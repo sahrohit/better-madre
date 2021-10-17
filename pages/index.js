@@ -1,25 +1,25 @@
 import Head from "next/head";
 import Features from "../components/Home/Features";
 import Footer from "../components/shared/Footer";
-import NavBar from "../components/shared/NavBar";
+import { Box, useBreakpointValue } from "@chakra-ui/react";
+import Navbar from "../components/Navbar";
+import OpenGraphHead from "../components/shared/OpenGraphHead";
 
-export default function Home() {
+const Home = () => {
+  const paddTop = useBreakpointValue({ base: 0, md: -5, lg: -5, xl: 10 });
   return (
     <>
-      <Head>
-        <title>Madre</title>
-        <meta
-          name="description"
-          content="where something delicious is Always Cooking"
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <OpenGraphHead />
 
-      <NavBar />
+      <Navbar />
+
+      <Box marginTop={paddTop} />
 
       <Features />
 
       <Footer />
     </>
   );
-}
+};
+
+export default Home;
