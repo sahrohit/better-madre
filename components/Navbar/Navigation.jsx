@@ -141,14 +141,16 @@ const Navigation = () => {
           paddingBottom={isMobile ? 10 : "0"}
           onClick={onMenuItemClick}
         >
-          <Box
-            width={{ base: "100%", lg: "auto" }}
-            textAlign={{ base: "center", lg: "left" }}
-            mr={{ base: 0, lg: "auto" }}
-            display={{ sm: "none", md: "none", lg: "none", xl: "block" }}
-          >
-            <SearchBar />
-          </Box>
+          {!isMobile && (
+            <Box
+              width={{ base: "100%", lg: "auto" }}
+              textAlign={{ base: "center", lg: "left" }}
+              mr={{ base: 0, lg: "auto" }}
+              display={{ sm: "none", md: "none", lg: "none", xl: "block" }}
+            >
+              <SearchBar />
+            </Box>
+          )}
           <NavItem href="/menu" label="Menu" />
           <NavItem href="/events" label="Event" />
           <NavItem href="/jobs" label="Jobs" />
