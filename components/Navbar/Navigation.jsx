@@ -61,6 +61,7 @@ const Navigation = () => {
   };
 
   const NavItem = ({ href, label }) => {
+    console.log("IsOpen", isOpen);
     return (
       <Box
         width={{ base: "100%", lg: "auto" }}
@@ -79,7 +80,6 @@ const Navigation = () => {
             as="a"
             href={href}
             rel="noreferrer"
-            // onClick={onMenuItemClick}
           >
             {label}
           </Button>
@@ -100,11 +100,10 @@ const Navigation = () => {
         style={{
           width: !isMobile ? "100%" : "100%",
           top: !isOpen && isMobile && "-100vh",
-          opacity: !isOpen && isMobile && "0",
+          display: !isOpen && isMobile && "none",
           left: isOpen && isMobile && 0,
-          top: isMobile && "5%",
+          top: isMobile && "12%",
         }}
-        zIndex={{ lm: isOpen ? 2 : 0, sm: isOpen ? 2 : 0, lg: "auto" }}
         position={{ base: "fixed", sm: "fixed", lg: "static", xl: "static" }}
         justifyContent={{ base: "center", lg: "flex-end" }}
         direction={{
@@ -119,6 +118,7 @@ const Navigation = () => {
         height={{ base: "100vh", lg: "auto" }}
         paddingRight="0"
         paddingBottom={isMobile ? 10 : "0"}
+        borderColor={borderColor}
         onClick={onMenuItemClick}
         as="nav"
       >
