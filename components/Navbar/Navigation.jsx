@@ -47,6 +47,19 @@ const Navigation = () => {
     [isMobile, toggleOpen]
   );
 
+  const ToggleThemeButton = (props) => {
+    return (
+      <IconButton
+        {...props}
+        aria-label="Color Mode"
+        variant="ghost"
+        icon={<Icon />}
+        boxShadow="none"
+        onClick={toggleColorMode}
+      />
+    );
+  };
+
   const NavItem = ({ href, label }) => {
     return (
       <Box
@@ -64,7 +77,7 @@ const Navigation = () => {
             padding={2}
             marginX={2}
             as="a"
-            href="/Rohit's-Resume.pdf"
+            href={href}
             rel="noreferrer"
             // onClick={onMenuItemClick}
           >
@@ -77,99 +90,59 @@ const Navigation = () => {
 
   return (
     <>
-      <Box
-        display={{ base: "flex", xl: "none" }}
-        width="80%"
-        alignItems="center"
-        justifyContent="space-between"
-        paddingTop={1}
-        className={styles.menuBar}
-        zIndex={100}
-        top="3%"
-      >
-        <SearchBar />
-
-        <IconButton
-          aria-label="Color Mode"
-          variant="ghost"
-          icon={<Icon />}
-          boxShadow="none"
-          onClick={toggleColorMode}
-          padding={0}
-        />
-        <MobileMenu isDarkMode={IsDark} toggle={toggleOpen} isOpen={isOpen} />
-      </Box>
-
-      <Container
-        width="100%"
+      <Flex
         backgroundColor={bg}
-        maxWidth={{ base: "100%", sm: "100%", lg: "50%", xl: "80%" }}
-        className={styles.menu}
-        right={{
-          lg: !isMobile ? "2%" : "3.5%",
-        }}
+        ease={easing}
+        variants={menuAnim}
+        marginTop={0}
+        paddingTop={3}
         initial="hide"
-        animate={(!isMobile || isOpen) && "show"}
         style={{
           width: !isMobile ? "100%" : "100%",
           top: !isOpen && isMobile && "-100vh",
           opacity: !isOpen && isMobile && "0",
           left: isOpen && isMobile && 0,
+          top: isMobile && "5%",
         }}
-        borderColor={isOpen && isMobile && borderColor}
-        borderBottomWidth={isOpen && isMobile && "1px"}
-        paddingBottom={isOpen && isMobile && "1px"}
-        ease={easing}
-        variants={menuAnim}
-        marginTop={0}
-        paddingTop={3}
+        zIndex={{ lm: isOpen ? 2 : 0, sm: isOpen ? 2 : 0, lg: "auto" }}
+        position={{ base: "fixed", sm: "fixed", lg: "static", xl: "static" }}
+        justifyContent={{ base: "center", lg: "flex-end" }}
+        direction={{
+          base: "column",
+          lg: "row",
+        }}
+        paddingX={{ base: "", sm: "10", lg: "0" }}
+        paddingY={{
+          base: "10",
+          lg: "3",
+        }}
+        height={{ base: "100vh", lg: "auto" }}
+        paddingRight="0"
+        paddingBottom={isMobile ? 10 : "0"}
+        onClick={onMenuItemClick}
         as="nav"
       >
-        <Flex
-          justifyContent={{ base: "center", lg: "flex-end" }}
-          direction={{
-            base: "column",
-            lg: "row",
-          }}
-          paddingX={{ base: "", sm: "10", lg: "0" }}
-          paddingY={{
-            base: "10",
-            lg: "3",
-          }}
-          height={{ base: "100vh", lg: "auto" }}
-          paddingRight="0"
-          paddingBottom={isMobile ? 10 : "0"}
-          onClick={onMenuItemClick}
-        >
-          {!isMobile && (
-            <Box
-              width={{ base: "100%", lg: "auto" }}
-              textAlign={{ base: "center", lg: "left" }}
-              mr={{ base: 0, lg: "auto" }}
-              display={{ sm: "none", md: "none", lg: "none", xl: "block" }}
-            >
-              <SearchBar />
-            </Box>
-          )}
-          <NavItem href="/menu" label="Menu" />
-          <NavItem href="/events" label="Event" />
-          <NavItem href="/jobs" label="Jobs" />
-          <NavItem href="/aboutus" label="About Us" />
+        <NavItem href="/menu" label="Menu" />
+        <NavItem href="/events" label="Event" />
+        <NavItem href="/jobs" label="Jobs" />
+        <NavItem href="/aboutus" label="About Us" />
 
-          {!isMobile && (
-            <Box>
-              <IconButton
-                marginX={1}
-                aria-label="Color Mode"
-                variant="ghost"
-                icon={<Icon />}
-                boxShadow="none"
-                onClick={toggleColorMode}
-              />
-            </Box>
-          )}
-        </Flex>
-      </Container>
+        {!isMobile && <ToggleThemeButton marginX={1} />}
+      </Flex>
+
+      <Box
+        display={{ base: "flex", xl: "none" }}
+        width="20%"
+        alignItems="center"
+        justifyContent="flex-end"
+        paddingTop={1}
+        className={styles.menuBar}
+        zIndex={100}
+        top="3%"
+      >
+        <ToggleThemeButton padding={0} />
+        <MobileMenu isDarkMode={IsDark} toggle={toggleOpen} isOpen={isOpen} />
+      </Box>
     </>
   );
 };

@@ -24,6 +24,7 @@ const Navbar = () => {
       margin={0}
     >
       <Logo />
+      <SearchBar />
       <Navigation />
     </Container>
   );
