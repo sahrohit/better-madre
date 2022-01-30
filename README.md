@@ -1,34 +1,89 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/github_username/repo_name">
+    <img src="./public/Madre_dark.svg" alt="Logo" width="160" height="80">
+  </a>
+
+<h3 align="center">Madre</h3>
+
+  <p align="center">
+    Built with love & Next.js
+    <br />
+    <a href="https://madre.vercel.app">https://madre.vercel.app</a>
+
+</div>
+
+## About The Project
+
+[![Product Name Screen Shot](https://shot.screenshotapi.net/screenshot?token=SYFRG8T-XWFMK5V-PGRW10V-VTR9YYG&url=https%3A%2F%2Fmadre.vercel.app&width=1536&height=722&full_page=true&output=image&file_type=webp&lazy_load=true&dark_mode=true&wait_for_event=load&ttl=86400)](https://madre.vercel.app)
+
+Madre was our very first project, and the initial iteration is available [`https://oldmadre.vercel.app`](https://oldmadre.vercel.app). Looking back over the years, we noticed a lot of issues and wanted to enhance our site, so we created this. As before said, we welcome any and all suggestions and help.
+
+### Built With
+
+-   [Next.js](https://nextjs.org/)
+-   [ChakraUI](https://chakra-ui.com/)
+-   [Framer Motion](https://www.framer.com/motion/)
+
+<!-- GETTING STARTED -->
 
 ## Getting Started
 
-First, run the development server:
+This is an example of how you may give instructions on setting up your project locally.
+To get a local copy up and running follow these simple example steps.
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+### Installation
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. Clone the repo
+    ```sh
+    git clone https://github.com/sahrohit/better-madre.git
+    ```
+2. Install NPM packages
+    ```sh
+    npm install
+    ```
+3. Rename the `env.example` to `env.local` & update you enviroment variables.
+    ```js
+    API_KEY = YOUR API KEYS
+    ```
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+### After Setting Up
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+To initialize the frontend,
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+`npm run dev` - Starts a Next App at http://localhost:3000
 
-## Learn More
+<!-- ROADMAP -->
+<!--
+## Roadmap
 
-To learn more about Next.js, take a look at the following resources:
+-   [] Feature 1
+-   [] Feature 2
+-   [] Feature 3
+    -   [] Nested Feature
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues). -->
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+<!-- CONTRIBUTING -->
 
-## Deploy on Vercel
+## Contributing
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
+Don't forget to give the project a star! Thanks again!
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+<!-- LICENSE -->
+
+## License
+
+Distributed under the MIT License. See `LICENSE.txt` for more information.
+
+<!-- CONTACT -->
