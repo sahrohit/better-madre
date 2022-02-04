@@ -51,13 +51,18 @@ export default function Simple({ id }) {
 	const [item, setItem] = useState(null);
 
 	useEffect(() => {
-		setTimeout(async () => {
+		const timer = setTimeout(async () => {
 			const res = await fetch(
 				`https://foodbukka.herokuapp.com/api/v1/menu/${id}`
 			);
 			const data = await res.json();
 			setItem(data.Result);
 		}, 2000);
+
+		return () => {
+			clearTimeout(timer);
+			setItem(null);
+		};
 	});
 
 	return (
@@ -102,7 +107,7 @@ export default function Simple({ id }) {
 									{item.menuname}
 								</Heading>
 							) : (
-								<Skeleton height="2rem" />
+								<Skeleton height="3.2rem" />
 							)}
 
 							<Text
@@ -114,9 +119,13 @@ export default function Simple({ id }) {
 								fontSize={"2xl"}
 							>
 								{item ? (
-									"$350.00 USD"
+									`रू518.00`
 								) : (
-									<Skeleton height="1.5rem" width="40%" />
+									<Skeleton
+										mt={2}
+										height="1.5rem"
+										width="40%"
+									/>
 								)}
 							</Text>
 						</Box>

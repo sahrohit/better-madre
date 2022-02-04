@@ -13,24 +13,26 @@ import {
 	useBreakpointValue,
 	useDisclosure,
 	useColorMode,
-	Image,
-	VStack,
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import NextRouter from "next/router";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import Logo from "@components/Logo";
 import { mobileBreakpointsMap } from "config/theme";
+import LoginMenu from "./LoginMenu";
+import { useAuth } from "@contexts/AuthContext";
+import ProfileMenu from "./ProfileMenu";
 
-export const Navbar = () => {
+export const Navbar = ({ position }) => {
 	const { isOpen, onToggle } = useDisclosure();
 
 	const { colorMode, toggleColorMode } = useColorMode();
 
 	const isMobile = useBreakpointValue(mobileBreakpointsMap);
+	const { currentUser } = useAuth();
 
 	return (
-		<Box position="sticky" top="0" zIndex="1" marginX={!isMobile && "10"}>
+		<Box position={position} top="0" zIndex="1" marginX={!isMobile && "10"}>
 			<Flex
 				bg={useColorModeValue("#edf2f7", "black")}
 				color={useColorModeValue("gray.600", "white")}
@@ -91,19 +93,7 @@ export const Navbar = () => {
 					direction={"row"}
 					spacing={6}
 				>
-					<Button
-						display={{ base: "none", md: "inline-flex" }}
-						fontSize={"sm"}
-						fontWeight={600}
-						color={"white"}
-						bg="#25b09c"
-						_hover={{
-							bg: "#e34d4d",
-						}}
-						onClick={() => NextRouter.push("/auth/login")}
-					>
-						Sign In
-					</Button>
+					{currentUser ? <ProfileMenu /> : <LoginMenu />}
 
 					<IconButton
 						variant="nooutline"
@@ -218,10 +208,11 @@ const MobileNavItem = ({ label, href }) => {
 				_hover={{
 					textDecoration: "none",
 				}}
+				onClick={() => NextRouter.push(href)}
 			>
 				<Text
 					as={Link}
-					href={href ?? "#"}
+					// href={href ?? "#"}
 					fontWeight={600}
 					color={useColorModeValue("gray.600", "gray.200")}
 				>

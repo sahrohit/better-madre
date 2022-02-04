@@ -4,9 +4,11 @@
 		"paths": {
 			"@components/*": ["./components/*"],
 			"@config/*": ["./config/*"],
+			"@contexts/*": ["./contexts/*"],
+			"@pages/*": ["./pages/*"],
 			"@public/*": ["./public/*"],
-			"@styles/*": ["./styles/*"],
-			"@pages/*": ["./pages/*"]
+			"@store/*": ["./store/*"],
+			"@styles/*": ["./styles/*"]
 		}
 	}
 }

@@ -12,6 +12,7 @@ import {
 import { useState, useEffect } from "react";
 import { Box, Stat, useColorModeValue } from "@chakra-ui/react";
 import Stats from "@components/Home/Stats";
+import FadeInWhenVisible from "@components/shared/FadeWhenVisible";
 
 const Home = () => {
 	const [isComplete, setIsComplete] = useState(false);
@@ -31,7 +32,7 @@ const Home = () => {
 
 			{/* <NavBar /> */}
 
-			<Navbar />
+			<Navbar position="sticky" />
 
 			{/* <Box
 				height={100}
@@ -68,13 +69,21 @@ const Home = () => {
 				</svg>
 			</Box> */}
 
-			<Banner />
+			<FadeInWhenVisible>
+				<Banner />
+			</FadeInWhenVisible>
 
-			<Stats />
+			<FadeInWhenVisible>
+				<Stats />
+			</FadeInWhenVisible>
 
-			<Features />
+			<FadeInWhenVisible>
+				<Features />
+			</FadeInWhenVisible>
 
-			<Footer />
+			<FadeInWhenVisible>
+				<Footer />
+			</FadeInWhenVisible>
 		</>
 	);
 };

@@ -23,8 +23,11 @@ Madre was our very first project, and the initial iteration is available [`https
 ### Built With
 
 -   [Next.js](https://nextjs.org/)
+-   [Firebase](https://firebase.google.com/)
 -   [ChakraUI](https://chakra-ui.com/)
 -   [Framer Motion](https://www.framer.com/motion/)
+-   [Formik](https://formik.org/)
+-   [Redux](https://redux-toolkit.js.org/)
 
 <!-- GETTING STARTED -->
 

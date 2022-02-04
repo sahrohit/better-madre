@@ -32,13 +32,16 @@ const Menu = () => {
 	const [menu, setMenu] = useState(null);
 
 	useEffect(() => {
-		setTimeout(async () => {
+		const timer = setTimeout(async () => {
 			const res = await fetch(
-				"https://foodbukka.herokuapp.com/api/v1/menu"
+				process.env.NEXT_PUBLIC_FIREBASE_REALTIME_DATABASE_URL
 			);
 			const data = await res.json();
-			setMenu(data.Result);
+			setMenu(data["-MuxjT863Vd78kuMGVBc"].menuItems);
 		}, 0);
+		return () => {
+			clearTimeout(timer);
+		};
 	});
 
 	return (
