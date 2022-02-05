@@ -14,35 +14,12 @@ import {
 	CheckboxGroup,
 	Stack,
 } from "@chakra-ui/react";
-import React, { useState, useEffect } from "react";
 import MenuCard from "./MenuCard";
 import { BiDollar } from "react-icons/bi";
-
-const data = {
-	isNew: true,
-	imageURL:
-		"https://images.unsplash.com/photo-1572635196237-14b3f281503f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=4600&q=80",
-	name: "Wayfarer Classic",
-	price: 4.5,
-	rating: 4.2,
-	numReviews: 34,
-};
+import { useMenu } from "@contexts/MenuContext";
 
 const Menu = () => {
-	const [menu, setMenu] = useState(null);
-
-	useEffect(() => {
-		const timer = setTimeout(async () => {
-			const res = await fetch(
-				process.env.NEXT_PUBLIC_FIREBASE_REALTIME_DATABASE_URL
-			);
-			const data = await res.json();
-			setMenu(data["-MuxjT863Vd78kuMGVBc"].menuItems);
-		}, 0);
-		return () => {
-			clearTimeout(timer);
-		};
-	});
+	const { menuItems } = useMenu();
 
 	return (
 		<>
@@ -129,18 +106,18 @@ const Menu = () => {
 					spacing={50}
 					columns={{ sm: 1, md: 1, lg: 2, xl: 3 }}
 				>
-					{menu
-						? menu.map((item) => {
+					{menuItems
+						? menuItems.map((item) => {
 								return (
 									<MenuCard
 										key={item._id}
-										id={item._id}
-										isNew={data.isNew}
+										id={item.menuId}
+										isNew={item.isPopular}
 										name={item.menuname}
 										imageURL={item.images[0]}
-										price={data.price}
-										rating={data.rating}
-										numReviews={data.numReviews}
+										price={item.price}
+										rating={item.rating}
+										numReviews={item.numberOfReviews}
 									/>
 								);
 						  })

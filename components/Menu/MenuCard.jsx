@@ -68,6 +68,8 @@ function MenuCard({ id, isNew, imageURL, name, price, rating, numReviews }) {
 
 				<Image
 					src={imageURL}
+					// height="300px"
+					fit={"cover"}
 					alt={`Picture of ${name}`}
 					roundedTop="lg"
 					cursor="pointer"
@@ -134,7 +136,7 @@ function MenuCard({ id, isNew, imageURL, name, price, rating, numReviews }) {
 							<Box as="span" color={"gray.600"} fontSize="md">
 								रू
 							</Box>
-							{price.toFixed(2) * 118}
+							{price / 100}
 						</Box>
 					</Flex>
 				</Box>

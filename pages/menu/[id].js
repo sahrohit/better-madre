@@ -1,7 +1,6 @@
 import React from "react";
 import {
 	Box,
-	chakra,
 	Container,
 	Stack,
 	Text,
@@ -13,31 +12,31 @@ import {
 	SimpleGrid,
 	StackDivider,
 	useColorModeValue,
-	VisuallyHidden,
 	List,
 	ListItem,
 	Skeleton,
-	SkeletonText,
+	HStack,
+	Icon,
 } from "@chakra-ui/react";
-import { FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
+import { AiOutlineShoppingCart } from "react-icons/ai";
 import { MdLocalShipping } from "react-icons/md";
 import { Navbar } from "@components/Navbar";
 import Footer from "@components/shared/Footer";
 import { useState, useEffect } from "react";
+import { collection, doc, onSnapshot, getDocs } from "firebase/firestore";
+import { db } from "../../firebase";
+import { nanoid } from "nanoid";
 
 export const getStaticProps = async ({ params }) => {
 	const { id } = params;
-
 	return { props: { id } };
 };
 
 export const getStaticPaths = async () => {
-	const res = await fetch("https://foodbukka.herokuapp.com/api/v1/menu");
-	const data = await res.json();
-
-	const paths = data.Result.map((item) => {
+	const querySnapshot = await getDocs(collection(db, "menu"));
+	const paths = querySnapshot.docs.map((doc) => {
 		return {
-			params: { id: item._id },
+			params: { id: doc.id },
 		};
 	});
 
@@ -50,20 +49,13 @@ export const getStaticPaths = async () => {
 export default function Simple({ id }) {
 	const [item, setItem] = useState(null);
 
-	useEffect(() => {
-		const timer = setTimeout(async () => {
-			const res = await fetch(
-				`https://foodbukka.herokuapp.com/api/v1/menu/${id}`
-			);
-			const data = await res.json();
-			setItem(data.Result);
-		}, 2000);
-
-		return () => {
-			clearTimeout(timer);
-			setItem(null);
-		};
-	});
+	useEffect(
+		() =>
+			onSnapshot(doc(db, "menu", id), (doc) => {
+				setItem(doc.data());
+			}),
+		[id]
+	);
 
 	return (
 		<>
@@ -79,7 +71,7 @@ export default function Simple({ id }) {
 							<Image
 								rounded={"md"}
 								alt={"product image"}
-								src={item.images[1]}
+								src={item.images[0]}
 								fit={"cover"}
 								align={"center"}
 								w={"100%"}
@@ -93,42 +85,53 @@ export default function Simple({ id }) {
 						)}
 					</Flex>
 					<Stack spacing={{ base: 6, md: 10 }}>
-						<Box as={"header"}>
-							{item ? (
-								<Heading
-									lineHeight={1.1}
-									fontWeight={600}
-									fontSize={{
-										base: "2xl",
-										sm: "4xl",
-										lg: "5xl",
-									}}
-								>
-									{item.menuname}
-								</Heading>
-							) : (
-								<Skeleton height="3.2rem" />
-							)}
-
-							<Text
-								color={useColorModeValue(
-									"gray.900",
-									"gray.400"
-								)}
-								fontWeight={300}
-								fontSize={"2xl"}
-							>
+						<HStack as={"header"} justifyContent={"space-between"}>
+							<VStack align={"left"}>
 								{item ? (
-									`रू518.00`
+									<Heading
+										lineHeight={1.1}
+										fontWeight={600}
+										fontSize={{
+											base: "2xl",
+											sm: "4xl",
+											lg: "5xl",
+										}}
+									>
+										{item.menuname}
+									</Heading>
 								) : (
-									<Skeleton
-										mt={2}
-										height="1.5rem"
-										width="40%"
-									/>
+									<Skeleton height="3.2rem" />
 								)}
-							</Text>
-						</Box>
+								<Box
+									color={useColorModeValue(
+										"gray.900",
+										"gray.400"
+									)}
+								>
+									{item ? (
+										<Text fontWeight={300} fontSize={"2xl"}>
+											{`रू ${(item.price / 100).toFixed(
+												2
+											)}`}
+										</Text>
+									) : (
+										<Skeleton
+											mt={2}
+											height="1.5rem"
+											width="40%"
+										/>
+									)}
+								</Box>
+							</VStack>
+							<Box>
+								<Icon
+									mr={12}
+									as={AiOutlineShoppingCart}
+									w={12}
+									h={12}
+								/>
+							</Box>
+						</HStack>
 
 						<Stack
 							spacing={{ base: 4, sm: 6 }}
@@ -143,16 +146,19 @@ export default function Simple({ id }) {
 							}
 						>
 							<VStack spacing={{ base: 4, sm: 6 }}>
-								<Text
+								<Box
 									color={useColorModeValue(
 										"gray.500",
 										"gray.400"
 									)}
-									fontSize={"2xl"}
-									fontWeight={"300"}
 								>
 									{item ? (
-										item.description
+										<Text
+											fontSize={"2xl"}
+											fontWeight={"300"}
+										>
+											{item.description}
+										</Text>
 									) : (
 										<Stack>
 											<Skeleton height="20px" />
@@ -160,23 +166,16 @@ export default function Simple({ id }) {
 											<Skeleton height="20px" />
 										</Stack>
 									)}
-								</Text>
-								<Text fontSize={"lg"}>
-									{item ? (
-										`Lorem ipsum dolor sit amet, consectetur
-										adipisicing elit. Ad aliquid amet at
-										delectus doloribus dolorum expedita hic,
-										ipsum maxime modi nam officiis porro, quae,
-										quisquam quos reprehenderit velit? Natus,
-										totam.`
-									) : (
-										<Stack>
-											<Skeleton height="20px" />
-											<Skeleton height="20px" />
-											<Skeleton height="20px" />
-										</Stack>
-									)}
-								</Text>
+								</Box>
+								{item ? (
+									<Text fontSize={"lg"}>{item.recipe}</Text>
+								) : (
+									<Stack>
+										<Skeleton height="20px" />
+										<Skeleton height="20px" />
+										<Skeleton height="20px" />
+									</Stack>
+								)}
 							</VStack>
 							<Box>
 								<Text
@@ -193,21 +192,26 @@ export default function Simple({ id }) {
 								</Text>
 
 								<SimpleGrid
+									as={List}
 									columns={{ base: 1, md: 2 }}
-									spacing={10}
+									spacing={2}
 								>
-									<List spacing={2}>
-										<ListItem>Chronograph</ListItem>
-										<ListItem>
-											Master Chronometer Certified
-										</ListItem>{" "}
-										<ListItem>Tachymeter</ListItem>
-									</List>
-									<List spacing={2}>
-										<ListItem>Anti‑magnetic</ListItem>
-										<ListItem>Chronometer</ListItem>
-										<ListItem>Small seconds</ListItem>
-									</List>
+									{item
+										? item.features.map((detail) => {
+												return (
+													<ListItem key={nanoid()}>
+														{detail}
+													</ListItem>
+												);
+										  })
+										: Array(6)
+												.fill("")
+												.map((_, i) => (
+													<Skeleton
+														key={nanoid()}
+														height="20px"
+													/>
+												))}
 								</SimpleGrid>
 							</Box>
 							<Box>
@@ -225,50 +229,22 @@ export default function Simple({ id }) {
 								</Text>
 
 								<List spacing={2}>
-									<ListItem>
-										<Text as={"span"} fontWeight={"bold"}>
-											Between lugs:
-										</Text>{" "}
-										20 mm
-									</ListItem>
-									<ListItem>
-										<Text as={"span"} fontWeight={"bold"}>
-											Bracelet:
-										</Text>{" "}
-										leather strap
-									</ListItem>
-									<ListItem>
-										<Text as={"span"} fontWeight={"bold"}>
-											Case:
-										</Text>{" "}
-										Steel
-									</ListItem>
-									<ListItem>
-										<Text as={"span"} fontWeight={"bold"}>
-											Case diameter:
-										</Text>{" "}
-										42 mm
-									</ListItem>
-									<ListItem>
-										<Text as={"span"} fontWeight={"bold"}>
-											Dial color:
-										</Text>{" "}
-										Black
-									</ListItem>
-									<ListItem>
-										<Text as={"span"} fontWeight={"bold"}>
-											Crystal:
-										</Text>{" "}
-										Domed, scratch‑resistant sapphire
-										crystal with anti‑reflective treatment
-										inside
-									</ListItem>
-									<ListItem>
-										<Text as={"span"} fontWeight={"bold"}>
-											Water resistance:
-										</Text>{" "}
-										5 bar (50 metres / 167 feet){" "}
-									</ListItem>
+									{item &&
+										Object.keys(item.productDetails).map(
+											(key, index) => {
+												return (
+													<ListItem key={nanoid()}>
+														<Text
+															as={"span"}
+															fontWeight={"bold"}
+														>
+															{`${key}:`}
+														</Text>{" "}
+														{index}
+													</ListItem>
+												);
+											}
+										)}
 								</List>
 							</Box>
 						</Stack>
