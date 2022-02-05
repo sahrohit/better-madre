@@ -89,7 +89,7 @@ const EditPage = () => {
 			validationSchema={MenuSchema}
 			onSubmit={async (values, actions) => {
 				try {
-					await updateDoc(doc(db, "menu", id), values);
+					await updateDoc(doc(db, "menu", id), {...values, images: [values.images]});
 					toast({
 						title: `Menu Details Updated!`,
 						description: `${item.menuname} has been updated!`,
