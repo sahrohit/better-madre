@@ -3,6 +3,7 @@ import theme from "../config/theme";
 import { ChakraProvider } from "@chakra-ui/react";
 
 import { AuthProvider } from "@contexts/AuthContext";
+import { MenuProvider } from "@contexts/MenuContext";
 
 import Router, { useRouter } from "next/router";
 import NProgress from "nprogress";
@@ -16,7 +17,9 @@ function MyApp({ Component, pageProps }) {
 	return (
 		<ChakraProvider theme={theme}>
 			<AuthProvider>
-				<Component {...pageProps} />
+				<MenuProvider>
+					<Component {...pageProps} />
+				</MenuProvider>
 			</AuthProvider>
 		</ChakraProvider>
 	);
