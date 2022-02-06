@@ -7,11 +7,11 @@ import {
 	Flex,
 	useColorMode,
 } from "@chakra-ui/react";
-import Address from "./Address";
-import CompletedOrders from "./CompletedOrders";
-import PendingOrder from "../AdminPage/OrderRecieved";
+import LeftForDelivery from "./LeftForDelivery";
+import CompletedAdminOrders from "./CompletedAdminOrders";
+import OrderRecieved from "./OrderRecieved";
 
-const TabSection = () => {
+const AdminTabs = () => {
 	const { colorMode } = useColorMode();
 
 	return (
@@ -25,19 +25,19 @@ const TabSection = () => {
 				<TabList
 				// mb="1em"
 				>
-					<Tab>Pending Orders</Tab>
-					<Tab>Addresses</Tab>
+					<Tab>Orders Recieved</Tab>
+					<Tab>Left for Delivery</Tab>
 					<Tab>Completed Orders</Tab>
 				</TabList>
 				<TabPanels>
 					<TabPanel>
-						<PendingOrder />
+						<OrderRecieved />
 					</TabPanel>
 					<TabPanel>
-						<Address />
+						<LeftForDelivery />
 					</TabPanel>
 					<TabPanel>
-						<CompletedOrders />
+						<CompletedAdminOrders />
 					</TabPanel>
 				</TabPanels>
 			</Tabs>
@@ -45,4 +45,4 @@ const TabSection = () => {
 	);
 };
 
-export default TabSection;
+export default AdminTabs;
