@@ -19,15 +19,22 @@ import {
 	StatLabel,
 	StatHelpText,
 	StatNumber,
+	Box,
+	Image,
+	chakra,
+	Icon,
+	useClipboard,
 	Link as ChakraLink,
 } from "@chakra-ui/react";
 import { CheckIcon } from "@chakra-ui/icons";
 import { useAuth } from "contexts/AuthContext";
 import { useRouter } from "next/router";
+import { BsFillBriefcaseFill, BsTelephone } from "react-icons/bs";
+import { MdLocationOn, MdHeadset, MdEmail } from "react-icons/md";
+import { FaUser } from "react-icons/fa";
+import { AiOutlineIdcard, AiOutlineMail } from "react-icons/ai";
 
 const ProfilePanel = () => {
-	console.log("Re-rendering the Profile Panel");
-
 	const toast = useToast();
 
 	const router = useRouter();
@@ -35,152 +42,100 @@ const ProfilePanel = () => {
 
 	const KEYVALUES = [
 		{
-			key: "Uid: ",
+			icon: AiOutlineIdcard,
 			value: currentUser?.uid,
 		},
 		{
-			key: "Phone Number: ",
-			value: 9818506752,
+			icon: AiOutlineMail,
+			value: currentUser?.email,
+		},
+		{
+			icon: BsTelephone,
+			value: "9800000000",
 		},
 	];
 
 	return (
-		<Flex m={5} align={"center"} justify={"center"}>
-			<Stack
-				spacing={4}
-				w={"full"}
-				maxW={"md"}
-				rounded={"xl"}
-				boxShadow={"lg"}
-				p={6}
-				my={12}
-				// bg={useColorModeValue("gray.50", "gray.800")}
-			>
-				<Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }}>
-					Profile
-				</Heading>
-				<Stack
-					direction={["column"]}
-					justifyContent={"center"}
-					alignItems={"center"}
-					spacing={6}
-				>
-					<Avatar
-						size="xl"
-						src={
-							currentUser?.photoURL
-								? currentUser.photoURL
-								: "https://source.boringavatars.com/beam/120/"
-						}
+		<Flex w="full" alignItems="center" justifyContent="center">
+			<Box w="sm" mx="auto" shadow="lg" rounded="lg" overflow="hidden">
+				<Image
+					w="full"
+					h={56}
+					fit="cover"
+					objectPosition="center"
+					src={
+						currentUser?.photoURL
+							? currentUser.photoURL
+							: "https://source.boringavatars.com/beam/120/"
+					}
+					alt="avatar"
+				/>
+
+				<Flex alignItems="center" px={6} py={3} bg="gray.900">
+					<Icon as={FaUser} h={6} w={6} color="white" />
+
+					<chakra.h1
+						mx={3}
+						color="white"
+						fontWeight="bold"
+						fontSize="lg"
 					>
-						{currentUser?.emailVerified && (
-							<AvatarBadge
-								as={IconButton}
-								size="sm"
-								rounded="full"
-								colorScheme="green"
-								aria-label="remove Image"
-								icon={<CheckIcon />}
-							/>
-						)}
-					</Avatar>
-				</Stack>
-				<Stack justifyContent={"center"} alignItems={"center"}>
-					<Heading fontSize={"2xl"} fontFamily={"body"}>
-						{currentUser.displayName}
-					</Heading>
-					<Text fontWeight={600} color={"gray.500"}>
-						{currentUser.email}
-					</Text>
-					<Text
-						textAlign={"center"}
-						color={useColorModeValue("gray.700", "gray.400")}
-						px={3}
-					>
-						Actress, musician, songwriter and artist. PM for work
-						inquires or{" "}
-						<ChakraLink href={"#"} color={"blue.400"}>
-							#tag
-						</ChakraLink>{" "}
-						me in your posts
-					</Text>
-				</Stack>
-				<Stack
-					align={"left"}
-					justify={"center"}
-					direction={"column"}
-					width={"100%"}
-				>
+						{currentUser?.displayName}
+					</chakra.h1>
+				</Flex>
+
+				<Box py={4} px={6}>
+					<chakra.p py={2}>
+						Full Stack maker & UI / UX Designer , love hip hop music
+						Author of Building UI.
+					</chakra.p>
+
 					{KEYVALUES.map((item) => {
 						return (
-							<HStack key={item.key}>
-								<Text fontWeight={600} color={"gray.500"}>
-									{item.key}
-								</Text>
-								<Text>{item.value}</Text>
+							<HStack key={item.value} alignItems="center" mt={4}>
+								<Icon as={item.icon} h={6} w={6} mr={2} />
+
+								<chakra.h1 px={2} fontSize="sm">
+									{item.value}
+								</chakra.h1>
 							</HStack>
 						);
 					})}
-				</Stack>
-				<Stack
-					align={"center"}
-					justify={"center"}
-					direction={"row"}
-					p={2}
-					spacing={8}
-					border="1px"
-					borderRadius="12px"
-					width={"100%"}
-				>
-					<Stat>
-						<StatLabel>Total Orders</StatLabel>
-						<StatNumber>0</StatNumber>
-					</Stat>
-					<Stat>
-						<StatLabel>Total Spent</StatLabel>
-						<StatNumber>रू0.00</StatNumber>
-					</Stat>
-					<Stat>
-						<StatLabel>Total Cusine</StatLabel>
-						<StatNumber>0</StatNumber>
-					</Stat>
-				</Stack>
-
-				<Stack spacing={6} direction={["column", "row"]}>
-					<Button
-						bg={"red.400"}
-						color={"white"}
-						w="full"
-						_hover={{
-							bg: "red.500",
-						}}
-						onClick={() => {
-							logOut()
-								.then(() => {
-									toast({
-										title: "",
-										description: "Logged Out Successfully.",
-										status: "success",
-										duration: 9000,
-										isClosable: true,
-									});
-									router.replace("/auth/login");
-								})
-								.catch((error) => {
-									toast({
-										title: "An Error Occured",
-										description: error.message,
-										status: "error",
-										duration: 9000,
-										isClosable: true,
-									});
+				</Box>
+				<Button
+					rounded={"none"}
+					bg={"red.400"}
+					color={"white"}
+					w="full"
+					_hover={{
+						bg: "red.500",
+					}}
+					onClick={() => {
+						logOut()
+							.then(() => {
+								toast({
+									title: "",
+									description: "Logged Out Successfully.",
+									status: "success",
+									duration: 9000,
+									isClosable: true,
 								});
-						}}
-					>
-						Logout
-					</Button>
-				</Stack>
-			</Stack>
+								router.replace("/auth/login");
+							})
+							.catch((error) => {
+								toast({
+									title: "An Error Occured",
+									description: error.message,
+									status: "error",
+									duration: 9000,
+									isClosable: true,
+								});
+							});
+					}}
+				>
+					Logout
+				</Button>
+			</Box>
 		</Flex>
 	);
 };
