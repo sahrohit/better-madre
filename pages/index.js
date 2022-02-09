@@ -69,9 +69,7 @@ const Home = () => {
 				</svg>
 			</Box> */}
 
-			<FadeInWhenVisible>
-				<Banner />
-			</FadeInWhenVisible>
+			<Banner />
 
 			<FadeInWhenVisible>
 				<Stats />
