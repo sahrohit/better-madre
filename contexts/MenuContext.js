@@ -9,6 +9,7 @@ import {
 	getDocs,
 } from "firebase/firestore";
 import { db } from "../firebase";
+import FullPageLoadingSpinner from "@components/shared/FullPageLoadingSpinner";
 
 const MenuContext = React.createContext();
 
@@ -42,6 +43,10 @@ const MenuProvider = ({ children }) => {
 		categories,
 		cusines,
 	};
+
+	if (loading) {
+		return <FullPageLoadingSpinner />;
+	}
 
 	return (
 		<MenuContext.Provider value={value}>

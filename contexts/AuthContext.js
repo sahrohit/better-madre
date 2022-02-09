@@ -8,7 +8,16 @@ import {
 	sendPasswordResetEmail,
 	updateProfile,
 	sendEmailVerification,
+	signInWithPopup,
+	GoogleAuthProvider,
+	unlink,
+	linkWithPopup,
 } from "firebase/auth";
+import { isEqual } from "lodash";
+import { getFromStorage, setToStorage } from "@components/helpers/localstorage";
+import { updateDoc, doc } from "firebase/firestore";
+import { db } from "../firebase";
+import FullPageLoadingSpinner from "@components/shared/FullPageLoadingSpinner";
 
 const AuthContext = React.createContext();
 
@@ -17,8 +26,10 @@ const useAuth = () => {
 };
 
 const AuthProvider = ({ children }) => {
-	const [currentUser, setCurrentUser] = useState();
 	const [loading, setLoading] = useState(true);
+	const [currentUser, setCurrentUser] = useState();
+	const [providers, setProviders] = useState();
+	const googleAuthProvider = new GoogleAuthProvider();
 
 	const signUp = (email, password) => {
 		return createUserWithEmailAndPassword(auth, email, password);
@@ -32,9 +43,17 @@ const AuthProvider = ({ children }) => {
 		return sendEmailVerification(user);
 	};
 
-	// const signInWithGoogle = () => {
-	// 	return auth.signInWithPopup(googleProvider);
-	// };
+	const signInWithGoogle = () => {
+		return signInWithPopup(auth, googleAuthProvider);
+	};
+
+	const linkGoogleAccount = () => {
+		return linkWithPopup(currentUser, googleAuthProvider);
+	};
+
+	const unLinkGoogleAccount = () => {
+		return unlink(currentUser, "google.com");
+	};
 
 	// const signInWithFacebook = () => {
 	// 	return auth.signInWithPopup(facebookProvider);
@@ -67,6 +86,54 @@ const AuthProvider = ({ children }) => {
 	const unsubscribe = useEffect(() => {
 		onAuthStateChanged(auth, (user) => {
 			setCurrentUser(user);
+			setProviders(
+				user.providerData.map((provider) => provider.providerId)
+			);
+
+			if (user) {
+				if (
+					!isEqual(
+						{
+							displayName: user.displayName,
+							email: user.email,
+							emailVerified: user.emailVerified,
+							phoneNumber: user.phoneNumber,
+							photoURL: user.photoURL,
+							providerData: user.providerData,
+							uid: user.uid,
+						},
+						JSON.parse(getFromStorage("currentUserState"))
+					)
+				) {
+					setToStorage(
+						"currentUserState",
+						JSON.stringify({
+							displayName: user.displayName,
+							email: user.email,
+							emailVerified: user.emailVerified,
+							phoneNumber: user.phoneNumber,
+							photoURL: user.photoURL,
+							providerData: user.providerData,
+							uid: user.uid,
+						})
+					);
+					updateDoc(doc(db, "users", user.uid), {
+						displayName: user.displayName,
+						email: user.email,
+						emailVerified: user.emailVerified,
+						phoneNumber: user.phoneNumber,
+						photoURL: user.photoURL,
+						providerData: user.providerData,
+						uid: user.uid,
+					});
+					console.log("Updated in Database");
+				} else {
+					console.log("Used Cached Data");
+				}
+			}
+
+			console.log("user", user);
+
 			setLoading(false);
 		});
 
@@ -75,18 +142,25 @@ const AuthProvider = ({ children }) => {
 
 	const value = {
 		currentUser,
+		providers,
 		signUp,
 		logIn,
 		logOut,
 		resetPassword,
 		updateProfileDetails,
 		sendVerificationEmail,
+		signInWithGoogle,
+		unLinkGoogleAccount,
+		linkGoogleAccount,
 		// updateEmail,
 		// updatePassword,
-		// signInWithGoogle,
 		// signInWithFacebook,
 		// signInWithGithub,
 	};
+
+	if (loading) {
+		return <FullPageLoadingSpinner />;
+	}
 
 	return (
 		<AuthContext.Provider value={value}>

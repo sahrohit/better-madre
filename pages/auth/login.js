@@ -13,6 +13,8 @@ import {
 	Text,
 	useBreakpointValue,
 	FormErrorMessage,
+	Divider,
+	Center,
 } from "@chakra-ui/react";
 import { useAuth } from "contexts/AuthContext";
 import { useRouter } from "next/router";
@@ -21,11 +23,12 @@ import { mobileBreakpointsMap } from "@config/theme";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import OnlyLoggedOut from "@components/routes/OnlyLoggedOut";
+import { FaGoogle } from "react-icons/fa";
 
 export default function LoginPage() {
 	const toast = useToast();
 	const router = useRouter();
-	const { logIn } = useAuth();
+	const { logIn, signInWithGoogle } = useAuth();
 	const LoginSchema = Yup.object().shape({
 		email: Yup.string()
 			.email("Invalid Email Address")
@@ -182,6 +185,43 @@ export default function LoginPage() {
 								</Form>
 							)}
 						</Formik>
+
+						<Center>
+							<Divider w={"50%"} />
+						</Center>
+
+						<Button
+							leftIcon={<FaGoogle />}
+							type="submit"
+							colorScheme={"blue"}
+							variant={"solid"}
+							onClick={() => {
+								signInWithGoogle()
+									.then((userCredential) => {
+										const user = userCredential.user;
+										toast({
+											title: `Welcome back, ${user.displayName}!`,
+											description:
+												"We are happy to have you back.",
+											status: "success",
+											duration: 9000,
+											isClosable: true,
+										});
+									})
+									.catch((error) => {
+										const errorMessage = error.message;
+										toast({
+											title: "Failed.",
+											description: errorMessage,
+											status: "error",
+											duration: 9000,
+											isClosable: true,
+										});
+									});
+							}}
+						>
+							Continue with Google
+						</Button>
 
 						<Stack pt={6}>
 							<Text align={"center"}>

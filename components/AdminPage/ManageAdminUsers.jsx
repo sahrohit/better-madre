@@ -29,6 +29,7 @@ import {
 	setDoc,
 	onSnapshot,
 	deleteDoc,
+	getDoc,
 } from "firebase/firestore";
 import { db } from "../../firebase";
 import FullPageLoadingSpinner from "@components/shared/FullPageLoadingSpinner";
@@ -65,8 +66,8 @@ const ManageAdminUsers = () => {
 			<Heading variant={"emphasis"}>Admins</Heading>
 
 			<VStack>
-				{admin.map((user) => (
-					<ProfileCard key={user} user={user} />
+				{admin.map((uid) => (
+					<ProfileCard key={uid} uid={uid} />
 				))}
 			</VStack>
 
@@ -119,7 +120,7 @@ const ManageAdminUsers = () => {
 
 export default ManageAdminUsers;
 
-const ProfileCard = ({ user }) => {
+const ProfileCard = ({ uid }) => {
 	const toast = useToast();
 	const { colorMode } = useColorMode();
 	const { currentUser } = useAuth();
@@ -128,6 +129,20 @@ const ProfileCard = ({ user }) => {
 	const cancelButtonRef = useRef();
 
 	const [confirmInput, setConfirmInput] = useState("");
+
+	const [user, setUser] = useState();
+
+	useEffect(() => {
+		const getUserData = async () => {
+			try {
+				const docSnap = await getDoc(doc(db, "users", uid));
+				setUser(docSnap.data());
+			} catch (error) {
+				console.log(error);
+			}
+		};
+		getUserData();
+	}, [uid]);
 
 	return (
 		<HStack
@@ -140,12 +155,15 @@ const ProfileCard = ({ user }) => {
 			borderRadius="12px"
 			borderColor={colorMode == "light" ? `gray.200` : `whiteAlpha.300`}
 		>
-			<Avatar name="Dan Abrahmov" src="https://bit.ly/dan-abramov" />
+			<Avatar name={user?.displayName} src={user?.photoURL} />
 			<VStack align={"left"}>
 				<HStack justifyContent={"space-between"}>
-					<Heading as="h2" size="md">
-						{currentUser.displayName}
-					</Heading>
+					<VStack align={"left"}>
+						<Heading fontSize="xl" fontWeight={"normal"}>
+							{user?.displayName}
+						</Heading>
+						<Text fontSize="sm">{uid}</Text>
+					</VStack>
 					<IconButton
 						color="red.500"
 						size="sm"
@@ -193,7 +211,7 @@ const ProfileCard = ({ user }) => {
 										isDisabled={confirmInput !== "revoke"}
 										colorScheme="red"
 										onClick={async () => {
-											if (user === currentUser.uid) {
+											if (uid === currentUser.uid) {
 												toast({
 													title: `Can't delete yourself`,
 													description:
@@ -205,12 +223,12 @@ const ProfileCard = ({ user }) => {
 											} else {
 												try {
 													await deleteDoc(
-														doc(db, "admin", user)
+														doc(db, "admin", uid)
 													);
 													toast({
 														title: `Deleted Successfully`,
 														description:
-															"All permission are revoked.",
+															`All permission are revoked for ${user?.displayName}.`,
 														status: "success",
 														duration: 4000,
 														isClosable: true,
@@ -237,7 +255,6 @@ const ProfileCard = ({ user }) => {
 						</AlertDialogOverlay>
 					</AlertDialog>
 				</HStack>
-				<Text fontSize="lg">{user}</Text>
 			</VStack>
 		</HStack>
 	);

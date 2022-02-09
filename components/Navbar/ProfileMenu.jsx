@@ -17,9 +17,9 @@ import { useRouter } from "next/router";
 import { useAuth } from "@contexts/AuthContext";
 
 const ProfileMenu = () => {
-	const router = useRouter();
-
+	
 	const toast = useToast();
+	const router = useRouter();
 
 	const { currentUser, logOut } = useAuth();
 
@@ -27,7 +27,7 @@ const ProfileMenu = () => {
 		<HStack>
 			<Avatar
 				cursor="pointer"
-				name="Dan Abrahmov"
+				name={currentUser.displayName}
 				src={
 					currentUser?.photoURL
 						? currentUser?.photoURL
