@@ -87,7 +87,9 @@ const AuthProvider = ({ children }) => {
 		onAuthStateChanged(auth, (user) => {
 			setCurrentUser(user);
 			setProviders(
-				user.providerData.map((provider) => provider.providerId)
+				user
+					? user.providerData.map((provider) => provider.providerId)
+					: []
 			);
 
 			if (user) {
