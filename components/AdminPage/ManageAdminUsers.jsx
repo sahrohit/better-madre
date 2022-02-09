@@ -1,67 +1,45 @@
 import {
 	Button,
-	Flex,
 	FormControl,
-	FormLabel,
 	Heading,
 	Input,
-	Stack,
-	useColorModeValue,
 	HStack,
 	Avatar,
-	AvatarBadge,
 	IconButton,
-	Center,
 	useToast,
 	Text,
-	Badge,
-	Stat,
-	StatLabel,
-	StatHelpText,
-	StatNumber,
-	SimpleGrid,
-	InputGroup,
-	InputRightElement,
-	Link as ChakraLink,
 	useColorMode,
 	VStack,
-	Box,
-	Divider,
+	AlertDialog,
+	AlertDialogBody,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogContent,
+	AlertDialogOverlay,
+	Tag,
 } from "@chakra-ui/react";
-import { CheckIcon, CloseIcon, AddIcon } from "@chakra-ui/icons";
+import { CloseIcon } from "@chakra-ui/icons";
 import { useAuth } from "contexts/AuthContext";
-import { useRouter } from "next/router";
-import { Formik, Field, Form, FieldArray } from "formik";
+import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
 	collection,
-	addDoc,
 	doc,
 	setDoc,
-	updateDoc,
 	onSnapshot,
-	getDocs,
 	deleteDoc,
 } from "firebase/firestore";
-import { db, auth } from "../../firebase";
+import { db } from "../../firebase";
 import FullPageLoadingSpinner from "@components/shared/FullPageLoadingSpinner";
 
 const ManageAdminUsers = () => {
+	const toast = useToast();
+	const [admin, setAdmin] = useState(null);
+	const [loading, setLoading] = useState(true);
 	const AdminUsersSchema = Yup.object().shape({
 		newadminuid: Yup.string().required("Required"),
 	});
-
-	const [admin, setAdmin] = useState(null);
-	const [loading, setLoading] = useState(true);
-
-	const toast = useToast();
-
-	const { currentUser } = useAuth();
-
-	const writeToDatabase = async () => {
-		await setDoc(doc(db, "admin", "apple"), {});
-	};
 
 	useEffect(
 		() =>
@@ -146,6 +124,11 @@ const ProfileCard = ({ user }) => {
 	const { colorMode } = useColorMode();
 	const { currentUser } = useAuth();
 
+	const [isDialogOpen, setIsDialogOpen] = useState(false);
+	const cancelButtonRef = useRef();
+
+	const [confirmInput, setConfirmInput] = useState("");
+
 	return (
 		<HStack
 			p={4}
@@ -168,39 +151,91 @@ const ProfileCard = ({ user }) => {
 						size="sm"
 						aria-label="Delete"
 						icon={<CloseIcon />}
-						onClick={async () => {
-							if (user === currentUser.uid) {
-								toast({
-									title: `Can't delete yourself`,
-									description:
-										"You cannot remove yourself from the admin list",
-									status: "error",
-									duration: 4000,
-									isClosable: true,
-								});
-							} else {
-								try {
-									await deleteDoc(doc(db, "admin", user));
-									toast({
-										title: `Deleted Successfully`,
-										description:
-											"All permission are revoked.",
-										status: "success",
-										duration: 4000,
-										isClosable: true,
-									});
-								} catch (error) {
-									toast({
-										title: `An Error Occured`,
-										description: error.message,
-										status: "success",
-										duration: 4000,
-										isClosable: true,
-									});
-								}
-							}
-						}}
+						onClick={() => setIsDialogOpen(true)}
 					/>
+
+					<AlertDialog
+						isOpen={isDialogOpen}
+						leastDestructiveRef={cancelButtonRef}
+						onClose={() => setIsDialogOpen(false)}
+					>
+						<AlertDialogOverlay>
+							<AlertDialogContent>
+								<AlertDialogHeader
+									fontSize="lg"
+									fontWeight="bold"
+								>
+									Revoke Admin Access
+								</AlertDialogHeader>
+
+								<AlertDialogBody>
+									Type <Tag>revoke</Tag> to confirm.
+									<FormControl>
+										<Input
+											my={2}
+											placeholder="revoke"
+											onChange={(e) =>
+												setConfirmInput(e.target.value)
+											}
+										/>
+									</FormControl>
+								</AlertDialogBody>
+
+								<AlertDialogFooter>
+									<Button
+										ref={cancelButtonRef}
+										onClick={() => setIsDialogOpen(false)}
+									>
+										Cancel
+									</Button>
+
+									<Button
+										isDisabled={confirmInput !== "revoke"}
+										colorScheme="red"
+										onClick={async () => {
+											if (user === currentUser.uid) {
+												toast({
+													title: `Can't delete yourself`,
+													description:
+														"You cannot remove yourself from the admin list",
+													status: "error",
+													duration: 4000,
+													isClosable: true,
+												});
+											} else {
+												try {
+													await deleteDoc(
+														doc(db, "admin", user)
+													);
+													toast({
+														title: `Deleted Successfully`,
+														description:
+															"All permission are revoked.",
+														status: "success",
+														duration: 4000,
+														isClosable: true,
+													});
+												} catch (error) {
+													toast({
+														title: `An Error Occured`,
+														description:
+															error.message,
+														status: "success",
+														duration: 4000,
+														isClosable: true,
+													});
+												}
+											}
+											setIsDialogOpen(false);
+										}}
+										ml={3}
+									>
+										Delete
+									</Button>
+								</AlertDialogFooter>
+							</AlertDialogContent>
+						</AlertDialogOverlay>
+					</AlertDialog>
 				</HStack>
 				<Text fontSize="lg">{user}</Text>
 			</VStack>
