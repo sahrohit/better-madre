@@ -124,6 +124,17 @@ const theme = extendTheme({
 				}),
 			},
 		},
+		Drawer: {
+			variants: {
+				default: (props) => ({
+					color: mode("gray.800", "whiteAlpha.900")(props),
+					bg: mode("gray.100", "#121212")(props),
+					// _hover: {
+					// 	backgroundColor: mode("#fc4553", "#fc4553")(props),
+					// },
+				}),
+			},
+		},
 	},
 });
 

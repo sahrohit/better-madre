@@ -5,21 +5,42 @@ import {
 	SkeletonText,
 	Skeleton,
 	Heading,
-	Slider,
-	SliderTrack,
-	SliderFilledTrack,
-	SliderThumb,
-	SliderMark,
-	Checkbox,
-	CheckboxGroup,
-	Stack,
+	useBreakpointValue,
 } from "@chakra-ui/react";
 import MenuCard from "./MenuCard";
-import { BiDollar } from "react-icons/bi";
 import { useMenu } from "@contexts/MenuContext";
+import { useState } from "react";
+import MenuOption from "./MenuOption";
+import MobileMenuOption from "./MobileMenuOption";
 
 const Menu = () => {
-	const { menuItems } = useMenu();
+	const { menuItems, categories, cusines } = useMenu();
+
+	const [sliderValue, setSliderValue] = useState([0, 10000]);
+	const [showCategories, setShowCategories] = useState(
+		Array.from(categories)
+	);
+	const [showCusines, setShowCusines] = useState(Array.from(cusines));
+
+	const isMobile = useBreakpointValue({
+		base: true,
+		md: false,
+		lg: false,
+		xl: false,
+	});
+
+	const optionValidator = (item) => {
+		if (
+			item.price >= sliderValue[0] * 100 &&
+			item.price <= sliderValue[1] * 100 &&
+			showCategories.includes(item.category) &&
+			showCusines.includes(item.cusine)
+		) {
+			return true;
+		} else {
+			return false;
+		}
+	};
 
 	return (
 		<>
@@ -33,93 +54,57 @@ const Menu = () => {
 				Menu
 			</Heading>
 			<Flex direction={{ base: "column", md: "row" }}>
-				<Box
-					flexDirection="column"
-					maxW="350"
-					display={{
-						base: "none",
-						md: "flex",
-						lg: "flex",
-						xl: "flex",
-					}}
-					margin={50}
-					w="300px"
-				>
-					<Box h={20}>
-						<Heading size="md" fontWeight="thin">
-							Price Range
-						</Heading>
-						<Slider aria-label="slider-ex-4" defaultValue={30}>
-							<SliderMark
-								value={0}
-								mt="1"
-								ml="-2.5"
-								fontSize="sm"
-							>
-								रू0
-							</SliderMark>
-							<SliderMark
-								value={100}
-								mt="1"
-								ml="-2.5"
-								fontSize="sm"
-							>
-								रू1000
-							</SliderMark>
-							<SliderTrack bg="red.100">
-								<SliderFilledTrack bg="tomato" />
-							</SliderTrack>
-							<SliderThumb boxSize={6}>
-								<Box color="tomato" as={BiDollar} />
-							</SliderThumb>
-						</Slider>
-					</Box>
-
-					<Box>
-						<Heading size="md" fontWeight="thin">
-							Category
-						</Heading>
-						<CheckboxGroup
-							colorScheme="green"
-							defaultValue={["naruto", "kakashi"]}
+				{isMobile ? (
+					<MobileMenuOption
+						sliderValue={sliderValue}
+						setSliderValue={setSliderValue}
+						showCategories={showCategories}
+						showCusines={showCusines}
+						setShowCategories={setShowCategories}
+						setShowCusines={setShowCusines}
+					/>
+				) : (
+					<Box
+						flexDirection="column"
+						display={{
+							base: "none",
+							md: "flex",
+							lg: "flex",
+							xl: "flex",
+						}}
+					>
+						<Box
+							maxW="300"
+							w="350px"
+							margin={25}
+							padding={50}
+							shadow="lg"
+							rounded="lg"
 						>
-							<Stack spacing={1} direction={["column", "column"]}>
-								<Checkbox value="whateverthatis">
-									Hors d`oeuvre
-								</Checkbox>
-								<Checkbox value="soup">Soup</Checkbox>
-								<Checkbox value="appetizer">Appetizer</Checkbox>
-								<Checkbox value="salad">Salad</Checkbox>
-								<Checkbox value="maincourse">
-									Maincourse
-								</Checkbox>
-								<Checkbox value="dessert">Dessert</Checkbox>
-								<Checkbox value="mignardise">
-									Mignardise
-								</Checkbox>
-							</Stack>
-						</CheckboxGroup>
+							<MenuOption
+								sliderValue={sliderValue}
+								setSliderValue={setSliderValue}
+								showCategories={showCategories}
+								showCusines={showCusines}
+								setShowCategories={setShowCategories}
+								setShowCusines={setShowCusines}
+							/>
+						</Box>
 					</Box>
-				</Box>
+				)}
+
 				<SimpleGrid
-					m={50}
+					m={{ base: "auto", md: "50" }}
 					spacing={50}
 					columns={{ sm: 1, md: 1, lg: 2, xl: 3 }}
 				>
 					{menuItems
 						? menuItems.map((item) => {
-								return (
-									<MenuCard
-										key={item._id}
-										id={item.menuId}
-										isNew={item.isPopular}
-										name={item.menuname}
-										imageURL={item.images[0]}
-										price={item.price}
-										rating={item.rating}
-										numReviews={item.numberOfReviews}
-									/>
-								);
+								if (optionValidator(item)) {
+									return (
+										<MenuCard key={item._id} {...item} />
+									);
+								}
 						  })
 						: Array(12)
 								.fill("")
