@@ -30,6 +30,7 @@ import OnlyLoggedIn from "@components/routes/OnlyLoggedIn";
 const EditPage = () => {
 	const MenuSchema = Yup.object().shape({
 		menuname: Yup.string().required("Required"),
+		badges: Yup.array().of(Yup.string().required("Required")),
 		price: Yup.number().required("Required"),
 		description: Yup.string().required("Required"),
 		features: Yup.array().of(Yup.string().required("Required")),
@@ -63,6 +64,7 @@ const EditPage = () => {
 				<Formik
 					initialValues={{
 						menuname: item.menuname,
+						badges: item.badges,
 						price: item.price,
 						description: item.description,
 						features: item.features,
@@ -189,6 +191,128 @@ const EditPage = () => {
 												</FormControl>
 											)}
 										</Field>
+										<FieldArray
+											name="badges"
+											render={(arrayHelpers) => (
+												<>
+													<Stack
+														direction={{
+															base: "column",
+															sm: "row",
+														}}
+														align={"start"}
+														justify={
+															"space-between"
+														}
+													>
+														<FormLabel>
+															Badges
+														</FormLabel>
+
+														<Button
+															size="xs"
+															colorScheme="green"
+															onClick={() =>
+																arrayHelpers.insert(
+																	props.values
+																		.badges
+																		.length,
+																	""
+																)
+															}
+														>
+															Add
+														</Button>
+													</Stack>
+													<SimpleGrid
+														spacing={2}
+														columns={{
+															base: 1,
+															lg: 2,
+														}}
+													>
+														{props.values.badges &&
+														props.values.badges
+															.length > 0 ? (
+															props.values.badges.map(
+																(
+																	badge,
+																	index
+																) => (
+																	<Field
+																		key={
+																			index
+																		}
+																		name={`badges.${index}`}
+																	>
+																		{({
+																			field,
+																			form,
+																		}) => (
+																			<FormControl
+																				isInvalid={
+																					form
+																						.errors
+																						.badges &&
+																					form
+																						.touched
+																						.badges
+																				}
+																			>
+																				<Stack
+																					direction={{
+																						base: "column",
+																						sm: "row",
+																					}}
+																					align={
+																						"start"
+																					}
+																					justify={
+																						"space-between"
+																					}
+																				></Stack>
+																				<InputGroup>
+																					<Input
+																						{...field}
+																						type="text"
+																					/>
+																					<InputRightElement width="4.5rem">
+																						<IconButton
+																							color="red.500"
+																							size="sm"
+																							aria-label="Delete"
+																							icon={
+																								<CloseIcon />
+																							}
+																							onClick={() =>
+																								arrayHelpers.remove(
+																									index
+																								)
+																							}
+																						/>
+																					</InputRightElement>
+																				</InputGroup>
+																			</FormControl>
+																		)}
+																	</Field>
+																)
+															)
+														) : (
+															<Button
+																type="button"
+																onClick={() =>
+																	arrayHelpers.push(
+																		""
+																	)
+																}
+															>
+																Add a Badge
+															</Button>
+														)}
+													</SimpleGrid>
+												</>
+											)}
+										/>
 										<Field name="price">
 											{({ field, form }) => (
 												<FormControl
