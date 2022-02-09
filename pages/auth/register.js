@@ -23,6 +23,17 @@ import { useRouter } from "next/router";
 import * as Yup from "yup";
 import { setToStorage } from "@components/helpers/localstorage";
 import OnlyLoggedOut from "@components/routes/OnlyLoggedOut";
+import {
+	collection,
+	addDoc,
+	doc,
+	setDoc,
+	updateDoc,
+	onSnapshot,
+	getDocs,
+	deleteField,
+} from "firebase/firestore";
+import { db } from "../../firebase";
 
 const RegisterPage = () => {
 	const toast = useToast();
@@ -78,11 +89,13 @@ const RegisterPage = () => {
 											`${values.firstname} ${values.lastname}`
 										);
 										console.log(user);
+										setDoc(doc(db, "users", user.uid), {});
 										actions.setSubmitting(false);
 										setToStorage(
 											"resendVerificationTimeout",
 											Math.ceil(Date.now() / 1000) + 60
 										);
+
 										toast({
 											title: `Welcome ${values.firstname} ${values.lastname}!`,
 											description:
