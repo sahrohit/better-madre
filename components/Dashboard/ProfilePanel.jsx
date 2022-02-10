@@ -34,6 +34,7 @@ const ProfilePanel = () => {
 	const toast = useToast();
 	const router = useRouter();
 	const {
+		updateProfileDetails,
 		currentUser,
 		providers,
 		logOut,
@@ -206,9 +207,18 @@ const ProfilePanel = () => {
 						leftIcon={<FcGoogle />}
 						m={5}
 						w="90%"
-						onClick={() => {
-							linkGoogleAccount()
+						onClick={async () => {
+							await linkGoogleAccount()
 								.then(() => {
+									updateProfileDetails(
+										currentUser,
+										currentUser.displayName,
+										currentUser.providerData[0].photoURL
+											? currentUser.providerData[0]
+													.photoURL
+											: currentUser.providerData[1]
+													.photoURL
+									);
 									toast({
 										title: "Successfully Linked",
 										description:

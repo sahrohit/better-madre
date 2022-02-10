@@ -80,7 +80,7 @@ const RegisterPage = () => {
 								password: "",
 							}}
 							validationSchema={SignupSchema}
-							onSubmit={(values, actions) => {
+							onSubmit={async (values, actions) => {
 								signUp(values.email, values.password)
 									.then((userCredential) => {
 										const user = userCredential.user;
@@ -88,7 +88,6 @@ const RegisterPage = () => {
 											user,
 											`${values.firstname} ${values.lastname}`
 										);
-										console.log(user);
 										setDoc(doc(db, "users", user.uid), {});
 										actions.setSubmitting(false);
 										setToStorage(

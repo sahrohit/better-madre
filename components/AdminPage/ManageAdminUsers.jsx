@@ -33,8 +33,19 @@ import {
 } from "firebase/firestore";
 import { db } from "../../firebase";
 import FullPageLoadingSpinner from "@components/shared/FullPageLoadingSpinner";
+import {
+	AutoComplete,
+	AutoCompleteInput,
+	AutoCompleteItem,
+	AutoCompleteList,
+	AutoCompleteGroup,
+	AutoCompleteFixedItem,
+} from "@choc-ui/chakra-autocomplete";
+import { useMenu } from "@contexts/MenuContext";
 
 const ManageAdminUsers = () => {
+	const { menuItems } = useMenu();
+
 	const toast = useToast();
 	const [admin, setAdmin] = useState(null);
 	const [loading, setLoading] = useState(true);
@@ -98,7 +109,37 @@ const ManageAdminUsers = () => {
 											form.touched.newadminuid
 										}
 									>
-										<Input {...field} id="newadminuid" />
+										<AutoComplete rollNavigation>
+											<AutoCompleteInput
+												{...field}
+												id="newadminuid"
+												placeholder="Search..."
+												autoFocus
+												variant="filled"
+											/>
+											<AutoCompleteList>
+												{menuItems.map(
+													(option, oid) => (
+														<AutoCompleteItem
+															key={`option-${oid}`}
+															value={
+																option.menuname
+															}
+															textTransform="capitalize"
+															onClick={() => {
+																form.setFieldValue(
+																	"newadminuid",
+																	option.menuname
+																);
+															}}
+														>
+															{option.menuname}
+														</AutoCompleteItem>
+													)
+												)}
+											</AutoCompleteList>
+										</AutoComplete>
+										{/* <Input {...field} id="newadminuid" /> */}
 									</FormControl>
 								)}
 							</Field>
@@ -227,8 +268,7 @@ const ProfileCard = ({ uid }) => {
 													);
 													toast({
 														title: `Deleted Successfully`,
-														description:
-															`All permission are revoked for ${user?.displayName}.`,
+														description: `All permission are revoked for ${user?.displayName}.`,
 														status: "success",
 														duration: 4000,
 														isClosable: true,

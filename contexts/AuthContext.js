@@ -15,7 +15,7 @@ import {
 } from "firebase/auth";
 import { isEqual } from "lodash";
 import { getFromStorage, setToStorage } from "@components/helpers/localstorage";
-import { updateDoc, doc } from "firebase/firestore";
+import { updateDoc, doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import FullPageLoadingSpinner from "@components/shared/FullPageLoadingSpinner";
 
@@ -71,7 +71,11 @@ const AuthProvider = ({ children }) => {
 		return sendPasswordResetEmail(auth, email);
 	};
 
-	const updateProfileDetails = (user, displayName, photoURL = "") => {
+	const updateProfileDetails = (
+		user = currentUser,
+		displayName = user.displayName,
+		photoURL = ""
+	) => {
 		return updateProfile(user, { displayName, photoURL });
 	};
 
@@ -84,7 +88,7 @@ const AuthProvider = ({ children }) => {
 	// };
 
 	const unsubscribe = useEffect(() => {
-		onAuthStateChanged(auth, (user) => {
+		onAuthStateChanged(auth, async (user) => {
 			setCurrentUser(user);
 			setProviders(
 				user
@@ -119,22 +123,31 @@ const AuthProvider = ({ children }) => {
 							uid: user.uid,
 						})
 					);
-					updateDoc(doc(db, "users", user.uid), {
-						displayName: user.displayName,
-						email: user.email,
-						emailVerified: user.emailVerified,
-						phoneNumber: user.phoneNumber,
-						photoURL: user.photoURL,
-						providerData: user.providerData,
-						uid: user.uid,
-					});
-					console.log("Updated in Database");
-				} else {
-					console.log("Used Cached Data");
+					try {
+						await updateDoc(doc(db, "users", user.uid), {
+							displayName: user.displayName,
+							email: user.email,
+							emailVerified: user.emailVerified,
+							phoneNumber: user.phoneNumber,
+							photoURL: user.photoURL,
+							providerData: user.providerData,
+							uid: user.uid,
+						});
+					} catch (error) {
+						if (error.code === "not-found") {
+							await setDoc(doc(db, "users", user.uid), {
+								displayName: user.displayName,
+								email: user.email,
+								emailVerified: user.emailVerified,
+								phoneNumber: user.phoneNumber,
+								photoURL: user.photoURL,
+								providerData: user.providerData,
+								uid: user.uid,
+							});
+						}
+					}
 				}
 			}
-
-			console.log("user", user);
 
 			setLoading(false);
 		});
@@ -151,9 +164,10 @@ const AuthProvider = ({ children }) => {
 		resetPassword,
 		updateProfileDetails,
 		sendVerificationEmail,
+		GoogleAuthProvider,
 		signInWithGoogle,
-		unLinkGoogleAccount,
 		linkGoogleAccount,
+		unLinkGoogleAccount,
 		// updateEmail,
 		// updatePassword,
 		// signInWithFacebook,
