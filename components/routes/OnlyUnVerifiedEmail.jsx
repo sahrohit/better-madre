@@ -9,6 +9,11 @@ const OnlyUnVerifiedEmail = ({ children }) => {
 	const router = useRouter();
 	const { currentUser } = useAuth();
 
+	if (!currentUser) {
+		router.push("/");
+		return <FullPageLoadingSpinner />;
+	}
+
 	if (currentUser.emailVerified) {
 		router.push("/cart").then(() => {
 			//! The last page (from which the push is being called) re-renders while router.push is being used.

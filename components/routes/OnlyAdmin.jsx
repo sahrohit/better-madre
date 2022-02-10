@@ -30,6 +30,11 @@ const OnlyAdmin = ({ children }) => {
 		[currentUser]
 	);
 
+	if (!currentUser) {
+		router.push("/");
+		return <FullPageLoadingSpinner />;
+	}
+
 	if (loading) {
 		return <FullPageLoadingSpinner />;
 	}
@@ -43,8 +48,6 @@ const OnlyAdmin = ({ children }) => {
 		// 	duration: 5000,
 		// 	isClosable: true,
 		// });
-
-		console.log("Pushed");
 
 		router.push("/");
 		return <FullPageLoadingSpinner />;
