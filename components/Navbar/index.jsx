@@ -6,13 +6,15 @@ import {
 	Button,
 	Stack,
 	Collapse,
-	Link,
+	Link as ChakraLink,
 	Popover,
 	PopoverTrigger,
 	useColorModeValue,
 	useBreakpointValue,
 	useDisclosure,
 	useColorMode,
+	HStack,
+	VStack,
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import NextRouter from "next/router";
@@ -22,18 +24,25 @@ import { mobileBreakpointsMap } from "config/theme";
 import LoginMenu from "./LoginMenu";
 import { useAuth } from "@contexts/AuthContext";
 import ProfileMenu from "./ProfileMenu";
+import { AiFillHome } from "react-icons/ai";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import { MdOutlineRestaurantMenu, MdWorkOutline } from "react-icons/md";
+import { BiCalendarEvent, BiBuildings } from "react-icons/bi";
 
 export const Navbar = ({ position }) => {
 	const { isOpen, onToggle } = useDisclosure();
 
 	const { colorMode, toggleColorMode } = useColorMode();
 
-	const isMobile = useBreakpointValue(mobileBreakpointsMap);
+	const isMobile = useBreakpointValue({ base: true, md: false });
 	const { currentUser } = useAuth();
 
 	return (
-		<Box position={position} top="0" zIndex="1" marginX={!isMobile && "10"}>
+		<Box w={"full"} position={position} top="0" zIndex="1">
 			<Flex
+				mr={!isMobile && "10"}
+				ml={!isMobile && "10"}
 				bg={useColorModeValue("#edf2f7", "black")}
 				color={useColorModeValue("gray.600", "white")}
 				minH={"60px"}
@@ -69,17 +78,6 @@ export const Navbar = ({ position }) => {
 					alignItems="center"
 					onClick={() => NextRouter.push("/")}
 				>
-					{/* <Image
-						width="70px"
-						height="auto"
-						alt="Brand Secondary Logo"
-						src={useColorModeValue(
-							"/Madre_light.svg",
-							"/Madre_dark.svg"
-						)}
-						loading="eager"
-					/> */}
-
 					<Logo />
 
 					<Flex display={{ base: "none", md: "flex" }} ml={10}>
@@ -89,19 +87,28 @@ export const Navbar = ({ position }) => {
 
 				<Stack
 					flex={{ base: 1, md: 0 }}
-					justify={"flex-end"}
-					direction={"row"}
+					justify={"flex-start"}
+					align={"center"}
+					direction={currentUser ? "row-reverse" : "row"}
 					spacing={6}
 				>
 					{currentUser ? <ProfileMenu /> : <LoginMenu />}
 
-					<IconButton
-						variant="nooutline"
-						colorScheme="teal"
-						aria-label="Toggle Light Mode"
-						icon={colorMode == "light" ? <MoonIcon /> : <SunIcon />}
-						onClick={toggleColorMode}
-					/>
+					{!isMobile && (
+						<IconButton
+							variant="nooutline"
+							colorScheme="teal"
+							aria-label="Toggle Light Mode"
+							icon={
+								colorMode == "light" ? (
+									<MoonIcon />
+								) : (
+									<SunIcon />
+								)
+							}
+							onClick={toggleColorMode}
+						/>
+					)}
 				</Stack>
 			</Flex>
 
@@ -116,30 +123,31 @@ export const Navbar = ({ position }) => {
 };
 
 const DesktopNav = () => {
-	const linkColor = useColorModeValue("gray.600", "gray.200");
-	const linkHoverColor = useColorModeValue("gray.800", "white");
+	const router = useRouter();
 
 	return (
 		<Stack direction={"row"} spacing={4}>
 			{NAV_ITEMS.map((navItem) => (
 				<Box key={navItem.label}>
-					<Popover trigger={"hover"} placement={"bottom-start"}>
-						<PopoverTrigger>
-							<Link
-								p={2}
-								href={navItem.href ?? "#"}
-								fontSize={"sm"}
-								fontWeight={500}
-								color={linkColor}
-								_hover={{
-									textDecoration: "none",
-									color: linkHoverColor,
-								}}
-							>
-								{navItem.label}
-							</Link>
-						</PopoverTrigger>
-					</Popover>
+					<Button
+						variant={
+							router.asPath === navItem.href ? "solid" : "ghost"
+						}
+						leftIcon={navItem.icon}
+						size="sm"
+					>
+						<ChakraLink
+							href={
+								router.asPath === navItem.href
+									? "#"
+									: navItem.href
+							}
+							as={Link}
+							passHref
+						>
+							<a>{navItem.label}</a>
+						</ChakraLink>
+					</Button>
 				</Box>
 			))}
 		</Stack>
@@ -159,18 +167,17 @@ const MobileNav = ({ colorMode, toggleColorMode }) => {
 					/>
 				))}
 			</Stack>
-			<Flex
-				p={4}
+			<VStack
+				px={4}
 				display={{ md: "none", base: "flex" }}
 				direction="column"
 				justify={"space-between"}
 				align={"center"}
-				height="100%"
+				spacing={5}
 			>
 				<Button
 					display={"inline-flex"}
-					fontSize={"sm"}
-					fontWeight={600}
+					w={"full"}
 					color={"white"}
 					bg="#25b09c"
 					_hover={{
@@ -182,8 +189,7 @@ const MobileNav = ({ colorMode, toggleColorMode }) => {
 				</Button>
 				<Button
 					display={"inline-flex"}
-					fontSize={"sm"}
-					fontWeight={600}
+					w={"full"}
 					color={"white"}
 					bg="#25b09c"
 					_hover={{
@@ -193,16 +199,17 @@ const MobileNav = ({ colorMode, toggleColorMode }) => {
 				>
 					Sign In
 				</Button>
-			</Flex>
+			</VStack>
 		</Flex>
 	);
 };
 
-const MobileNavItem = ({ label, href }) => {
+const MobileNavItem = ({ label, href, icon }) => {
+	const router = useRouter();
+
 	return (
 		<Stack spacing={4}>
 			<Flex
-				py={2}
 				justify={"space-between"}
 				align={"center"}
 				_hover={{
@@ -210,14 +217,15 @@ const MobileNavItem = ({ label, href }) => {
 				}}
 				onClick={() => NextRouter.push(href)}
 			>
-				<Text
-					as={Link}
-					// href={href ?? "#"}
-					fontWeight={600}
-					color={useColorModeValue("gray.600", "gray.200")}
-				>
-					{label}
-				</Text>
+				<Link href={href} as={href} passHref>
+					<Button
+						variant={router.asPath === href ? "solid" : "ghost"}
+						leftIcon={icon}
+						size="sm"
+					>
+						{label}
+					</Button>
+				</Link>
 			</Flex>
 		</Stack>
 	);
@@ -227,17 +235,21 @@ const NAV_ITEMS = [
 	{
 		label: "Menu",
 		href: "/menu",
+		icon: <MdOutlineRestaurantMenu />,
 	},
 	{
 		label: "Events",
 		href: "/events",
+		icon: <BiCalendarEvent />,
 	},
 	{
 		label: "Jobs",
 		href: "/jobs",
+		icon: <MdWorkOutline />,
 	},
 	{
 		label: "About Us",
 		href: "/aboutus",
+		icon: <BiBuildings />,
 	},
 ];

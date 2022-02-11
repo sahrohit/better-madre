@@ -17,6 +17,7 @@ import {
 	AlertDialogContent,
 	AlertDialogOverlay,
 	Tag,
+	FormErrorMessage,
 } from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
 import { useAuth } from "contexts/AuthContext";
@@ -41,30 +42,27 @@ import {
 	AutoCompleteGroup,
 	AutoCompleteFixedItem,
 } from "@choc-ui/chakra-autocomplete";
-import { useMenu } from "@contexts/MenuContext";
+import { useUser } from "@contexts/UserContext";
+import { GrUserAdmin } from "react-icons/gr";
+import { nanoid } from "nanoid";
 
 const ManageAdminUsers = () => {
-	const { menuItems } = useMenu();
+	const { users, uids, admins } = useUser();
 
 	const toast = useToast();
-	const [admin, setAdmin] = useState(null);
-	const [loading, setLoading] = useState(true);
+
+	const [confirmInput, setConfirmInput] = useState("");
+	const cancelButtonRef = useRef();
+	const [newAdminUid, setNewAdminUid] = useState("");
+
+	const [isAddAdminDialogOpen, setIsAddAdminDialogOpen] = useState(false);
+
 	const AdminUsersSchema = Yup.object().shape({
-		newadminuid: Yup.string().required("Required"),
+		newadminuid: Yup.string()
+			.required("Required")
+			.oneOf(uids, "Not a valud Userid")
+			.notOneOf(admins, "Already an Admin"),
 	});
-
-	useEffect(
-		() =>
-			onSnapshot(collection(db, "admin"), (snapshot) => {
-				setAdmin(snapshot.docs.map((doc) => doc.id));
-				setLoading(false);
-			}),
-		[]
-	);
-
-	if (loading) {
-		return <FullPageLoadingSpinner />;
-	}
 
 	return (
 		<VStack
@@ -74,28 +72,22 @@ const ManageAdminUsers = () => {
 			justify={"flex-start"}
 			alignItems={"center"}
 		>
-			<Heading variant={"emphasis"}>Admins</Heading>
+			<Heading variant={"emphasis"}>Manage Admins</Heading>
 
 			<VStack>
-				{admin.map((uid) => (
+				{admins.map((uid) => (
 					<ProfileCard key={uid} uid={uid} />
 				))}
 			</VStack>
 
 			<Formik
+				validateOnChange={false}
+				validateOnBlur={false}
 				initialValues={{ newadminuid: "" }}
 				validationSchema={AdminUsersSchema}
 				onSubmit={async (values, actions) => {
-					try {
-						await setDoc(doc(db, "admin", values.newadminuid), {});
-						toast({
-							title: `Added New Admin!`,
-							description: `One more to the team. 🎉`,
-							status: "success",
-							duration: 4000,
-							isClosable: true,
-						});
-					} catch (error) {}
+					setIsAddAdminDialogOpen(true);
+					setNewAdminUid(values.newadminuid);
 				}}
 			>
 				{(props) => (
@@ -110,48 +102,133 @@ const ManageAdminUsers = () => {
 										}
 									>
 										<AutoComplete rollNavigation>
-											<AutoCompleteInput
-												{...field}
-												id="newadminuid"
-												placeholder="Search..."
-												autoFocus
-												variant="filled"
-											/>
+											<HStack spacing={2}>
+												<AutoCompleteInput
+													{...field}
+													id="newadminuid"
+													placeholder="User Id or Search Name"
+													autoFocus
+													autoComplete="off"
+													variant="filled"
+												/>
+												<IconButton
+													fontSize={"xl"}
+													colorScheme={"teal"}
+													type="submit"
+													icon={<GrUserAdmin />}
+												/>
+											</HStack>
 											<AutoCompleteList>
-												{menuItems.map(
-													(option, oid) => (
-														<AutoCompleteItem
-															key={`option-${oid}`}
-															value={
-																option.menuname
+												{users.map((user, oid) => (
+													<AutoCompleteItem
+														key={nanoid()}
+														value={user.displayName}
+														textTransform="capitalize"
+														align="center"
+														onClick={() => {
+															form.setFieldValue(
+																"newadminuid",
+																user.uid
+															);
+														}}
+														my={1}
+													>
+														<Avatar
+															size="sm"
+															name={
+																user.displayName
 															}
-															textTransform="capitalize"
-															onClick={() => {
-																form.setFieldValue(
-																	"newadminuid",
-																	option.menuname
-																);
-															}}
-														>
-															{option.menuname}
-														</AutoCompleteItem>
-													)
-												)}
+															src={user.photoURL}
+														/>
+														<Text ml="4">
+															{user.displayName}
+														</Text>
+													</AutoCompleteItem>
+												))}
 											</AutoCompleteList>
 										</AutoComplete>
-										{/* <Input {...field} id="newadminuid" /> */}
+
+										<FormErrorMessage>
+											{form.errors.newadminuid}
+										</FormErrorMessage>
 									</FormControl>
 								)}
 							</Field>
-							<Button
-								mt={4}
-								colorScheme={"green"}
-								isLoading={props.isSubmitting}
-								type="submit"
-							>
-								Add
-							</Button>
 						</HStack>
+						<AlertDialog
+							isOpen={isAddAdminDialogOpen}
+							leastDestructiveRef={cancelButtonRef}
+							onClose={() => setIsAddAdminDialogOpen(false)}
+						>
+							<AlertDialogOverlay>
+								<AlertDialogContent>
+									<AlertDialogHeader
+										fontSize="lg"
+										fontWeight="bold"
+									>
+										Revoke Admin Access
+									</AlertDialogHeader>
+
+									<AlertDialogBody>
+										Type <Tag>confirm</Tag> to confirm.
+										<FormControl>
+											<Input
+												my={2}
+												placeholder="confirm"
+												onChange={(e) =>
+													setConfirmInput(
+														e.target.value
+													)
+												}
+											/>
+										</FormControl>
+									</AlertDialogBody>
+
+									<AlertDialogFooter>
+										<Button
+											ref={cancelButtonRef}
+											onClick={() =>
+												setIsAddAdminDialogOpen(false)
+											}
+										>
+											Cancel
+										</Button>
+
+										<Button
+											isDisabled={
+												confirmInput !== "confirm"
+											}
+											colorScheme="green"
+											ml={3}
+											onClick={async () => {
+												try {
+													await setDoc(
+														doc(
+															db,
+															"admin",
+															newAdminUid
+														),
+														{}
+													);
+													toast({
+														title: `Added New Admin!`,
+														description: `One more to the team. 🎉`,
+														status: "success",
+														duration: 4000,
+														isClosable: true,
+													});
+													setIsAddAdminDialogOpen(
+														false
+													);
+												} catch (error) {}
+											}}
+										>
+											Add
+										</Button>
+									</AlertDialogFooter>
+								</AlertDialogContent>
+							</AlertDialogOverlay>
+						</AlertDialog>
 					</Form>
 				)}
 			</Formik>
@@ -166,7 +243,7 @@ const ProfileCard = ({ uid }) => {
 	const { colorMode } = useColorMode();
 	const { currentUser } = useAuth();
 
-	const [isDialogOpen, setIsDialogOpen] = useState(false);
+	const [isRevokeDialogOpen, setIsRevokeDialogOpen] = useState(false);
 	const cancelButtonRef = useRef();
 
 	const [confirmInput, setConfirmInput] = useState("");
@@ -210,13 +287,13 @@ const ProfileCard = ({ uid }) => {
 						size="sm"
 						aria-label="Delete"
 						icon={<CloseIcon />}
-						onClick={() => setIsDialogOpen(true)}
+						onClick={() => setIsRevokeDialogOpen(true)}
 					/>
 
 					<AlertDialog
-						isOpen={isDialogOpen}
+						isOpen={isRevokeDialogOpen}
 						leastDestructiveRef={cancelButtonRef}
-						onClose={() => setIsDialogOpen(false)}
+						onClose={() => setIsRevokeDialogOpen(false)}
 					>
 						<AlertDialogOverlay>
 							<AlertDialogContent>
@@ -243,7 +320,9 @@ const ProfileCard = ({ uid }) => {
 								<AlertDialogFooter>
 									<Button
 										ref={cancelButtonRef}
-										onClick={() => setIsDialogOpen(false)}
+										onClick={() =>
+											setIsRevokeDialogOpen(false)
+										}
 									>
 										Cancel
 									</Button>
@@ -284,7 +363,7 @@ const ProfileCard = ({ uid }) => {
 													});
 												}
 											}
-											setIsDialogOpen(false);
+											setIsRevokeDialogOpen(false);
 										}}
 										ml={3}
 									>

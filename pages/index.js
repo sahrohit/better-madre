@@ -3,28 +3,28 @@ import Footer from "@components/shared/Footer";
 import { Navbar } from "@components/Navbar";
 import OpenGraphHead from "@components/shared/OpenGraphHead";
 import Banner from "@components/Home/Banner";
-import {
-	motion,
-	useViewportScroll,
-	useSpring,
-	useTransform,
-} from "framer-motion";
-import { useState, useEffect } from "react";
-import { Box, Stat, useColorModeValue } from "@chakra-ui/react";
+// import {
+// 	motion,
+// 	useViewportScroll,
+// 	useSpring,
+// 	useTransform,
+// } from "framer-motion";
+// import { useState, useEffect } from "react";
+// import { Box, Stat, useColorModeValue } from "@chakra-ui/react";
 import Stats from "@components/Home/Stats";
 import FadeInWhenVisible from "@components/shared/FadeWhenVisible";
 
 const Home = () => {
-	const [isComplete, setIsComplete] = useState(false);
-	const { scrollYProgress } = useViewportScroll();
-	const yRange = useTransform(scrollYProgress, [0, 0.9], [0, 1]);
-	const pathLength = useSpring(yRange, { stiffness: 400, damping: 90 });
+	// const [isComplete, setIsComplete] = useState(false);
+	// const { scrollYProgress } = useViewportScroll();
+	// const yRange = useTransform(scrollYProgress, [0, 0.9], [0, 1]);
+	// const pathLength = useSpring(yRange, { stiffness: 400, damping: 90 });
 
 	// console.log("ScrollYProgress", scrollYProgress);
 	// console.log("yRange", yRange);
 	// console.log("path Length", pathLength);
 
-	const progressColor = useColorModeValue("#3F72AF", "#30E3CA");
+	// const progressColor = useColorModeValue("#3F72AF", "#30E3CA");
 
 	return (
 		<>

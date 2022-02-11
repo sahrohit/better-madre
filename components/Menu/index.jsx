@@ -15,7 +15,6 @@ import MobileMenuOption from "./MobileMenuOption";
 
 const Menu = () => {
 	const { menuItems, categories, cusines } = useMenu();
-
 	const [sliderValue, setSliderValue] = useState([0, 10000]);
 	const [showCategories, setShowCategories] = useState(
 		Array.from(categories)
@@ -41,6 +40,8 @@ const Menu = () => {
 			return false;
 		}
 	};
+
+	console.log("Test", menuItems, categories, cusines);
 
 	return (
 		<>

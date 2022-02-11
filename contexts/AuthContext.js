@@ -174,10 +174,6 @@ const AuthProvider = ({ children }) => {
 		// signInWithGithub,
 	};
 
-	if (loading) {
-		return <FullPageLoadingSpinner />;
-	}
-
 	return (
 		<AuthContext.Provider value={value}>
 			{!loading && children}
