@@ -12,6 +12,7 @@ import { useMenu } from "@contexts/MenuContext";
 import { useState } from "react";
 import MenuOption from "./MenuOption";
 import MobileMenuOption from "./MobileMenuOption";
+import SearchBar from "@components/shared/SearchBar";
 
 const Menu = () => {
 	const { menuItems, categories, cusines } = useMenu();
@@ -41,8 +42,6 @@ const Menu = () => {
 		}
 	};
 
-	console.log("Test", menuItems, categories, cusines);
-
 	return (
 		<>
 			<Heading
@@ -54,6 +53,15 @@ const Menu = () => {
 			>
 				Menu
 			</Heading>
+			<Flex
+				boxShadow={"md"}
+				borderRadius={"lg"}
+				mx={"auto"}
+				w={isMobile ? "95%" : "600px"}
+				my={2}
+			>
+				<SearchBar />
+			</Flex>
 			<Flex direction={{ base: "column", md: "row" }}>
 				{isMobile ? (
 					<MobileMenuOption
