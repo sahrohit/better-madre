@@ -1,0 +1,100 @@
+{
+	"theme_color": "#318b6c",
+	"background_color": "#edf2f7",
+	"display": "standalone",
+	"scope": "/",
+	"start_url": "/",
+	"name": "Madre Restaurant",
+	"short_name": "Madre",
+	"description": "The restaurant chain, that focuses on customer experience and quality food.",
+	"orientation": "portrait",
+	"shortcuts": [
+		{
+			"name": "Menu",
+			"short_name": "Menu",
+			"description": "View your Menu",
+			"url": "/menu",
+			"icons": [
+				{
+					"src": "icons/menu.png",
+					"sizes": "48x48",
+					"type": "image/png"
+				}
+			]
+		},
+		{
+			"name": "Events",
+			"short_name": "Events",
+			"description": "Celebrate your special events",
+			"url": "/events",
+			"icons": [
+				{
+					"src": "icons/events.png",
+					"sizes": "48x48",
+					"type": "image/png"
+				}
+			]
+		},
+		{
+			"name": "Jobs",
+			"short_name": "Jobs",
+			"description": "Work with us",
+			"url": "/jobs",
+			"icons": [
+				{
+					"src": "icons/jobs.png",
+					"sizes": "48x48",
+					"type": "image/png"
+				}
+			]
+		},
+		{
+			"name": "About Us",
+			"short_name": "About us",
+			"description": "Learn more about us",
+			"url": "/aboutus",
+			"icons": [
+				{
+					"src": "icons/aboutus.png",
+					"sizes": "48x48",
+					"type": "image/png"
+				}
+			]
+		}
+	],
+	"icons": [
+		{
+			"src": "icons/icon-192x192.png",
+			"sizes": "192x192",
+			"type": "image/png"
+		},
+		{
+			"src": "icons/icon-256x256.png",
+			"sizes": "256x256",
+			"type": "image/png"
+		},
+		{
+			"src": "icons/icon-384x384.png",
+			"sizes": "384x384",
+			"type": "image/png"
+		},
+		{
+			"src": "icons/icon-512x512.png",
+			"sizes": "512x512",
+			"type": "image/png"
+		},
+		{
+			"src": "icons/manifest-icon-192.maskable.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"purpose": "any maskable"
+		},
+		{
+			"src": "icons/manifest-icon-512.maskable.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "any maskable"
+		}
+	],
+	"splash_pages": null
+}
