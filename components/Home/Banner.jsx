@@ -93,7 +93,7 @@ const Banner = (props) => {
 					The restaurant chain, that focuses on customer <br />{" "}
 					experience and quality food.
 				</Heading>
-				<Link href="/" passHref>
+				<Link href="/menu" passHref>
 					<Button
 						variant="outline"
 						borderRadius="8px"
