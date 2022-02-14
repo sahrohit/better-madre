@@ -6,9 +6,12 @@ import {
 	HStack,
 	Text,
 	IconButton,
+	Button,
 } from "@chakra-ui/react";
 import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import { useRouter } from "next/router";
+import Link from "next/link";
+import { useUser } from "@contexts/UserContext";
 
 function Rating({ rating, numberOfReviews }) {
 	return (
@@ -58,6 +61,8 @@ const MenuCard = ({
 }) => {
 	const router = useRouter();
 
+	const { addToCart } = useUser();
+
 	const determineBadgeColor = (badge) => {
 		if (badge.toLowerCase() === "new") {
 			return "green";
@@ -68,18 +73,44 @@ const MenuCard = ({
 
 	return (
 		<Box maxW="sm" borderWidth="1px" rounded="lg" shadow="lg">
-			<Box
-				cursor={"pointer"}
-				bgImage={`url(${images[0]})`}
-				width={"100%"}
-				bgSize="cover"
-				roundedTop="lg"
-				bgPosition="center"
-				height={"276px"}
-				onClick={() => {
-					router.push(`/menu/${menuId}`);
-				}}
-			/>
+			<Link href={`/menu/${menuId}`} passHref>
+				<Box
+					cursor={"pointer"}
+					bgImage={`url(${images[0]})`}
+					width={"100%"}
+					bgSize="cover"
+					roundedTop="lg"
+					bgPosition="center"
+					height={"276px"}
+					align={"right"}
+				>
+					<Button
+						m={2}
+						size="xs"
+						bg="gray.800"
+						fontSize="xs"
+						fontWeight="bold"
+						color="white"
+						px={2}
+						py={1}
+						rounded="md"
+						textTransform="uppercase"
+						_hover={{
+							bg: useColorModeValue("gray.700", "gray.600"),
+						}}
+						_focus={{
+							bg: useColorModeValue("gray.700", "gray.600"),
+							outline: "none",
+						}}
+						onClick={(event) => {
+							event.stopPropagation();
+							addToCart(menuId, menuname, price);
+						}}
+					>
+						Add to cart
+					</Button>
+				</Box>
+			</Link>
 
 			<Box p="6">
 				{badges && (
@@ -115,6 +146,28 @@ const MenuCard = ({
 				<Box>{`रू ${price / 100}`}</Box>
 
 				<Rating rating={rating} numberOfReviews={numberOfReviews} />
+				{/* <HStack justifyContent={"flex-end"}>
+					<Button
+						size="xs"
+						bg="gray.800"
+						fontSize="xs"
+						fontWeight="bold"
+						color="white"
+						px={2}
+						py={1}
+						rounded="md"
+						textTransform="uppercase"
+						_hover={{
+							bg: useColorModeValue("gray.700", "gray.600"),
+						}}
+						_focus={{
+							bg: useColorModeValue("gray.700", "gray.600"),
+							outline: "none",
+						}}
+					>
+						Add to cart
+					</Button>
+				</HStack> */}
 			</Box>
 		</Box>
 	);
