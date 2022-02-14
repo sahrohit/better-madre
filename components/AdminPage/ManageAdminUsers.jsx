@@ -255,9 +255,7 @@ const ProfileCard = ({ uid }) => {
 			try {
 				const docSnap = await getDoc(doc(db, "users", uid));
 				setUser(docSnap.data());
-			} catch (error) {
-				console.log(error);
-			}
+			} catch (error) {}
 		};
 		getUserData();
 	}, [uid]);

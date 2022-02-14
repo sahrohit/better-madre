@@ -6,7 +6,6 @@ import { Navbar } from "@components/Navbar";
 import OnlyVerifiedEmail from "@components/routes/OnlyVerifiedEmail";
 
 const ProfilePage = () => {
-	console.log("Re-rendering the Profile Page");
 	return (
 		<>
 			<Navbar position="static" />

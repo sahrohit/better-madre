@@ -51,8 +51,6 @@ export const Navbar = ({ position }) => {
 
 	const [isComplete, setIsComplete] = useState(false);
 
-	console.log(scrollYProgress);
-
 	return (
 		<Box w={"full"} position={position} top="0" zIndex="1" boxShadow={"md"}>
 			<Flex
@@ -91,7 +89,6 @@ export const Navbar = ({ position }) => {
 					flex={{ base: 1 }}
 					justifyContent={{ base: "center", md: "start" }}
 					alignItems="center"
-					onClick={() => NextRouter.push("/")}
 				>
 					<Logo />
 
