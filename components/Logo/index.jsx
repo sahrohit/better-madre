@@ -22,7 +22,7 @@ const Logo = () => {
 						objectFit="contain"
 						src="/Madre_dark.svg"
 						alt="Madre Logo"
-						fallbackSrc="./logo.png"
+						fallbackSrc="/Madre_dark.svg"
 						variants={simpleOpacity}
 						initial="initial"
 						animate={isLogoLoaded && "animate"}
@@ -36,7 +36,7 @@ const Logo = () => {
 						height={"50px"}
 						objectFit="contain"
 						src="/Madre_light.svg"
-						fallbackSrc="./logo_light.png"
+						fallbackSrc="/Madre_light.svg"
 						alt="Madre Logo"
 						variants={simpleOpacity}
 						initial="initial"
