@@ -27,7 +27,7 @@ import { useRouter } from "next/router";
 import { BiCalendarEvent, BiBuildings } from "react-icons/bi";
 import { MdWorkOutline, MdLogin, MdDashboard } from "react-icons/md";
 import { AiOutlineShoppingCart, AiFillHome } from "react-icons/ai";
-import { IoBagCheckOutline, IoCreateOutline } from "react-icons/io";
+import { IoBagCheckOutline, IoCreateOutline } from "react-icons/io5";
 import { SearchIcon } from "@chakra-ui/icons";
 
 const SearchBar = () => {
