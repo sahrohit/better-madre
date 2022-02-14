@@ -14,7 +14,6 @@
     "@choc-ui/chakra-autocomplete": "^4.16.2",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
-    "@reduxjs/toolkit": "^1.7.2",
     "firebase": "^9.6.6",
     "formik": "^2.2.9",
     "framer-motion": "^6.2.4",

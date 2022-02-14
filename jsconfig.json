@@ -7,7 +7,6 @@
 			"@contexts/*": ["./contexts/*"],
 			"@pages/*": ["./pages/*"],
 			"@public/*": ["./public/*"],
-			"@store/*": ["./store/*"],
 			"@styles/*": ["./styles/*"]
 		}
 	}
