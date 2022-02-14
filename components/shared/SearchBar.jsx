@@ -59,7 +59,7 @@ const SearchBar = () => {
 						variant="unstyled"
 					>
 						<option value="all">All</option>
-						<option value="menu">Menu Item</option>
+						<option value="menu">Menu</option>
 						<option value="pages">Pages</option>
 					</Select>
 				</InputRightAddon>

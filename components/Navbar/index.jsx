@@ -29,8 +29,19 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { MdOutlineRestaurantMenu, MdWorkOutline } from "react-icons/md";
 import { BiCalendarEvent, BiBuildings } from "react-icons/bi";
+import {
+	motion,
+	useViewportScroll,
+	useSpring,
+	useTransform,
+} from "framer-motion";
+import { useEffect, useState } from "react";
 
 export const Navbar = ({ position }) => {
+	const MotionBox = motion(Box);
+
+	const { scrollYProgress } = useViewportScroll();
+
 	const { isOpen, onToggle } = useDisclosure();
 
 	const { colorMode, toggleColorMode } = useColorMode();
@@ -38,8 +49,12 @@ export const Navbar = ({ position }) => {
 	const isMobile = useBreakpointValue({ base: true, md: false });
 	const { currentUser } = useAuth();
 
+	const [isComplete, setIsComplete] = useState(false);
+
+	console.log(scrollYProgress);
+
 	return (
-		<Box w={"full"} position={position} top="0" zIndex="1">
+		<Box w={"full"} position={position} top="0" zIndex="1" boxShadow={"md"}>
 			<Flex
 				mr={!isMobile && "10"}
 				ml={!isMobile && "10"}
@@ -48,11 +63,11 @@ export const Navbar = ({ position }) => {
 				minH={"60px"}
 				py={{ base: 2 }}
 				px={{ base: 4 }}
-				borderBottom={1}
-				borderStyle={"solid"}
 				zIndex="100"
-				borderColor={useColorModeValue("gray.200", "gray.900")}
 				align={"center"}
+				// borderBottom={1}
+				// borderStyle={"solid"}
+				// borderColor={useColorModeValue("gray.200", "gray.900")}
 			>
 				<Flex
 					flex={{ base: 1, md: "auto" }}

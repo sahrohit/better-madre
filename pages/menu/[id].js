@@ -26,6 +26,7 @@ import { useState, useEffect } from "react";
 import { collection, doc, onSnapshot, getDocs } from "firebase/firestore";
 import { db } from "../../firebase";
 import { nanoid } from "nanoid";
+import { useUser } from "@contexts/UserContext";
 
 export const getStaticProps = async ({ params }) => {
 	const { id } = params;
@@ -48,6 +49,7 @@ export const getStaticPaths = async () => {
 
 export default function Simple({ id }) {
 	const [item, setItem] = useState(null);
+	const { addToCart } = useUser();
 
 	useEffect(
 		() =>
@@ -262,6 +264,13 @@ export default function Simple({ id }) {
 								transform: "translateY(2px)",
 								boxShadow: "lg",
 							}}
+							onClick={() =>
+								addToCart(
+									item.menuId,
+									item.menuname,
+									item.price
+								)
+							}
 						>
 							Add to cart
 						</Button>
