@@ -1,5 +1,7 @@
+import { Navbar } from "@components/Navbar";
+
 const EventsPage = () => {
-	return <h1>This is EventsPage</h1>;
+	return <Navbar position="sticky" />;
 };
 
 export default EventsPage;

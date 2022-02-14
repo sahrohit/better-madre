@@ -1,5 +1,7 @@
+import { Navbar } from "@components/Navbar";
+
 const JobsPage = () => {
-	return <h1>This is JobsPage</h1>;
+	return <Navbar position="sticky" />;
 };
 
 export default JobsPage;
