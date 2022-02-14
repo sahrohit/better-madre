@@ -42,12 +42,12 @@ import {
 	AutoCompleteGroup,
 	AutoCompleteFixedItem,
 } from "@choc-ui/chakra-autocomplete";
-import { useUser } from "@contexts/UserContext";
+import { useAdmin } from "@contexts/AdminContext";
 import { GrUserAdmin } from "react-icons/gr";
 import { nanoid } from "nanoid";
 
 const ManageAdminUsers = () => {
-	const { users, uids, admins } = useUser();
+	const { users, uids, admins } = useAdmin();
 
 	const toast = useToast();
 
