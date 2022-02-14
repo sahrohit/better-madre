@@ -143,6 +143,8 @@ const AuthProvider = ({ children }) => {
 								photoURL: user.photoURL,
 								providerData: user.providerData,
 								uid: user.uid,
+								cartItems: [],
+								cartTotal: 0,
 							});
 						}
 					}
