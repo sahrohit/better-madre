@@ -21,10 +21,26 @@ const AdminProvider = ({ children }) => {
 	const [users, setUsers] = useState(null);
 	const [uids, setUids] = useState(null);
 	const [admins, setAdmins] = useState(null);
+	const [adminMenu, setAdminMenu] = useState(null);
 	const [loading, setLoading] = useState(true);
+	const [adminCategories, setAdminCategories] = useState(new Set());
+	const [adminCusines, setAdminCusines] = useState(new Set());
+
+	console.log("Admin Context Executed");
 
 	useEffect(() => {
 		let subscribers = [];
+		const menuListener = onSnapshot(collection(db, "menu"), (snapshot) => {
+			setAdminMenu(snapshot.docs.map((doc) => doc.data()));
+			setAdminCategories(
+				new Set(snapshot.docs.map((doc) => doc.data().category))
+			);
+			setAdminCusines(
+				new Set(snapshot.docs.map((doc) => doc.data().cusine))
+			);
+			setLoading(false);
+		});
+		subscribers.push(menuListener);
 		const userListener = onSnapshot(collection(db, "users"), (snapshot) => {
 			setUsers(snapshot.docs.map((doc) => doc.data()));
 			setUids(snapshot.docs.map((doc) => doc.data().uid));
@@ -42,10 +58,21 @@ const AdminProvider = ({ children }) => {
 		return () => subscribers.forEach((sub) => sub());
 	}, []);
 
+	const updateMenu = async (menuId, updatedMenu) => {
+		await updateDoc(doc(db, "menu", menuId), {
+			...adminMenu.menuId,
+			...updatedMenu,
+		});
+	};
+
 	const value = {
+		adminMenu,
 		users,
 		uids,
 		admins,
+		adminCusines,
+		adminCategories,
+		updateMenu,
 	};
 
 	return (
@@ -57,3 +84,9 @@ const AdminProvider = ({ children }) => {
 
 export { AdminProvider };
 export { useAdmin };
+
+const AdminContextWrapper = ({ children }) => {
+	return <AdminProvider>{children}</AdminProvider>;
+};
+
+export default AdminContextWrapper;

@@ -3,7 +3,6 @@ import theme from "../config/theme";
 import { ChakraProvider } from "@chakra-ui/react";
 import { AuthProvider } from "@contexts/AuthContext";
 import { MenuProvider } from "@contexts/MenuContext";
-import { AdminProvider } from "@contexts/AdminContext";
 import { UserProvider } from "@contexts/UserContext";
 
 import Router, { useRouter } from "next/router";
@@ -19,11 +18,9 @@ function MyApp({ Component, pageProps }) {
 		<ChakraProvider theme={theme}>
 			<AuthProvider>
 				<MenuProvider>
-					<AdminProvider>
-						<UserProvider>
-							<Component {...pageProps} />
-						</UserProvider>
-					</AdminProvider>
+					<UserProvider>
+						<Component {...pageProps} />
+					</UserProvider>
 				</MenuProvider>
 			</AuthProvider>
 		</ChakraProvider>
