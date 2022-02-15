@@ -7,6 +7,8 @@ import {
 	updateDoc,
 	onSnapshot,
 	getDocs,
+	where,
+	query,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import FullPageLoadingSpinner from "@components/shared/FullPageLoadingSpinner";
@@ -25,16 +27,19 @@ const MenuProvider = ({ children }) => {
 
 	useEffect(
 		() =>
-			onSnapshot(collection(db, "menu"), (snapshot) => {
-				setMenuItems(snapshot.docs.map((doc) => doc.data()));
-				setCategories(
-					new Set(snapshot.docs.map((doc) => doc.data().category))
-				);
-				setCusines(
-					new Set(snapshot.docs.map((doc) => doc.data().cusine))
-				);
-				setLoading(false);
-			}),
+			onSnapshot(
+				query(collection(db, "menu"), where("isPublished", "==", true)),
+				(snapshot) => {
+					setMenuItems(snapshot.docs.map((doc) => doc.data()));
+					setCategories(
+						new Set(snapshot.docs.map((doc) => doc.data().category))
+					);
+					setCusines(
+						new Set(snapshot.docs.map((doc) => doc.data().cusine))
+					);
+					setLoading(false);
+				}
+			),
 		[]
 	);
 
