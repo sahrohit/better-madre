@@ -29,11 +29,9 @@ const MobileMenuOption = ({
 		<>
 			<Button
 				leftIcon={<FiFilter />}
-				w={{ base: "96%", md: "80%" }}
-				mx={"auto"}
-				mb={10}
+				m={4}
 				ref={btnRef}
-				colorScheme="teal"
+				colorScheme="purple"
 				onClick={onOpen}
 			>
 				Filters
@@ -60,12 +58,6 @@ const MobileMenuOption = ({
 							setShowCusines={setShowCusines}
 						/>
 					</DrawerBody>
-
-					{/* <DrawerFooter>
-						<Button variant="outline" mr={3} onClick={onClose}>
-							Close
-						</Button>
-					</DrawerFooter> */}
 				</DrawerContent>
 			</Drawer>
 		</>

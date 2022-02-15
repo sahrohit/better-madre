@@ -40,16 +40,18 @@ const OnlyAdmin = ({ children }) => {
 	}
 
 	if (!admin) {
-		// toast({
-		// 	id: "not-authorized",
-		// 	title: "Not Authorized",
-		// 	description: "You are not authorized to view this page.",
-		// 	status: "error",
-		// 	duration: 5000,
-		// 	isClosable: true,
-		// });
-
-		router.push("/");
+		router.replace("/").then(() => {
+			if (!toast.isActive("not-authorized")) {
+				toast({
+					id: "not-authorized",
+					title: "Not Authorized",
+					description: "You are not authorized to view this page.",
+					status: "error",
+					duration: 5000,
+					isClosable: true,
+				});
+			}
+		});
 		return <FullPageLoadingSpinner />;
 	}
 

@@ -141,25 +141,25 @@ const DesktopNav = () => {
 		<Stack direction={"row"} spacing={4}>
 			{NAV_ITEMS.map((navItem) => (
 				<Box key={navItem.label}>
-					<Button
-						variant={
-							router.asPath === navItem.href ? "solid" : "ghost"
+					<ChakraLink
+						href={
+							router.asPath === navItem.href ? "#" : navItem.href
 						}
-						leftIcon={navItem.icon}
-						size="sm"
+						as={Link}
+						passHref
 					>
-						<ChakraLink
-							href={
+						<Button
+							variant={
 								router.asPath === navItem.href
-									? "#"
-									: navItem.href
+									? "solid"
+									: "ghost"
 							}
-							as={Link}
-							passHref
+							leftIcon={navItem.icon}
+							size="sm"
 						>
 							<a>{navItem.label}</a>
-						</ChakraLink>
-					</Button>
+						</Button>
+					</ChakraLink>
 				</Box>
 			))}
 		</Stack>
