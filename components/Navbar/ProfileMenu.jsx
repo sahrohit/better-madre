@@ -77,6 +77,23 @@ const ProfileMenu = () => {
 						</>
 					)}
 					<MenuDivider />
+					<MenuGroup title="Management">
+						<MenuItem
+							onClick={() => {
+								router.push("/admin");
+							}}
+						>
+							Admin
+						</MenuItem>
+						<MenuItem
+							onClick={() => {
+								router.push("/admin/menu");
+							}}
+						>
+							Manage Menu
+						</MenuItem>
+					</MenuGroup>
+					<MenuDivider />
 					<MenuItem
 						onClick={() => {
 							logOut()
