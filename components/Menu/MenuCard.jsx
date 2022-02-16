@@ -7,11 +7,13 @@ import {
 	Text,
 	IconButton,
 	Button,
+	useToast,
 } from "@chakra-ui/react";
 import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useUser } from "@contexts/UserContext";
+import { useAuth } from "@contexts/AuthContext";
 
 function Rating({ rating, numberOfReviews }) {
 	return (
@@ -60,8 +62,9 @@ const MenuCard = ({
 	numberOfReviews,
 }) => {
 	const router = useRouter();
-
+	const { currentUser } = useAuth();
 	const { addToCart } = useUser();
+	const toast = useToast();
 
 	const determineBadgeColor = (badge) => {
 		if (badge.toLowerCase() === "new") {
@@ -104,7 +107,17 @@ const MenuCard = ({
 						}}
 						onClick={(event) => {
 							event.stopPropagation();
-							addToCart(menuId, menuname, price);
+							if (currentUser) {
+								addToCart(menuId, menuname, price);
+							} else {
+								router.push("/auth/login");
+								toast({
+									title: "Not Logged in",
+									description: "Please login to add to cart",
+									status: "error",
+									duration: 5000,
+								});
+							}
 						}}
 					>
 						Add to cart
