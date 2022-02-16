@@ -17,17 +17,28 @@ import {
 	NumberInputStepper,
 	NumberIncrementStepper,
 	NumberDecrementStepper,
+	Input,
+	Button,
+	InputGroup,
+	InputRightElement,
+	IconButton,
 } from "@chakra-ui/react";
 import { BiDollar } from "react-icons/bi";
 import { useAdmin } from "@contexts/AdminContext";
+import AddNewMenuOption from "./AddNewMenuOption";
+import { CloseIcon } from "@chakra-ui/icons";
 
 const AdminMenuOption = ({
+	showDelete,
+	setShowDelete,
+	searchText,
 	sliderValue,
 	setSliderValue,
 	setShowCategories,
 	setShowCusines,
 	showCategories,
 	showCusines,
+	setSearchText,
 }) => {
 	const [showTooltip, setShowTooltip] = useState(false);
 	const { adminCategories, adminCusines } = useAdmin();
@@ -36,6 +47,31 @@ const AdminMenuOption = ({
 
 	return (
 		<>
+			<AddNewMenuOption
+				showDelete={showDelete}
+				setShowDelete={setShowDelete}
+			/>
+			<InputGroup my={4}>
+				<Input
+					w={"full"}
+					type="text"
+					placeholder="Search"
+					value={searchText}
+					onChange={(e) => setSearchText(e.target.value)}
+				/>
+				<InputRightElement>
+					<Tooltip label={"Clear"}>
+						<IconButton
+							size="sm"
+							icon={<CloseIcon />}
+							onClick={() => {
+								setSearchText("");
+							}}
+						/>
+					</Tooltip>
+				</InputRightElement>
+			</InputGroup>
+
 			<Box h={20}>
 				<Heading my={1} size="sm" fontWeight="thin">
 					Price Range

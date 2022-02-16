@@ -12,7 +12,7 @@ import {
 	Box,
 } from "@chakra-ui/react";
 import AdminMenuOption from "./AdminMenuOption";
-import { FiFilter } from "react-icons/fi";
+import { GoSettings } from "react-icons/go";
 
 const MobileMenuOption = ({
 	sliderValue,
@@ -21,6 +21,10 @@ const MobileMenuOption = ({
 	showCusines,
 	setShowCategories,
 	setShowCusines,
+	setSearchText,
+	searchText,
+	showDelete,
+	setShowDelete,
 }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const btnRef = useRef();
@@ -28,7 +32,7 @@ const MobileMenuOption = ({
 	return (
 		<>
 			<Button
-				leftIcon={<FiFilter />}
+				rightIcon={<GoSettings />}
 				m={4}
 				ref={btnRef}
 				colorScheme="purple"
@@ -44,12 +48,16 @@ const MobileMenuOption = ({
 				variant={"default"}
 			>
 				<DrawerOverlay />
-				<DrawerContent variant="default">
+				<DrawerContent h={"80%"} variant="default">
 					<DrawerCloseButton />
 					<DrawerHeader>Filters</DrawerHeader>
 
 					<DrawerBody p={50}>
 						<AdminMenuOption
+							showDelete={showDelete}
+							setShowDelete={setShowDelete}
+							searchText={searchText}
+							setSearchText={setSearchText}
 							sliderValue={sliderValue}
 							setSliderValue={setSliderValue}
 							showCategories={showCategories}

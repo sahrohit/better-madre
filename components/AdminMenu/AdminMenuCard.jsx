@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
 	Flex,
 	Circle,
@@ -6,18 +6,17 @@ import {
 	Image,
 	Badge,
 	useColorModeValue,
-	Icon,
 	chakra,
-	Tooltip,
 	HStack,
 	Center,
 	Switch,
 	Text,
+	IconButton,
+	useToast,
 } from "@chakra-ui/react";
-import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
-import { FiShoppingCart } from "react-icons/fi";
 import { useRouter } from "next/router";
 import { useAdmin } from "@contexts/AdminContext";
+import { DeleteIcon } from "@chakra-ui/icons";
 
 const AdminMenuCard = ({
 	id,
@@ -28,9 +27,11 @@ const AdminMenuCard = ({
 	rating,
 	numReviews,
 	isPublished,
+	showDelete,
 }) => {
+	const toast = useToast();
 	const router = useRouter();
-	const { updateMenu } = useAdmin();
+	const { updateMenu, deleteMenuItem } = useAdmin();
 
 	return (
 		<Flex w="full" alignItems="center" justifyContent="center">
@@ -61,10 +62,33 @@ const AdminMenuCard = ({
 					}}
 					position="relative"
 				>
+					{showDelete && (
+						<IconButton
+							z={2}
+							position="absolute"
+							fontSize="25px"
+							colorScheme="red"
+							top={2}
+							right={2}
+							icon={<DeleteIcon />}
+							onClick={(e) => {
+								e.stopPropagation();
+								deleteMenuItem(id).then(() => {
+									toast({
+										title: "Deleted",
+										description: `${name} deleted.`,
+										status: "success",
+										duration: 5000,
+										isClosable: true,
+									});
+								});
+							}}
+						/>
+					)}
+
 					<Box
-						w={{ base: 56, md: 64 }}
+						w={64}
 						bg={useColorModeValue("white", "gray.800")}
-						// shadow="lg"
 						roundedTop="lg"
 						overflow="hidden"
 						position="absolute"
@@ -85,7 +109,7 @@ const AdminMenuCard = ({
 				</Center>
 
 				<Box
-					w={{ base: 56, md: 64 }}
+					w={64}
 					bg={useColorModeValue("white", "gray.800")}
 					shadow="lg"
 					roundedBottom="lg"

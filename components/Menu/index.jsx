@@ -15,12 +15,10 @@ import MobileMenuOption from "./MobileMenuOption";
 import SearchBar from "@components/shared/SearchBar";
 
 const Menu = () => {
-	const { menuItems, categories, cusines } = useMenu();
+	const { menuItems } = useMenu();
 	const [sliderValue, setSliderValue] = useState([0, 10000]);
-	const [showCategories, setShowCategories] = useState(
-		Array.from(categories)
-	);
-	const [showCusines, setShowCusines] = useState(Array.from(cusines));
+	const [showCategories, setShowCategories] = useState([]);
+	const [showCusines, setShowCusines] = useState([]);
 
 	const isMobile = useBreakpointValue({
 		base: true,
@@ -33,8 +31,9 @@ const Menu = () => {
 		if (
 			item.price >= sliderValue[0] * 100 &&
 			item.price <= sliderValue[1] * 100 &&
-			showCategories.includes(item.category) &&
-			showCusines.includes(item.cusine)
+			(showCategories.length == 0 ||
+				showCategories.includes(item.category)) &&
+			(showCusines.length == 0 || showCusines.includes(item.cusine))
 		) {
 			return true;
 		} else {
@@ -103,6 +102,11 @@ const Menu = () => {
 				)}
 
 				<SimpleGrid
+					// w={"full"}
+					// mx={{ base: "auto", md: 50 }}
+					// my={50}
+					// spacing={50}
+					// minChildWidth="300px"
 					m={{ base: "auto", md: "50" }}
 					spacing={50}
 					columns={{ sm: 1, md: 1, lg: 2, xl: 3 }}

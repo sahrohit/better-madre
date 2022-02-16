@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import AdminMenuCard from "./AdminMenuCard";
 import {
 	SimpleGrid,
@@ -15,13 +15,13 @@ import AdminMobileMenuOption from "@components/AdminMenu/AdminMobileMenuOption";
 import { useAdmin } from "@contexts/AdminContext";
 
 const AdminPage = () => {
-	const { adminMenu, adminCategories, adminCusines } = useAdmin();
+	const { adminMenu } = useAdmin();
 
 	const [sliderValue, setSliderValue] = useState([0, 10000]);
-	const [showCategories, setShowCategories] = useState(
-		Array.from(adminCategories)
-	);
-	const [showCusines, setShowCusines] = useState(Array.from(adminCusines));
+	const [showCategories, setShowCategories] = useState([]);
+	const [showCusines, setShowCusines] = useState([]);
+	const [searchText, setSearchText] = useState("");
+	const [showDelete, setShowDelete] = useState(false);
 
 	const isMobile = useBreakpointValue({
 		base: true,
@@ -34,8 +34,10 @@ const AdminPage = () => {
 		if (
 			item.price >= sliderValue[0] * 100 &&
 			item.price <= sliderValue[1] * 100 &&
-			showCategories.includes(item.category) &&
-			showCusines.includes(item.cusine)
+			(showCategories.length == 0 ||
+				showCategories.includes(item.category)) &&
+			(showCusines.length == 0 || showCusines.includes(item.cusine)) &&
+			item.menuname.toLowerCase().includes(searchText.toLowerCase())
 		) {
 			return true;
 		} else {
@@ -52,7 +54,7 @@ const AdminPage = () => {
 				fontWeight={"light"}
 				fontFamily={"'Parisienne', sans-serif"}
 			>
-				Menu
+				Manage Menu
 			</Heading>
 			<Flex
 				boxShadow={"md"}
@@ -66,6 +68,10 @@ const AdminPage = () => {
 			<Flex direction={{ base: "column", md: "row" }}>
 				{isMobile ? (
 					<AdminMobileMenuOption
+						showDelete={showDelete}
+						setShowDelete={setShowDelete}
+						searchText={searchText}
+						setSearchText={setSearchText}
 						sliderValue={sliderValue}
 						setSliderValue={setSliderValue}
 						showCategories={showCategories}
@@ -92,6 +98,10 @@ const AdminPage = () => {
 							rounded="lg"
 						>
 							<AdminMenuOption
+								showDelete={showDelete}
+								setShowDelete={setShowDelete}
+								searchText={searchText}
+								setSearchText={setSearchText}
 								sliderValue={sliderValue}
 								setSliderValue={setSliderValue}
 								showCategories={showCategories}
@@ -109,18 +119,18 @@ const AdminPage = () => {
 					my={50}
 					spacing={50}
 					minChildWidth="300px"
-					// columns={{ sm: 1, md: 1, lg: 2, xl: 3 }}
 				>
 					{adminMenu
 						? adminMenu.map((item) => {
 								if (optionValidator(item)) {
 									return (
 										<AdminMenuCard
+											showDelete={showDelete}
 											key={item._id}
 											id={item.menuId}
 											isNew={item.isPopular}
 											name={item.menuname}
-											imageURL={item.images[0]}
+											imageURL={item.images?.[0]}
 											price={item.price}
 											rating={item.rating}
 											numReviews={item.numberOfReviews}
