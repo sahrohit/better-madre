@@ -125,14 +125,6 @@ export default function Simple({ id }) {
 									)}
 								</Box>
 							</VStack>
-							<Box>
-								<Icon
-									mr={12}
-									as={AiOutlineShoppingCart}
-									w={12}
-									h={12}
-								/>
-							</Box>
 						</HStack>
 
 						<Stack
@@ -158,6 +150,7 @@ export default function Simple({ id }) {
 										<Text
 											fontSize={"2xl"}
 											fontWeight={"300"}
+											textAlign={"justify"}
 										>
 											{item.description}
 										</Text>
@@ -169,15 +162,35 @@ export default function Simple({ id }) {
 										</Stack>
 									)}
 								</Box>
-								{item ? (
-									<Text fontSize={"lg"}>{item.recipe}</Text>
-								) : (
-									<Stack>
-										<Skeleton height="20px" />
-										<Skeleton height="20px" />
-										<Skeleton height="20px" />
-									</Stack>
-								)}
+								<Button
+									rounded={"none"}
+									w={"full"}
+									mt={8}
+									size={"lg"}
+									py={"7"}
+									bg={useColorModeValue(
+										"gray.900",
+										"gray.50"
+									)}
+									color={useColorModeValue(
+										"white",
+										"gray.900"
+									)}
+									textTransform={"uppercase"}
+									_hover={{
+										transform: "translateY(2px)",
+										boxShadow: "lg",
+									}}
+									onClick={() =>
+										addToCart(
+											item.menuId,
+											item.menuname,
+											item.price
+										)
+									}
+								>
+									Add to cart
+								</Button>
 							</VStack>
 							<Box>
 								<Text
@@ -227,61 +240,34 @@ export default function Simple({ id }) {
 									textTransform={"uppercase"}
 									mb={"4"}
 								>
-									Product Details
+									Recipe / Ingridients
 								</Text>
 
-								<List spacing={2}>
-									{item &&
-										Object.keys(item.productDetails).map(
-											(key, index) => {
+								<SimpleGrid
+									as={List}
+									columns={{ base: 1, md: 2 }}
+									spacing={2}
+								>
+									{item
+										? item.recipe.map((detail, index) => {
 												return (
 													<ListItem key={nanoid()}>
-														<Text
-															as={"span"}
-															fontWeight={"bold"}
-														>
-															{`${key}:`}
-														</Text>{" "}
-														{index}
+														{`${
+															index + 1
+														}. ${detail}`}
 													</ListItem>
 												);
-											}
-										)}
-								</List>
+										  })
+										: Array(6)
+												.fill("")
+												.map((_, i) => (
+													<Skeleton
+														key={nanoid()}
+														height="20px"
+													/>
+												))}
+								</SimpleGrid>
 							</Box>
-						</Stack>
-
-						<Button
-							rounded={"none"}
-							w={"full"}
-							mt={8}
-							size={"lg"}
-							py={"7"}
-							bg={useColorModeValue("gray.900", "gray.50")}
-							color={useColorModeValue("white", "gray.900")}
-							textTransform={"uppercase"}
-							_hover={{
-								transform: "translateY(2px)",
-								boxShadow: "lg",
-							}}
-							onClick={() =>
-								addToCart(
-									item.menuId,
-									item.menuname,
-									item.price
-								)
-							}
-						>
-							Add to cart
-						</Button>
-
-						<Stack
-							direction="row"
-							alignItems="center"
-							justifyContent={"center"}
-						>
-							<MdLocalShipping />
-							<Text>2-3 business days delivery</Text>
 						</Stack>
 					</Stack>
 				</SimpleGrid>

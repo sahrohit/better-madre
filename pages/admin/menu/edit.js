@@ -25,14 +25,17 @@ import {
 	Text,
 	Checkbox,
 	useClipboard,
+	Tooltip,
 } from "@chakra-ui/react";
-import { Formik, Form, Field, FieldArray, yupToFormErrors } from "formik";
+import { Formik, Form, Field, FieldArray } from "formik";
 import * as Yup from "yup";
 import { CheckIcon, CloseIcon, CopyIcon } from "@chakra-ui/icons";
 import OnlyAdmin from "@components/routes/OnlyAdmin";
 import OnlyLoggedIn from "@components/routes/OnlyLoggedIn";
 import AdminContextWrapper from "@contexts/AdminContext";
 import { useAdmin } from "@contexts/AdminContext";
+import { Navbar } from "@components/Navbar";
+import Footer from "@components/shared/Footer";
 
 const EditPage = () => {
 	const MenuSchema = Yup.object().shape({
@@ -57,7 +60,8 @@ const EditPage = () => {
 
 	const toast = useToast();
 	const { hasCopied: hasMenuIdCopied, onCopy: onMenuIdCopy } = useClipboard(
-		item?.menuId
+		item?.menuId,
+		5000
 	);
 
 	useEffect(
@@ -77,6 +81,7 @@ const EditPage = () => {
 		<AdminContextWrapper>
 			<OnlyLoggedIn>
 				<OnlyAdmin>
+					<Navbar position="sticky" />
 					<Formik
 						initialValues={{
 							menuname: item.menuname,
@@ -88,7 +93,7 @@ const EditPage = () => {
 							description: item.description,
 							features: item.features,
 							recipe: item.recipe,
-							images: item.images[0],
+							images: item.images?.[0],
 							isPublished: item.isPublished,
 						}}
 						validationSchema={MenuSchema}
@@ -137,7 +142,7 @@ const EditPage = () => {
 											<Image
 												rounded={"md"}
 												alt={"product image"}
-												src={item.images[0]}
+												src={item.images?.[0]}
 												fit={"cover"}
 												align={"center"}
 												w={"100%"}
@@ -185,51 +190,7 @@ const EditPage = () => {
 											</Field>
 										</VStack>
 
-										<Stack
-											spacing={4}
-											w={"full"}
-											// maxW={"md"}
-										>
-											{/* <Field name="menuname">
-												{({ field, form }) => (
-													<FormControl
-														isDisabled
-														isInvalid={
-															form.errors
-																.menuname &&
-															form.touched
-																.menuname
-														}
-													>
-														<Stack
-															direction={{
-																base: "column",
-																sm: "row",
-															}}
-															align={"start"}
-															justify={
-																"space-between"
-															}
-														>
-															<FormLabel>
-																Item Name
-															</FormLabel>
-															<FormErrorMessage>
-																{
-																	form.errors
-																		.menuname
-																}
-															</FormErrorMessage>
-														</Stack>
-
-														<Input
-															{...field}
-															type="text"
-														/>
-													</FormControl>
-												)}
-											</Field> */}
-
+										<Stack spacing={4} w={"full"}>
 											<Stack
 												direction={{
 													base: "column",
@@ -321,23 +282,39 @@ const EditPage = () => {
 																	{...field}
 																	type="text"
 																/>
-																<InputRightElement width="4.5rem">
-																	<IconButton
-																		ml={5}
-																		color="green.500"
-																		size="sm"
-																		aria-label="Delete"
-																		icon={
-																			hasMenuIdCopied ? (
-																				<CheckIcon />
-																			) : (
-																				<CopyIcon />
-																			)
+																<InputRightElement
+																	zIndex={0}
+																	width="4.5rem"
+																>
+																	<Tooltip
+																		closeOnClick={
+																			false
 																		}
-																		onClick={
-																			onMenuIdCopy
+																		label={
+																			hasMenuIdCopied
+																				? "✔ Copied"
+																				: "Copy"
 																		}
-																	/>
+																	>
+																		<IconButton
+																			ml={
+																				5
+																			}
+																			color="green.500"
+																			size="sm"
+																			aria-label="Delete"
+																			icon={
+																				hasMenuIdCopied ? (
+																					<CheckIcon />
+																				) : (
+																					<CopyIcon />
+																				)
+																			}
+																			onClick={
+																				onMenuIdCopy
+																			}
+																		/>
+																	</Tooltip>
 																</InputRightElement>
 															</InputGroup>
 														</FormControl>
@@ -509,7 +486,12 @@ const EditPage = () => {
 																							{...field}
 																							type="text"
 																						/>
-																						<InputRightElement width="4.5rem">
+																						<InputRightElement
+																							zIndex={
+																								0
+																							}
+																							width="4.5rem"
+																						>
 																							<IconButton
 																								ml={
 																									5
@@ -679,7 +661,12 @@ const EditPage = () => {
 																							{...field}
 																							type="text"
 																						/>
-																						<InputRightElement width="4.5rem">
+																						<InputRightElement
+																							zIndex={
+																								0
+																							}
+																							width="4.5rem"
+																						>
 																							<IconButton
 																								ml={
 																									5
@@ -811,7 +798,12 @@ const EditPage = () => {
 																							{...field}
 																							type="text"
 																						/>
-																						<InputRightElement width="4.5rem">
+																						<InputRightElement
+																							zIndex={
+																								0
+																							}
+																							width="4.5rem"
+																						>
 																							<IconButton
 																								ml={
 																									5
@@ -876,11 +868,11 @@ const EditPage = () => {
 															box, this menu item
 															will be published
 															and available to all
-															the user accessing
-															Madre. If unchecked,
-															this item will only
-															be available on
-															Admin Menu.
+															Madre users. If
+															unchecked, this item
+															will only be
+															available on Admin
+															Menu.
 														</Text>
 													</Checkbox>
 												)}
@@ -917,6 +909,7 @@ const EditPage = () => {
 							</Form>
 						)}
 					</Formik>
+					<Footer />
 				</OnlyAdmin>
 			</OnlyLoggedIn>
 		</AdminContextWrapper>
