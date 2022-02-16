@@ -7,9 +7,11 @@ import {
 	updateDoc,
 	onSnapshot,
 	getDocs,
+	deleteDoc,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import FullPageLoadingSpinner from "@components/shared/FullPageLoadingSpinner";
+import { nanoid } from "nanoid";
 
 const AdminContext = React.createContext();
 
@@ -65,6 +67,20 @@ const AdminProvider = ({ children }) => {
 		});
 	};
 
+	const addNewMenuItem = async (menuname, menuId) => {
+		return await setDoc(doc(db, "menu", menuId), {
+			_id: nanoid(),
+			isPublished: false,
+			price: 0,
+			menuname: menuname.toUpperCase(),
+			menuId: menuId,
+		});
+	};
+
+	const deleteMenuItem = async (menuId) => {
+		return await deleteDoc(doc(db, "menu", menuId));
+	};
+
 	const value = {
 		adminMenu,
 		users,
@@ -73,6 +89,8 @@ const AdminProvider = ({ children }) => {
 		adminCusines,
 		adminCategories,
 		updateMenu,
+		addNewMenuItem,
+		deleteMenuItem,
 	};
 
 	return (
