@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useReducer } from "react";
 import {
 	collection,
 	addDoc,
@@ -20,40 +20,82 @@ const useAdmin = () => {
 };
 
 const AdminProvider = ({ children }) => {
-	const [users, setUsers] = useState(null);
-	const [uids, setUids] = useState(null);
-	const [admins, setAdmins] = useState(null);
-	const [adminMenu, setAdminMenu] = useState(null);
-	const [loading, setLoading] = useState(true);
-	const [adminCategories, setAdminCategories] = useState(new Set());
-	const [adminCusines, setAdminCusines] = useState(new Set());
+	const initialState = {
+		users: null,
+		uids: null,
+		admins: null,
+		adminMenu: null,
+		loading: true,
+		adminCategories: new Set(),
+		adminCusines: new Set(),
+	};
 
-	console.log("Admin Context Executed");
+	const reducer = (state, action) => {
+		if (action.type === "MENULISTNER") {
+			return {
+				...state,
+				adminMenu: action.payload.adminMenu,
+				adminCategories: action.payload.adminCategories,
+				adminCusines: action.payload.adminCusines,
+				loading: action.payload.loading,
+			};
+		} else if (action.type === "USERLISTENER") {
+			return {
+				...state,
+				users: action.payload.users,
+				uids: action.payload.uids,
+				loading: action.payload.loading,
+			};
+		} else if (action.type === "ADMINLISTENER") {
+			return {
+				...state,
+				admins: action.payload.admins,
+				loading: action.payload.loading,
+			};
+		}
+	};
+
+	const [state, dispatch] = useReducer(reducer, initialState);
 
 	useEffect(() => {
 		let subscribers = [];
 		const menuListener = onSnapshot(collection(db, "menu"), (snapshot) => {
-			setAdminMenu(snapshot.docs.map((doc) => doc.data()));
-			setAdminCategories(
-				new Set(snapshot.docs.map((doc) => doc.data().category))
-			);
-			setAdminCusines(
-				new Set(snapshot.docs.map((doc) => doc.data().cusine))
-			);
-			setLoading(false);
+			dispatch({
+				type: "MENULISTNER",
+				payload: {
+					adminMenu: snapshot.docs.map((doc) => doc.data()),
+					adminCategories: new Set(
+						snapshot.docs.map((doc) => doc.data().category)
+					),
+					adminCusines: new Set(
+						snapshot.docs.map((doc) => doc.data().cusine)
+					),
+					loading: false,
+				},
+			});
 		});
 		subscribers.push(menuListener);
 		const userListener = onSnapshot(collection(db, "users"), (snapshot) => {
-			setUsers(snapshot.docs.map((doc) => doc.data()));
-			setUids(snapshot.docs.map((doc) => doc.data().uid));
-			setLoading(false);
+			dispatch({
+				type: "USERLISTENER",
+				payload: {
+					users: snapshot.docs.map((doc) => doc.data()),
+					uids: snapshot.docs.map((doc) => doc.data().uid),
+					loading: false,
+				},
+			});
 		});
 		subscribers.push(userListener);
 		const adminListener = onSnapshot(
 			collection(db, "admin"),
 			(snapshot) => {
-				setAdmins(snapshot.docs.map((doc) => doc.id));
-				setLoading(false);
+				dispatch({
+					type: "ADMINLISTENER",
+					payload: {
+						admins: snapshot.docs.map((doc) => doc.id),
+						loading: false,
+					},
+				});
 			}
 		);
 		subscribers.push(adminListener);
@@ -62,7 +104,7 @@ const AdminProvider = ({ children }) => {
 
 	const updateMenu = async (menuId, updatedMenu) => {
 		await updateDoc(doc(db, "menu", menuId), {
-			...adminMenu.menuId,
+			...state.adminMenu.menuId,
 			...updatedMenu,
 		});
 	};
@@ -82,12 +124,12 @@ const AdminProvider = ({ children }) => {
 	};
 
 	const value = {
-		adminMenu,
-		users,
-		uids,
-		admins,
-		adminCusines,
-		adminCategories,
+		adminMenu: state.adminMenu,
+		users: state.users,
+		uids: state.uids,
+		admins: state.admins,
+		adminCusines: state.adminCusines,
+		adminCategories: state.adminCategories,
 		updateMenu,
 		addNewMenuItem,
 		deleteMenuItem,
@@ -95,7 +137,7 @@ const AdminProvider = ({ children }) => {
 
 	return (
 		<AdminContext.Provider value={value}>
-			{!loading && children}
+			{!state.loading && children}
 		</AdminContext.Provider>
 	);
 };
