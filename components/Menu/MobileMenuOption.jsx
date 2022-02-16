@@ -12,7 +12,7 @@ import {
 	Box,
 } from "@chakra-ui/react";
 import MenuOption from "./MenuOption";
-import { FiFilter } from "react-icons/fi";
+import { GoSettings } from "react-icons/go";
 
 const MobileMenuOption = ({
 	sliderValue,
@@ -28,7 +28,7 @@ const MobileMenuOption = ({
 	return (
 		<>
 			<Button
-				leftIcon={<FiFilter />}
+				rightIcon={<GoSettings />}
 				m={4}
 				ref={btnRef}
 				colorScheme="purple"
