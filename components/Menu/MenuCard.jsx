@@ -71,6 +71,8 @@ const MenuCard = ({
 			return "green";
 		} else if (badge.toLowerCase() === "popular") {
 			return "purple";
+		} else if (badge.toLowerCase() === "hot") {
+			return "yellow";
 		} else return "red";
 	};
 
