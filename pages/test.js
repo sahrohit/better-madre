@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
 	Button,
 	useToast,
@@ -52,8 +52,18 @@ import {
 } from "react-icons/ai";
 import { BsFillCameraVideoFill } from "react-icons/bs";
 import SearchBar from "@components/shared/SearchBar";
+import {
+	uploadBytes,
+	ref,
+	uploadString,
+	getDownloadURL,
+} from "firebase/storage";
+
+import { storage } from "../firebase";
 
 const TestingPage = () => {
+	const files = [];
+
 	const { menuItems } = useMenu();
 
 	const router = useRouter();
@@ -65,9 +75,28 @@ const TestingPage = () => {
 	const bg = useColorModeValue("white", "gray.800");
 	const mobileNav = useDisclosure();
 
+	const [selectedFile, setSelectedFile] = useState();
+
+	const storageRef = ref(storage, "test/image");
+
+	const addImageToPost = async (e) => {
+		const reader = new FileReader();
+		if (e.target.files[0]) {
+			reader.readAsDataURL(e.target.files[0]);
+		}
+
+		reader.onload = (readerEvent) => {
+			setSelectedFile(readerEvent.target.result);
+		};
+	};
+
+	const handleClick = async () => {};
+
 	return (
 		<>
 			<SearchBar />
+			<Input type="file" onChange={addImageToPost} />
+			<Button onClick={handleClick}>Upload File</Button>
 		</>
 	);
 };

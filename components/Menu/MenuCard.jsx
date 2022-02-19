@@ -81,7 +81,7 @@ const MenuCard = ({
 			<Link href={`/menu/${menuId}`} passHref>
 				<Box
 					cursor={"pointer"}
-					bgImage={`url(${images[0]})`}
+					bgImage={`url(${images[0].imageURL})`}
 					width={"100%"}
 					bgSize="cover"
 					roundedTop="lg"
