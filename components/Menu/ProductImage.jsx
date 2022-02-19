@@ -16,7 +16,7 @@ const ProductImage = ({ item }) => {
 	const MotionBox = motion(Box);
 	const MotionImage = motion(Image);
 
-	const slides = item.images;
+	const slides = item.images.map((image) => image.imageURL);
 	const arrowStyles = {
 		cursor: "pointer",
 		pos: "absolute",

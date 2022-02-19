@@ -21,7 +21,7 @@ import { DeleteIcon } from "@chakra-ui/icons";
 const AdminMenuCard = ({
 	id,
 	isNew,
-	imageURL,
+	images,
 	name,
 	price,
 	rating,
@@ -51,7 +51,7 @@ const AdminMenuCard = ({
 					bgSize="cover"
 					bgPos="center"
 					style={{
-						backgroundImage: `url(${imageURL})`,
+						backgroundImage: `url(${images?.[0].imageURL})`,
 					}}
 					cursor="pointer"
 					onClick={() => {

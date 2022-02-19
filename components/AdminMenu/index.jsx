@@ -130,7 +130,7 @@ const AdminPage = () => {
 											id={item.menuId}
 											isNew={item.isPopular}
 											name={item.menuname}
-											imageURL={item.images?.[0]}
+											images={item.images}
 											price={item.price}
 											rating={item.rating}
 											numReviews={item.numberOfReviews}
