@@ -104,32 +104,32 @@ const AdminProductPage = ({ id }) => {
 	const [fileUploadProgress, setFileUploadProgress] = useState(0);
 	const [selectedFile, setSelectedFile] = useState();
 
-	React.useEffect(() => {
-		const confirmationMessage = "Changes you made may not be saved.";
-		const beforeUnloadHandler = (e) => {
-			(e || window.event).returnValue = confirmationMessage;
-			return confirmationMessage; // Gecko + Webkit, Safari, Chrome etc.
-		};
-		const beforeRouteHandler = (url) => {
-			if (Router.pathname !== url && !confirm(confirmationMessage)) {
-				// to inform NProgress or something ...
-				Router.events.emit("routeChangeError");
-				// tslint:disable-next-line: no-string-throw
-				throw `Route change to "${url}" was aborted (this error can be safely ignored).`;
-			}
-		};
-		if (true) {
-			window.addEventListener("beforeunload", beforeUnloadHandler);
-			Router.events.on("routeChangeStart", beforeRouteHandler);
-		} else {
-			window.removeEventListener("beforeunload", beforeUnloadHandler);
-			Router.events.off("routeChangeStart", beforeRouteHandler);
-		}
-		return () => {
-			window.removeEventListener("beforeunload", beforeUnloadHandler);
-			Router.events.off("routeChangeStart", beforeRouteHandler);
-		};
-	}, []);
+	// React.useEffect(() => {
+	// 	const confirmationMessage = "Changes you made may not be saved.";
+	// 	const beforeUnloadHandler = (e) => {
+	// 		(e || window.event).returnValue = confirmationMessage;
+	// 		return confirmationMessage; // Gecko + Webkit, Safari, Chrome etc.
+	// 	};
+	// 	const beforeRouteHandler = (url) => {
+	// 		if (Router.pathname !== url && !confirm(confirmationMessage)) {
+	// 			// to inform NProgress or something ...
+	// 			Router.events.emit("routeChangeError");
+	// 			// tslint:disable-next-line: no-string-throw
+	// 			throw `Route change to "${url}" was aborted (this error can be safely ignored).`;
+	// 		}
+	// 	};
+	// 	if (true) {
+	// 		window.addEventListener("beforeunload", beforeUnloadHandler);
+	// 		Router.events.on("routeChangeStart", beforeRouteHandler);
+	// 	} else {
+	// 		window.removeEventListener("beforeunload", beforeUnloadHandler);
+	// 		Router.events.off("routeChangeStart", beforeRouteHandler);
+	// 	}
+	// 	return () => {
+	// 		window.removeEventListener("beforeunload", beforeUnloadHandler);
+	// 		Router.events.off("routeChangeStart", beforeRouteHandler);
+	// 	};
+	// }, []);
 
 	return (
 		<Formik
