@@ -27,7 +27,8 @@ const PendingOrder = () => {
 				</Heading>
 				{orders.map((order) => (
 					<Text key={nanoid()} color={"gray.500"}>
-						{JSON.stringify(order)}
+						Pending Orders will show up here.
+						{/* {JSON.stringify(order)} */}
 					</Text>
 				))}
 
