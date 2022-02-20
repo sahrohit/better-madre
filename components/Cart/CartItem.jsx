@@ -28,7 +28,7 @@ const CartItem = ({ menuId, menuname, quantity, price, totalPrice }) => {
 				bgPos={"center"}
 				rounded="lg"
 				style={{
-					backgroundImage: `url(${currentMenuItem.images[0]})`,
+					backgroundImage: `url(${currentMenuItem.images[0].imageURL})`,
 				}}
 			/>
 

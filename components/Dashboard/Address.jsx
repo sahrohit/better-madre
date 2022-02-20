@@ -27,6 +27,8 @@ import { useUser } from "@contexts/UserContext";
 import AddressCard from "./AddressCard";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
+import Lottie from "react-lottie";
+import animationData from "@public/lotties/emptyaddresses.json";
 
 const AddressSchemea = Yup.object().shape({
 	addressName: Yup.string().required("Name is required"),
@@ -387,25 +389,32 @@ const Address = () => {
 				})
 			) : (
 				<Center>
-					<Box textAlign="center" py={10} px={6}>
-						<CheckCircleIcon boxSize={"50px"} color={"green.500"} />
-						<Heading as="h2" size="xl" mt={6} mb={2}>
-							No Pending Orders.
+					<Box textAlign="center" py={10} px={6} spacing={2}>
+						<Lottie
+							options={{
+								loop: true,
+								autoplay: true,
+								animationData: animationData,
+								// rendererSettings: {
+								// 	preserveAspectRatio: "xMidYMid slice",
+								// },
+							}}
+							height={200}
+							width={200}
+						/>
+						<Heading
+							as="h2"
+							fontWeight={"medium"}
+							size="xl"
+							mt={6}
+							mb={2}
+						>
+							Your Address List is Empty.
 						</Heading>
 						<Text color={"gray.500"}>
-							There are no pending orders, you can order some item
-							from our appealing menu.
+							Click the button on the top right to add new
+							Addresses.
 						</Text>
-						<HStack justifyContent={"center"} spacing="24px" mt={2}>
-							<Button
-								color="outline"
-								onClick={() => {
-									router.push("/menu");
-								}}
-							>
-								Order Now
-							</Button>
-						</HStack>
 					</Box>
 				</Center>
 			)}

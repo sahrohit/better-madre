@@ -57,7 +57,10 @@ import {
 	ref,
 	uploadString,
 	getDownloadURL,
+	listAll,
+	deleteObject,
 } from "firebase/storage";
+import { pull } from "lodash";
 
 import { storage } from "../firebase";
 
@@ -90,7 +93,48 @@ const TestingPage = () => {
 		};
 	};
 
-	const handleClick = async () => {};
+	const listRef = ref(storage, "images/menu/apple-crumble");
+
+	const appleCrubmle = menuItems.find(
+		(item) => item.menuId === "apple-crumble"
+	);
+
+	const appleImages = appleCrubmle.images.map((image) => image.imageRef);
+
+	// const handleClick = async () => {
+	// 	listAll(listRef)
+	// 		.then((res) => {
+	// 			const storageBucket = res.items.map((itemRef) => {
+	// 				return itemRef._location.path_;
+	// 			});
+	// 			console.log("STORAGE BUCKET", storageBucket);
+	// 			console.log("APPLE IMAGES", appleImages);
+	// 			const unWantedFiles = storageBucket.filter(
+	// 				(item) => !appleImages.includes(item)
+	// 			);
+	// 			unWantedFiles.forEach((file) => {
+	// 				deleteObject(ref(storage, file))
+	// 					.then(() => {
+	// 						console.log("File deleted successfully");
+	// 					})
+	// 					.catch((error) => {
+	// 						console.log("Uh-oh, an error occurred!");
+	// 					});
+	// 			});
+	// 		})
+	// 		.catch((error) => {
+	// 			console.log(error);
+	// 		});
+	// };
+
+	const handleClick = async (e) => {
+		e.preventDefault();
+		const docRef = await addDoc(collection(db, "orders"), {
+			name: "Tokyo",
+			country: "Japan",
+		});
+		console.log("Document written with ID: ", docRef.id);
+	};
 
 	return (
 		<>

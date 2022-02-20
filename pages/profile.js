@@ -4,10 +4,11 @@ import { Flex, SimpleGrid } from "@chakra-ui/react";
 import Tabs from "@components/Dashboard/Tabs";
 import { Navbar } from "@components/Navbar";
 import OnlyVerifiedEmail from "@components/routes/OnlyVerifiedEmail";
+import OrderContextWrapper from "@contexts/OrderContext";
 
 const ProfilePage = () => {
 	return (
-		<>
+		<OrderContextWrapper>
 			<Navbar position="static" />
 			<OnlyVerifiedEmail>
 				<SimpleGrid
@@ -19,7 +20,7 @@ const ProfilePage = () => {
 					<Tabs />
 				</SimpleGrid>
 			</OnlyVerifiedEmail>
-		</>
+		</OrderContextWrapper>
 	);
 };
 

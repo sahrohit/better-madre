@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import Address from "./Address";
 import CompletedOrders from "./CompletedOrders";
-import PendingOrder from "../AdminPage/OrderRecieved";
+import PendingOrder from "./PendingOrder";
 
 const TabSection = () => {
 	const { colorMode } = useColorMode();
@@ -22,9 +22,7 @@ const TabSection = () => {
 			borderColor={colorMode == "light" ? `gray.200` : `whiteAlpha.300`}
 		>
 			<Tabs width={"100%"} isFitted variant="enclosed">
-				<TabList
-				// mb="1em"
-				>
+				<TabList>
 					<Tab>Pending Orders</Tab>
 					<Tab>Addresses</Tab>
 					<Tab>Completed Orders</Tab>
