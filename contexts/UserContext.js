@@ -5,6 +5,7 @@ import FullPageLoadingSpinner from "@components/shared/FullPageLoadingSpinner";
 import { useAuth } from "./AuthContext";
 import { sum } from "lodash";
 import { useToast } from "@chakra-ui/react";
+import { nanoid } from "nanoid";
 
 const UserContext = React.createContext();
 
@@ -137,11 +138,50 @@ const UserProvider = ({ children }) => {
 		});
 	};
 
+	const addNewAddress = async (address) => {
+		try {
+			await updateDoc(doc(db, "users", uid), {
+				addresses: arrayUnion({
+					...address,
+					addressId: `${address.name}-${nanoid()}`,
+				}),
+			}).then(() => {
+				toast.closeAll();
+				toast({
+					title: "Address Added",
+					description: `${address.addressName} added successfully`,
+					status: "success",
+					duration: 5000,
+					isClosable: true,
+				});
+			});
+		} catch (error) {
+			toast.closeAll();
+			toast({
+				title: "An Error Occured",
+				description: error.message,
+				status: "error",
+				duration: 5000,
+				isClosable: true,
+			});
+		}
+	};
+
+	const deleteAddress = async (addressId) => {
+		await updateDoc(doc(db, "users", uid), {
+			addresses: userData.addresses.filter(
+				(address) => address.addressId !== addressId
+			),
+		});
+	};
+
 	const value = {
 		userData,
 		addToCart,
 		removeFromCart,
 		clearCart,
+		addNewAddress,
+		deleteAddress,
 	};
 
 	if (loading) {

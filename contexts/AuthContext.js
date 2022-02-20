@@ -107,6 +107,7 @@ const AuthProvider = ({ children }) => {
 							photoURL: user.photoURL,
 							providerData: user.providerData,
 							uid: user.uid,
+							addresses: user.addresses,
 						},
 						JSON.parse(getFromStorage("currentUserState"))
 					)
@@ -121,6 +122,7 @@ const AuthProvider = ({ children }) => {
 							photoURL: user.photoURL,
 							providerData: user.providerData,
 							uid: user.uid,
+							addresses: user.addresses,
 						})
 					);
 					try {
@@ -132,6 +134,7 @@ const AuthProvider = ({ children }) => {
 							photoURL: user.photoURL,
 							providerData: user.providerData,
 							uid: user.uid,
+							addresses: user.addresses,
 						});
 					} catch (error) {
 						if (error.code === "not-found") {
@@ -142,6 +145,7 @@ const AuthProvider = ({ children }) => {
 								phoneNumber: user.phoneNumber,
 								photoURL: user.photoURL,
 								providerData: user.providerData,
+								addresses: user.addresses,
 								uid: user.uid,
 								cartItems: [],
 								cartTotal: 0,
