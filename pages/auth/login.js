@@ -25,16 +25,17 @@ import * as Yup from "yup";
 import OnlyLoggedOut from "@components/routes/OnlyLoggedOut";
 import { FaGoogle } from "react-icons/fa";
 
+const LoginSchema = Yup.object().shape({
+	email: Yup.string()
+		.email("Invalid Email Address")
+		.required("Email is required"),
+	password: Yup.string().required("Password is required"),
+});
+
 export default function LoginPage() {
 	const toast = useToast();
 	const router = useRouter();
 	const { logIn, signInWithGoogle } = useAuth();
-	const LoginSchema = Yup.object().shape({
-		email: Yup.string()
-			.email("Invalid Email Address")
-			.required("Email is required"),
-		password: Yup.string().required("Password is required"),
-	});
 	const isMobile = useBreakpointValue(mobileBreakpointsMap);
 
 	return (
