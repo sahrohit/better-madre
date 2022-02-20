@@ -127,14 +127,14 @@ const TestingPage = () => {
 	// 		});
 	// };
 
-	const handleClick = async (e) => {
-		e.preventDefault();
-		const docRef = await addDoc(collection(db, "orders"), {
-			name: "Tokyo",
-			country: "Japan",
-		});
-		console.log("Document written with ID: ", docRef.id);
-	};
+	// const handleClick = async (e) => {
+	// 	e.preventDefault();
+	// 	const docRef = await addDoc(collection(db, "orders"), {
+	// 		name: "Tokyo",
+	// 		country: "Japan",
+	// 	});
+	// 	console.log("Document written with ID: ", docRef.id);
+	// };
 
 	return (
 		<>
