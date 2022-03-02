@@ -11,9 +11,9 @@ const AdminPage = () => {
 	const router = useRouter();
 
 	return (
-		<AdminContextWrapper>
-			<OnlyLoggedIn>
-				<OnlyAdmin>
+		<OnlyLoggedIn>
+			<OnlyAdmin>
+				<AdminContextWrapper>
 					{/* <Navbar position="static" /> */}
 					<SimpleGrid
 						height={"100vh"}
@@ -31,9 +31,9 @@ const AdminPage = () => {
 				>
 					Menu
 				</Button> */}
-				</OnlyAdmin>
-			</OnlyLoggedIn>
-		</AdminContextWrapper>
+				</AdminContextWrapper>
+			</OnlyAdmin>
+		</OnlyLoggedIn>
 	);
 };
 

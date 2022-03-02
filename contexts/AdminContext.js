@@ -65,9 +65,7 @@ const AdminProvider = ({ children }) => {
 		}
 	};
 
-	
 	const [state, dispatch] = useReducer(reducer, initialState);
-	console.log("Orders", state.orders);
 
 	useEffect(() => {
 		let subscribers = [];
