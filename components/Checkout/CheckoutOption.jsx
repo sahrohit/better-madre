@@ -248,8 +248,10 @@ const CheckoutOption = () => {
 													autoComplete="off"
 													variant="filled"
 												/>
+												{userData.addresses
+														?.length > 0 && (
 												<AutoCompleteList>
-													{userData?.addresses?.map(
+													{userData.addresses.map(
 														(address, oid) => (
 															<AutoCompleteItem
 																key={
@@ -285,6 +287,7 @@ const CheckoutOption = () => {
 														)}
 													</AutoCompleteCreatable>
 												</AutoCompleteList>
+												)}
 											</AutoComplete>
 										</FormControl>
 									)}
