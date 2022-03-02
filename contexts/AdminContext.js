@@ -41,20 +41,17 @@ const AdminProvider = ({ children }) => {
 				adminMenu: action.payload.adminMenu,
 				adminCategories: action.payload.adminCategories,
 				adminCusines: action.payload.adminCusines,
-				loading: action.payload.loading,
 			};
 		} else if (action.type === "USERLISTENER") {
 			return {
 				...state,
 				users: action.payload.users,
 				uids: action.payload.uids,
-				loading: action.payload.loading,
 			};
 		} else if (action.type === "ADMINLISTENER") {
 			return {
 				...state,
 				admins: action.payload.admins,
-				loading: action.payload.loading,
 			};
 		} else if (action.type === "ORDERLISTENER") {
 			return {
@@ -80,7 +77,6 @@ const AdminProvider = ({ children }) => {
 					adminCusines: new Set(
 						snapshot.docs.map((doc) => doc.data().cusine)
 					),
-					loading: false,
 				},
 			});
 		});
@@ -91,7 +87,6 @@ const AdminProvider = ({ children }) => {
 				payload: {
 					users: snapshot.docs.map((doc) => doc.data()),
 					uids: snapshot.docs.map((doc) => doc.data().uid),
-					loading: false,
 				},
 			});
 		});
@@ -103,7 +98,6 @@ const AdminProvider = ({ children }) => {
 					type: "ADMINLISTENER",
 					payload: {
 						admins: snapshot.docs.map((doc) => doc.id),
-						loading: false,
 					},
 				});
 			}
