@@ -16,19 +16,13 @@ import { nanoid } from "nanoid";
 
 const CompletedOrders = () => {
 	const router = useRouter();
-	const { orders } = useOrder();
+	const { completedOrders } = useOrder();
 
 	return (
 		<Box>
-			{orders.length > 0 ? (
+			{completedOrders.length > 0 ? (
 				<VStack spacing={5}>
-					{orders.map((order) => {
-						if (
-							order.status !== "delivered" &&
-							order.status !== "cancelled"
-						)
-							return;
-
+					{completedOrders.map((order) => {
 						return <OrderCard key={order.orderId} order={order} />;
 					})}
 				</VStack>

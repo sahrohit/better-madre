@@ -56,6 +56,16 @@ const OrderProvider = ({ children }) => {
 
 	const value = {
 		orders,
+		pendingOrders: orders?.filter(
+			(order) =>
+				order.status === "pending" ||
+				order.status === "verified" ||
+				order.status === "left-for-delivery"
+		),
+		completedOrders: orders?.filter(
+			(order) =>
+				order.status === "cancelled" || order.status === "delivered"
+		),
 	};
 
 	return (

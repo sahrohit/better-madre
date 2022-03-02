@@ -16,13 +16,13 @@ import OrderCard from "./OrderCard";
 
 const PendingOrder = () => {
 	const router = useRouter();
-	const { orders } = useOrder();
+	const { pendingOrders } = useOrder();
 
 	return (
 		<Box>
-			{orders.length > 0 ? (
+			{pendingOrders.length > 0 ? (
 				<VStack spacing={5}>
-					{orders.map((order) => {
+					{pendingOrders.map((order) => {
 						if (
 							order.status === "delivered" ||
 							order.status === "cancelled"
