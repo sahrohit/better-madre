@@ -249,7 +249,7 @@ const CheckoutOption = () => {
 													variant="filled"
 												/>
 												<AutoCompleteList>
-													{userData.addresses.map(
+													{userData?.addresses?.map(
 														(address, oid) => (
 															<AutoCompleteItem
 																key={
