@@ -50,6 +50,7 @@ import {
 	collection,
 	updateDoc,
 	arrayUnion,
+	serverTimestamp,
 } from "firebase/firestore";
 import { db } from "../../firebase";
 
@@ -99,8 +100,9 @@ const CheckoutOption = () => {
 							orderedBy: userData.uid,
 							orderedItems: userData.cartItems,
 							totalPrice: userData.cartTotal,
-							status: "ordered",
+							status: "pending",
 							payment: "unpaid",
+							orderTimeStamp: serverTimestamp(),
 						}).then(async ({ id }) => {
 							await updateDoc(doc(db, "users", userData.uid), {
 								orders: arrayUnion(id),

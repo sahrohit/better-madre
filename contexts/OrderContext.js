@@ -10,6 +10,7 @@ import {
 	deleteDoc,
 	where,
 	query,
+	orderBy,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import FullPageLoadingSpinner from "@components/shared/FullPageLoadingSpinner";
@@ -33,9 +34,20 @@ const OrderProvider = ({ children }) => {
 	useEffect(
 		() =>
 			onSnapshot(
-				query(collection(db, "orders"), where("orderedBy", "==", uid)),
+				query(
+					collection(db, "orders"),
+					where("orderedBy", "==", uid),
+					orderBy("orderTimeStamp", "desc")
+				),
 				(snapshot) => {
-					setOrders(snapshot.docs.map((doc) => doc.data()));
+					setOrders(
+						snapshot.docs.map((doc) => {
+							return {
+								...doc.data(),
+								orderId: doc.id,
+							};
+						})
+					);
 					setLoading(false);
 				}
 			),

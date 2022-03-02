@@ -119,6 +119,7 @@ const Banner = (props) => {
 				w={{ base: "80%", sm: "60%", md: "50%" }}
 				mb={{ base: 12, md: 0 }}
 				mx="auto"
+				overflow={"hidden"}
 			>
 				<AnimatePresence>
 					<MotionImage

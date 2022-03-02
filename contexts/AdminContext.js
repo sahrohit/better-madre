@@ -8,6 +8,9 @@ import {
 	onSnapshot,
 	getDocs,
 	deleteDoc,
+	query,
+	orderBy,
+	serverTimestamp,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import FullPageLoadingSpinner from "@components/shared/FullPageLoadingSpinner";
@@ -25,6 +28,7 @@ const AdminProvider = ({ children }) => {
 		uids: null,
 		admins: null,
 		adminMenu: null,
+		orders: null,
 		loading: true,
 		adminCategories: new Set(),
 		adminCusines: new Set(),
@@ -52,10 +56,18 @@ const AdminProvider = ({ children }) => {
 				admins: action.payload.admins,
 				loading: action.payload.loading,
 			};
+		} else if (action.type === "ORDERLISTENER") {
+			return {
+				...state,
+				orders: action.payload.orders,
+				loading: action.payload.loading,
+			};
 		}
 	};
 
+	
 	const [state, dispatch] = useReducer(reducer, initialState);
+	console.log("Orders", state.orders);
 
 	useEffect(() => {
 		let subscribers = [];
@@ -99,6 +111,24 @@ const AdminProvider = ({ children }) => {
 			}
 		);
 		subscribers.push(adminListener);
+		const orderListener = onSnapshot(
+			query(collection(db, "orders"), orderBy("orderTimeStamp", "desc")),
+			(snapshot) => {
+				dispatch({
+					type: "ORDERLISTENER",
+					payload: {
+						orders: snapshot.docs.map((doc) => {
+							return {
+								...doc.data(),
+								orderId: doc.id,
+							};
+						}),
+						loading: false,
+					},
+				});
+			}
+		);
+		subscribers.push(orderListener);
 		return () => subscribers.forEach((sub) => sub());
 	}, []);
 
@@ -123,16 +153,69 @@ const AdminProvider = ({ children }) => {
 		return await deleteDoc(doc(db, "menu", menuId));
 	};
 
+	const updateToVerified = async (orderId) => {
+		return await updateDoc(doc(db, "orders", orderId), {
+			status: "verified",
+			verificationTimeStamp: serverTimestamp(),
+		});
+	};
+
+	const updateToLeftforDelivery = async (
+		orderId,
+		deliverByName,
+		deliverByNumber
+	) => {
+		return await updateDoc(doc(db, "orders", orderId), {
+			status: "left-for-delivery",
+			deliveryPartner: {
+				name: deliverByName,
+				phoneNumber: deliverByNumber,
+			},
+			leftfordeliveryTimeStamp: serverTimestamp(),
+		});
+	};
+
+	const updateToDelivered = async (orderId) => {
+		return await updateDoc(doc(db, "orders", orderId), {
+			status: "delivered",
+			payment: "Paid with Cash",
+			deliveredTimeStamp: serverTimestamp(),
+		});
+	};
+
+	const updateToCancelled = async (orderId, cancellationMessage) => {
+		return await updateDoc(doc(db, "orders", orderId), {
+			status: "cancelled",
+			cancellationMessage,
+			cancelledTimeStamp: serverTimestamp(),
+		});
+	};
+
 	const value = {
 		adminMenu: state.adminMenu,
 		users: state.users,
 		uids: state.uids,
 		admins: state.admins,
+		orders: state.orders,
+		pendingOrders: state.orders?.filter(
+			(order) => order.status === "pending" || order.status === "verified"
+		),
+		leftfordeliveryOrders: state.orders?.filter(
+			(order) => order.status === "left-for-delivery"
+		),
+		completedOrders: state.orders?.filter(
+			(order) =>
+				order.status === "delivered" || order.status === "cancelled"
+		),
 		adminCusines: state.adminCusines,
 		adminCategories: state.adminCategories,
 		updateMenu,
 		addNewMenuItem,
 		deleteMenuItem,
+		updateToVerified,
+		updateToLeftforDelivery,
+		updateToDelivered,
+		updateToCancelled,
 	};
 
 	return (

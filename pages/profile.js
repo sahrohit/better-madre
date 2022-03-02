@@ -12,6 +12,7 @@ const ProfilePage = () => {
 			<Navbar position="static" />
 			<OnlyVerifiedEmail>
 				<SimpleGrid
+					w={"full"}
 					height={"100vh"}
 					templateColumns={{ sm: "1fr", lg: "1fr 2fr" }}
 					columns={{ sm: 1, md: 1, lg: 2, xl: 3 }}

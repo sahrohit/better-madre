@@ -378,7 +378,7 @@ const Address = () => {
 			>
 				Add New Address
 			</Button>
-			{userData?.addresses.length > 0 ? (
+			{userData?.addresses?.length > 0 ? (
 				userData.addresses.map((address, index) => {
 					return (
 						<AddressCard

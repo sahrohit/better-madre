@@ -6,10 +6,16 @@ import {
 	TabPanel,
 	Flex,
 	useColorMode,
+	Spacer,
+	HStack,
+	InputGroup,
+	InputLeftElement,
+	Input,
 } from "@chakra-ui/react";
 import Address from "./Address";
 import CompletedOrders from "./CompletedOrders";
 import PendingOrder from "./PendingOrder";
+import { AiOutlineSearch } from "react-icons/ai";
 
 const TabSection = () => {
 	const { colorMode } = useColorMode();
@@ -28,13 +34,13 @@ const TabSection = () => {
 					<Tab>Completed Orders</Tab>
 				</TabList>
 				<TabPanels>
-					<TabPanel>
+					<TabPanel w={"full"}>
 						<PendingOrder />
 					</TabPanel>
-					<TabPanel>
+					<TabPanel w={"full"}>
 						<Address />
 					</TabPanel>
-					<TabPanel>
+					<TabPanel w={"full"}>
 						<CompletedOrders />
 					</TabPanel>
 				</TabPanels>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	Button,
 	useToast,
@@ -17,6 +17,7 @@ import {
 	CloseButton,
 	InputGroup,
 	InputLeftElement,
+	Text,
 } from "@chakra-ui/react";
 import {
 	collection,
@@ -27,6 +28,8 @@ import {
 	onSnapshot,
 	getDocs,
 	deleteField,
+	orderBy,
+	query,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { useMenu } from "../contexts/MenuContext";
@@ -63,43 +66,52 @@ import {
 import { pull } from "lodash";
 
 import { storage } from "../firebase";
+import { Step, Steps, useSteps } from "chakra-ui-steps";
+
+import {
+	FiClipboard,
+	FiDollarSign,
+	FiUser,
+	FiCheckCircle,
+} from "react-icons/fi";
+import { GiDeliveryDrone } from "react-icons/gi";
 
 const TestingPage = () => {
-	const files = [];
+	// const files = [];
 
-	const { menuItems } = useMenu();
+	// const { menuItems } = useMenu();
 
-	const router = useRouter();
+	// const router = useRouter();
 
-	const toast = useToast();
+	// const toast = useToast();
 
-	const options = ["apple", "appoint", "zap", "cap", "japan"];
+	// const options = ["apple", "appoint", "zap", "cap", "japan"];
 
-	const bg = useColorModeValue("white", "gray.800");
-	const mobileNav = useDisclosure();
+	// const bg = useColorModeValue("white", "gray.800");
+	// const mobileNav = useDisclosure();
 
-	const [selectedFile, setSelectedFile] = useState();
+	// const [selectedFile, setSelectedFile] = useState();
 
-	const storageRef = ref(storage, "test/image");
+	// const storageRef = ref(storage, "test/image");
 
-	const addImageToPost = async (e) => {
-		const reader = new FileReader();
-		if (e.target.files[0]) {
-			reader.readAsDataURL(e.target.files[0]);
-		}
+	// const addImageToPost = async (e) => {
+	// 	const reader = new FileReader();
+	// 	if (e.target.files[0]) {
+	// 		reader.readAsDataURL(e.target.files[0]);
+	// 	}
 
-		reader.onload = (readerEvent) => {
-			setSelectedFile(readerEvent.target.result);
-		};
-	};
+	// 	reader.onload = (readerEvent) => {
+	// 		setSelectedFile(readerEvent.target.result);
+	// 	};
+	// };
 
-	const listRef = ref(storage, "images/menu/apple-crumble");
+	// const listRef = ref(storage, "images/menu/apple-crumble");
 
-	const appleCrubmle = menuItems.find(
-		(item) => item.menuId === "apple-crumble"
-	);
+	// const appleCrubmle = menuItems.find(
+	// 	(item) => item.menuId === "apple-crumble"
+	// );
 
-	const appleImages = appleCrubmle.images.map((image) => image.imageRef);
+	// const appleImages = appleCrubmle.images.map((image) => image.imageRef);
 
 	// const handleClick = async () => {
 	// 	listAll(listRef)
@@ -136,12 +148,36 @@ const TestingPage = () => {
 	// 	console.log("Document written with ID: ", docRef.id);
 	// };
 
+	const [orders, setOrders] = useState([]);
+
+	useEffect(
+		() =>
+			onSnapshot(
+				query(
+					collection(db, "orders"),
+					orderBy("orderTimeStamp", "desc")
+				),
+				(snapshot) => {
+					setOrders(
+						snapshot.docs.map((doc) => {
+							console.log(doc.id);
+							return {
+								...doc.data(),
+								orderId: doc.id,
+							};
+						})
+					);
+				}
+			),
+		[]
+	);
+
 	return (
-		<>
-			<SearchBar />
-			<Input type="file" onChange={addImageToPost} />
-			<Button onClick={handleClick}>Upload File</Button>
-		</>
+		<Box width="100%">
+			{orders?.map((order) => {
+				<Text>{JSON.stringify(order)}</Text>;
+			})}
+		</Box>
 	);
 };
 
