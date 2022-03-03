@@ -17,7 +17,6 @@ import { isEqual } from "lodash";
 import { getFromStorage, setToStorage } from "@components/helpers/localstorage";
 import { updateDoc, doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
-import FullPageLoadingSpinner from "@components/shared/FullPageLoadingSpinner";
 
 const AuthContext = React.createContext();
 
@@ -54,14 +53,6 @@ const AuthProvider = ({ children }) => {
 	const unLinkGoogleAccount = () => {
 		return unlink(currentUser, "google.com");
 	};
-
-	// const signInWithFacebook = () => {
-	// 	return auth.signInWithPopup(facebookProvider);
-	// };
-
-	// const signInWithGithub = () => {
-	// 	return auth.signInWithPopup(githubProvider);
-	// };
 
 	const logOut = () => {
 		return signOut(auth);
@@ -107,24 +98,10 @@ const AuthProvider = ({ children }) => {
 							photoURL: user.photoURL,
 							providerData: user.providerData,
 							uid: user.uid,
-							addresses: user.addresses,
 						},
 						JSON.parse(getFromStorage("currentUserState"))
 					)
 				) {
-					setToStorage(
-						"currentUserState",
-						JSON.stringify({
-							displayName: user.displayName,
-							email: user.email,
-							emailVerified: user.emailVerified,
-							phoneNumber: user.phoneNumber,
-							photoURL: user.photoURL,
-							providerData: user.providerData,
-							uid: user.uid,
-							addresses: user.addresses,
-						})
-					);
 					try {
 						await updateDoc(doc(db, "users", user.uid), {
 							displayName: user.displayName,
@@ -134,7 +111,19 @@ const AuthProvider = ({ children }) => {
 							photoURL: user.photoURL,
 							providerData: user.providerData,
 							uid: user.uid,
-							addresses: user.addresses,
+						}).then(() => {
+							setToStorage(
+								"currentUserState",
+								JSON.stringify({
+									displayName: user.displayName,
+									email: user.email,
+									emailVerified: user.emailVerified,
+									phoneNumber: user.phoneNumber,
+									photoURL: user.photoURL,
+									providerData: user.providerData,
+									uid: user.uid,
+								})
+							);
 						});
 					} catch (error) {
 						if (error.code === "not-found") {
@@ -145,16 +134,28 @@ const AuthProvider = ({ children }) => {
 								phoneNumber: user.phoneNumber,
 								photoURL: user.photoURL,
 								providerData: user.providerData,
-								addresses: user.addresses,
 								uid: user.uid,
+								addresses: [],
 								cartItems: [],
 								cartTotal: 0,
+							}).then(() => {
+								setToStorage(
+									"currentUserState",
+									JSON.stringify({
+										displayName: user.displayName,
+										email: user.email,
+										emailVerified: user.emailVerified,
+										phoneNumber: user.phoneNumber,
+										photoURL: user.photoURL,
+										providerData: user.providerData,
+										uid: user.uid,
+									})
+								);
 							});
 						}
 					}
 				}
 			}
-
 			setLoading(false);
 		});
 
@@ -174,10 +175,6 @@ const AuthProvider = ({ children }) => {
 		signInWithGoogle,
 		linkGoogleAccount,
 		unLinkGoogleAccount,
-		// updateEmail,
-		// updatePassword,
-		// signInWithFacebook,
-		// signInWithGithub,
 	};
 
 	return (

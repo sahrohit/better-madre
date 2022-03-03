@@ -8,9 +8,9 @@ import OrderContextWrapper from "@contexts/OrderContext";
 
 const ProfilePage = () => {
 	return (
-		<OrderContextWrapper>
-			<Navbar position="static" />
-			<OnlyVerifiedEmail>
+		<OnlyVerifiedEmail>
+			<OrderContextWrapper>
+				<Navbar position="static" />
 				<SimpleGrid
 					w={"full"}
 					height={"100vh"}
@@ -20,8 +20,8 @@ const ProfilePage = () => {
 					<ProfilePanel />
 					<Tabs />
 				</SimpleGrid>
-			</OnlyVerifiedEmail>
-		</OrderContextWrapper>
+			</OrderContextWrapper>
+		</OnlyVerifiedEmail>
 	);
 };
 
