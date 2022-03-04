@@ -8,13 +8,17 @@ import {
 	Input,
 	Link as ChakraLink,
 	Stack,
-	Image,
+	Image as ChakraImage,
 	useToast,
 	Text,
 	useBreakpointValue,
 	FormErrorMessage,
 	Divider,
 	Center,
+	VStack,
+	HStack,
+	IconButton,
+	Icon,
 } from "@chakra-ui/react";
 import { useAuth } from "contexts/AuthContext";
 import { useRouter } from "next/router";
@@ -23,7 +27,10 @@ import { mobileBreakpointsMap } from "@config/theme";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import OnlyLoggedOut from "@components/routes/OnlyLoggedOut";
-import { FaGoogle } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { fadeInRight } from "@config/animations";
 
 const LoginSchema = Yup.object().shape({
 	email: Yup.string()
@@ -37,14 +44,38 @@ export default function LoginPage() {
 	const router = useRouter();
 	const { logIn, signInWithGoogle } = useAuth();
 	const isMobile = useBreakpointValue(mobileBreakpointsMap);
+	const MotionFlex = motion(Flex);
 
 	return (
 		<OnlyLoggedOut>
 			<Stack minH={"100vh"} direction={{ base: "column", md: "row" }}>
-				<Flex p={8} flex={1} align={"center"} justify={"center"}>
+				<MotionFlex
+					p={8}
+					flex={1}
+					align={"center"}
+					justify={"center"}
+					initial="initial"
+					animate="animate"
+					variants={fadeInRight}
+				>
 					<Stack spacing={4} w={"full"} maxW={"md"}>
-						<Heading fontSize={"2xl"}>
-							Sign in to your account
+						<Text align={"left"} my={10}>
+							Return to{" "}
+							<Link passHref href="/">
+								<ChakraLink iHomecolor={"blue.400"}>
+									Home,
+								</ChakraLink>
+							</Link>
+						</Text>
+						<Heading
+							fontSize={"3xl"}
+							fontWeight={"medium"}
+							textAlign={"center"}
+							fontFamily={"Inter"}
+							whiteSpace={"nowrap"}
+							m={5}
+						>
+							Welcome back to Madre,
 						</Heading>
 						<Formik
 							initialValues={{ email: "", password: "" }}
@@ -89,11 +120,7 @@ export default function LoginPage() {
 														form.touched.email
 													}
 												>
-													<Stack
-														direction={{
-															base: "column",
-															sm: "row",
-														}}
+													<HStack
 														align={"start"}
 														justify={
 															"space-between"
@@ -105,7 +132,7 @@ export default function LoginPage() {
 														<FormErrorMessage>
 															{form.errors.email}
 														</FormErrorMessage>
-													</Stack>
+													</HStack>
 
 													<Input
 														{...field}
@@ -122,11 +149,7 @@ export default function LoginPage() {
 														form.touched.password
 													}
 												>
-													<Stack
-														direction={{
-															base: "column",
-															sm: "row",
-														}}
+													<HStack
 														align={"start"}
 														justify={
 															"space-between"
@@ -141,7 +164,7 @@ export default function LoginPage() {
 																	.password
 															}
 														</FormErrorMessage>
-													</Stack>
+													</HStack>
 													<Input
 														{...field}
 														type="password"
@@ -151,11 +174,7 @@ export default function LoginPage() {
 										</Field>
 
 										<Stack spacing={6}>
-											<Stack
-												direction={{
-													base: "column",
-													sm: "row",
-												}}
+											<HStack
 												align={"start"}
 												justify={"space-between"}
 											>
@@ -172,11 +191,11 @@ export default function LoginPage() {
 														Forgot password?
 													</ChakraLink>
 												</Link>
-											</Stack>
+											</HStack>
 											<Button
 												isLoading={props.isSubmitting}
 												type="submit"
-												colorScheme={"blue"}
+												colorScheme={"green"}
 												variant={"solid"}
 											>
 												Sign in
@@ -192,10 +211,9 @@ export default function LoginPage() {
 						</Center>
 
 						<Button
-							leftIcon={<FaGoogle />}
+							leftIcon={<FcGoogle fontSize={"25px"} />}
 							type="submit"
-							colorScheme={"blue"}
-							variant={"solid"}
+							variant={"outline"}
 							onClick={() => {
 								signInWithGoogle()
 									.then((userCredential) => {
@@ -235,14 +253,36 @@ export default function LoginPage() {
 							</Text>
 						</Stack>
 					</Stack>
-				</Flex>
+				</MotionFlex>
 				{!isMobile && (
-					<Flex flex={1}>
-						<Image
-							alt={"Login Image"}
+					<Flex flex={2} position={"relative"}>
+						<Flex
+							color={"white"}
+							zIndex={1}
+							direction={"column"}
+							w={"full"}
+							alignItems={"flex-end"}
+							justifyContent={"flex-end"}
+						>
+							<Heading
+								p={"20%"}
+								fontFamily={"Dancing Script"}
+								fontWeight={"semibold"}
+								fontSize={"80px"}
+								whiteSpace={"nowrap"}
+							>
+								Welcome back,
+							</Heading>
+						</Flex>
+
+						<ChakraImage
+							as={Image}
+							alt={"Beautiful Foods"}
+							layout={"fill"}
 							objectFit={"cover"}
+							filter={`blur(1px) brightness(80%)`}
 							src={
-								"https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80"
+								"https://images.unsplash.com/photo-1498837167922-ddd27525d352?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
 							}
 						/>
 					</Flex>

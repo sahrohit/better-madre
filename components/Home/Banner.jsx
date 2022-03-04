@@ -123,7 +123,7 @@ const Banner = (props) => {
 			>
 				<AnimatePresence>
 					<MotionImage
-						src="/foods/eggs.png"
+						src="/foods/eggs.webp"
 						alt="random image"
 						layout={`"fill"`}
 						variants={variants}

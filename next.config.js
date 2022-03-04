@@ -12,6 +12,10 @@ module.exports = withPWA({
 	swcMinify: true,
 	reactStrictMode: true,
 	images: {
-		domains: ["source.unsplash.com", "lh3.googleusercontent.com"],
+		domains: [
+			"source.unsplash.com",
+			"lh3.googleusercontent.com",
+			"images.unsplash.com",
+		],
 	},
 });
