@@ -11,10 +11,20 @@ import {
 	IconButton,
 	useColorModeValue,
 	Button,
+	FormControl,
+	HStack,
+	FormLabel,
+	FormErrorMessage,
 } from "@chakra-ui/react";
 import { FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
 import { BiMailSend } from "react-icons/bi";
 import Logo from "@components/Logo";
+import { Formik, Form, Field } from "formik";
+import * as Yup from "yup";
+
+const SubscriptionSchema = Yup.object().shape({
+	email: Yup.string().email("Invalid email").required("Required"),
+});
 
 const SocialButton = ({ children, label, href }) => {
 	return (
@@ -93,42 +103,53 @@ export default function Footer() {
 
 					<Stack align={"flex-start"} justifyContent="flex-start">
 						<ListHeader>Stay up to date</ListHeader>
-						<Stack direction={"column"}>
-							<Input
-								placeholder={"Your email address"}
-								bg={useColorModeValue(
-									"blackAlpha.100",
-									"whiteAlpha.100"
-								)}
-								border={0}
-								_focus={{
-									bg: "whiteAlpha.300",
-								}}
-							/>
-							{/* <IconButton
-								width={10}
-								bg={useColorModeValue("green.400", "green.800")}
-								color={useColorModeValue("white", "gray.800")}
-								_hover={{
-									bg: "green.600",
-								}}
-								aria-label="Subscribe"
-								icon={}
-							/> */}
-							<Button
-								bg={useColorModeValue("green.400", "green.800")}
-								color={useColorModeValue("white", "gray.800")}
-								_hover={{
-									bg: "green.600",
-								}}
-								aria-label="Subscribe"
-								size="md"
-								width="120px"
-								leftIcon={<BiMailSend />}
-							>
-								Subscribe
-							</Button>
-						</Stack>
+						<Formik
+							initialValues={{ email: "" }}
+							validationSchema={SubscriptionSchema}
+							validateOnChange={false}
+							validateOnBlur={false}
+							onSubmit={async (values, actions) => {
+								// Async Request to Store the Email (values.email)
+								actions.setSubmitting(false);
+							}}
+						>
+							{(props) => (
+								<Form>
+									<Stack direction={"column"} spacing={2}>
+										<Field name="email">
+											{({ field, form }) => (
+												<FormControl
+													isInvalid={
+														form.touched.email &&
+														form.errors.email
+													}
+												>
+													<Input
+														{...field}
+														placeholder={
+															"Your email address"
+														}
+														autoComplete="email"
+														type="email"
+													/>
+												</FormControl>
+											)}
+										</Field>
+										<Button
+											isLoading={props.isSubmitting}
+											type="submit"
+											colorScheme={"green"}
+											aria-label="Subscribe"
+											size="md"
+											width="120px"
+											leftIcon={<BiMailSend />}
+										>
+											Subscribe
+										</Button>
+									</Stack>
+								</Form>
+							)}
+						</Formik>
 					</Stack>
 				</SimpleGrid>
 			</Container>
