@@ -88,6 +88,8 @@ const Menu = () => {
 							padding={50}
 							shadow="lg"
 							rounded="lg"
+							position={"sticky"}
+							top={10}
 						>
 							<MenuOption
 								sliderValue={sliderValue}
