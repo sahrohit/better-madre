@@ -7,8 +7,6 @@ import {
 	Stack,
 	Collapse,
 	Link as ChakraLink,
-	Popover,
-	PopoverTrigger,
 	useColorModeValue,
 	useBreakpointValue,
 	useDisclosure,
@@ -16,40 +14,24 @@ import {
 	HStack,
 	VStack,
 } from "@chakra-ui/react";
-import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
-import NextRouter from "next/router";
-import { MoonIcon, SunIcon } from "@chakra-ui/icons";
+import Link from "next/link";
+import { useRouter } from "next/router";
+
 import Logo from "@components/Logo";
-import { mobileBreakpointsMap } from "config/theme";
 import LoginMenu from "./LoginMenu";
 import { useAuth } from "@contexts/AuthContext";
 import ProfileMenu from "./ProfileMenu";
-import { AiFillHome } from "react-icons/ai";
-import { useRouter } from "next/router";
-import Link from "next/link";
+
+import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { MdOutlineRestaurantMenu, MdWorkOutline } from "react-icons/md";
+import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { BiCalendarEvent, BiBuildings } from "react-icons/bi";
-import {
-	motion,
-	useViewportScroll,
-	useSpring,
-	useTransform,
-} from "framer-motion";
-import { useEffect, useState } from "react";
 
 export const Navbar = ({ position }) => {
-	const MotionBox = motion(Box);
-
-	const { scrollYProgress } = useViewportScroll();
-
-	const { isOpen, onToggle } = useDisclosure();
-
-	const { colorMode, toggleColorMode } = useColorMode();
-
-	const isMobile = useBreakpointValue({ base: true, md: false });
 	const { currentUser } = useAuth();
-
-	const [isComplete, setIsComplete] = useState(false);
+	const { isOpen, onToggle } = useDisclosure();
+	const { colorMode, toggleColorMode } = useColorMode();
+	const isMobile = useBreakpointValue({ base: true, md: false });
 
 	return (
 		<Box w={"full"} position={position} top="0" zIndex="1" boxShadow={"md"}>
@@ -63,9 +45,6 @@ export const Navbar = ({ position }) => {
 				px={{ base: 4 }}
 				zIndex="100"
 				align={"center"}
-				// borderBottom={1}
-				// borderStyle={"solid"}
-				// borderColor={useColorModeValue("gray.200", "gray.900")}
 			>
 				<Flex
 					flex={{ base: 1, md: "auto" }}
@@ -128,6 +107,7 @@ export const Navbar = ({ position }) => {
 				<MobileNav
 					colorMode={colorMode}
 					toggleColorMode={toggleColorMode}
+					currentUser={currentUser}
 				/>
 			</Collapse>
 		</Box>
@@ -138,35 +118,34 @@ const DesktopNav = () => {
 	const router = useRouter();
 
 	return (
-		<Stack direction={"row"} spacing={4}>
+		<Stack direction={"row"} spacing={6}>
 			{NAV_ITEMS.map((navItem) => (
-				<Box key={navItem.label}>
-					<ChakraLink
-						href={
-							router.asPath === navItem.href ? "#" : navItem.href
-						}
-						as={Link}
-						passHref
+				<ChakraLink
+					key={navItem.label}
+					href={router.asPath === navItem.href ? "" : navItem.href}
+					as={Link}
+					passHref
+				>
+					<HStack
+						spacing={2}
+						cursor={"pointer"}
+						px={2}
+						py={1}
+						rounded="lg"
+						wrap={"nowrap"}
 					>
-						<Button
-							variant={
-								router.asPath === navItem.href
-									? "solid"
-									: "ghost"
-							}
-							leftIcon={navItem.icon}
-							size="sm"
-						>
-							<a>{navItem.label}</a>
-						</Button>
-					</ChakraLink>
-				</Box>
+						{navItem.icon}
+						<Text whiteSpace={"nowrap"}>{navItem.label}</Text>
+					</HStack>
+				</ChakraLink>
 			))}
 		</Stack>
 	);
 };
 
-const MobileNav = ({ colorMode, toggleColorMode }) => {
+const MobileNav = ({ colorMode, toggleColorMode, currentUser }) => {
+	const router = useRouter();
+
 	return (
 		<Flex direction="row" justify={"space-between"} align={"center"}>
 			<Stack p={4} display={{ md: "none" }}>
@@ -179,39 +158,41 @@ const MobileNav = ({ colorMode, toggleColorMode }) => {
 					/>
 				))}
 			</Stack>
-			<VStack
-				px={4}
-				display={{ md: "none", base: "flex" }}
-				direction="column"
-				justify={"space-between"}
-				align={"center"}
-				spacing={5}
-			>
-				<Button
-					display={"inline-flex"}
-					w={"full"}
-					color={"white"}
-					bg="#25b09c"
-					_hover={{
-						bg: "#e34d4d",
-					}}
-					onClick={() => NextRouter.push("/auth/register")}
+			{!currentUser && (
+				<VStack
+					px={4}
+					display={{ md: "none", base: "flex" }}
+					direction="column"
+					justify={"space-between"}
+					align={"center"}
+					spacing={5}
 				>
-					Sign Up
-				</Button>
-				<Button
-					display={"inline-flex"}
-					w={"full"}
-					color={"white"}
-					bg="#25b09c"
-					_hover={{
-						bg: "#e34d4d",
-					}}
-					onClick={() => NextRouter.push("/auth/login")}
-				>
-					Sign In
-				</Button>
-			</VStack>
+					<Button
+						display={"inline-flex"}
+						w={"full"}
+						color={"white"}
+						bg="#25b09c"
+						_hover={{
+							bg: "#e34d4d",
+						}}
+						onClick={() => router.push("/auth/register")}
+					>
+						Sign Up
+					</Button>
+					<Button
+						display={"inline-flex"}
+						w={"full"}
+						color={"white"}
+						bg="#25b09c"
+						_hover={{
+							bg: "#e34d4d",
+						}}
+						onClick={() => router.push("/auth/login")}
+					>
+						Sign In
+					</Button>
+				</VStack>
+			)}
 		</Flex>
 	);
 };
@@ -220,26 +201,24 @@ const MobileNavItem = ({ label, href, icon }) => {
 	const router = useRouter();
 
 	return (
-		<Stack spacing={4}>
-			<Flex
-				justify={"space-between"}
-				align={"center"}
-				_hover={{
-					textDecoration: "none",
-				}}
-				onClick={() => NextRouter.push(href)}
+		<ChakraLink
+			key={label}
+			href={router.asPath === href ? "" : href}
+			as={Link}
+			passHref
+		>
+			<HStack
+				spacing={2}
+				cursor={"pointer"}
+				px={2}
+				py={1}
+				rounded="lg"
+				wrap={"nowrap"}
 			>
-				<Link href={href} as={href} passHref>
-					<Button
-						variant={router.asPath === href ? "solid" : "ghost"}
-						leftIcon={icon}
-						size="sm"
-					>
-						{label}
-					</Button>
-				</Link>
-			</Flex>
-		</Stack>
+				{icon}
+				<Text whiteSpace={"nowrap"}>{label}</Text>
+			</HStack>
+		</ChakraLink>
 	);
 };
 

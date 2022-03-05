@@ -1,10 +1,12 @@
+import Link from "next/link";
 import { memo, useState } from "react";
 import { useColorMode, Image, useBreakpointValue } from "@chakra-ui/react";
-import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import styles from "./styles.module.css";
-import { ThemeMode, mobileBreakpointsMap } from "@config/theme";
+
 import { simpleOpacity } from "@config/animations";
+import { ThemeMode, mobileBreakpointsMap } from "@config/theme";
+
+import styles from "./styles.module.css";
 
 const Logo = () => {
 	const { colorMode } = useColorMode();

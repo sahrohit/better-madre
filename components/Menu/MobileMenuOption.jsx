@@ -28,10 +28,11 @@ const MobileMenuOption = ({
 	return (
 		<>
 			<Button
+				variant={"outline"}
 				rightIcon={<GoSettings />}
 				m={4}
 				ref={btnRef}
-				colorScheme="purple"
+				colorScheme="green"
 				onClick={onOpen}
 			>
 				Filters
