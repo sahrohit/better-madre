@@ -136,6 +136,7 @@ export default function LoginPage() {
 
 													<Input
 														{...field}
+														autoComplete="email"
 														type="email"
 													/>
 												</FormControl>
@@ -167,6 +168,7 @@ export default function LoginPage() {
 													</HStack>
 													<Input
 														{...field}
+														autoComplete="current-password"
 														type="password"
 													/>
 												</FormControl>

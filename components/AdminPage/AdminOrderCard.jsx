@@ -349,7 +349,10 @@ const AdminOrderCard = ({ order }) => {
 															<PopoverArrow />
 															<PopoverCloseButton />
 															<PopoverBody>
-																<Field name="deliveryPartnerName">
+																<Field
+																	name="deliveryPartnerName"
+																	autoComplete="name"
+																>
 																	{({
 																		field,
 																		form,
@@ -384,7 +387,10 @@ const AdminOrderCard = ({ order }) => {
 																		</FormControl>
 																	)}
 																</Field>
-																<Field name="deliveryPartnerPhone">
+																<Field
+																	name="deliveryPartnerPhone"
+																	autoComplete="tel-national"
+																>
 																	{({
 																		field,
 																		form,

@@ -117,6 +117,7 @@ const Address = () => {
 
 													<Input
 														{...field}
+														autoComplete="nickname"
 														type="text"
 													/>
 												</FormControl>
@@ -191,6 +192,7 @@ const Address = () => {
 
 													<Input
 														{...field}
+														autoComplete="address-level2"
 														type="text"
 													/>
 												</FormControl>
@@ -229,6 +231,7 @@ const Address = () => {
 
 													<Input
 														{...field}
+														autoComplete="address-level3"
 														type="text"
 													/>
 												</FormControl>
@@ -267,6 +270,7 @@ const Address = () => {
 
 														<Input
 															{...field}
+															autoComplete="address-level2"
 															type="text"
 														/>
 													</FormControl>
@@ -303,6 +307,7 @@ const Address = () => {
 
 														<Input
 															{...field}
+															autoComplete="address-level1"
 															type="text"
 														/>
 													</FormControl>
@@ -340,6 +345,7 @@ const Address = () => {
 
 														<Input
 															{...field}
+															autoComplete="postal-code"
 															type="number"
 														/>
 													</FormControl>

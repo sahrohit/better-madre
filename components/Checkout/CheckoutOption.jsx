@@ -163,7 +163,11 @@ const CheckoutOption = () => {
 												</FormErrorMessage>
 											</Stack>
 
-											<Input {...field} type="text" />
+											<Input
+												{...field}
+												autoComplete="name"
+												type="text"
+											/>
 										</FormControl>
 									)}
 								</Field>
@@ -200,6 +204,7 @@ const CheckoutOption = () => {
 												</InputLeftAddon>
 												<Input
 													{...field}
+													autoComplete="tel-national"
 													type="number"
 												/>
 											</InputGroup>
@@ -248,45 +253,45 @@ const CheckoutOption = () => {
 													autoComplete="off"
 													variant="filled"
 												/>
-												{userData.addresses
-														?.length > 0 && (
-												<AutoCompleteList>
-													{userData.addresses.map(
-														(address, oid) => (
-															<AutoCompleteItem
-																key={
-																	address.addressId
-																}
-																value={
-																	address.addressName
-																}
-																textTransform="capitalize"
-																align="center"
-																onClick={() => {
-																	form.setFieldValue(
-																		"address",
-																		`${address.addressline1}, ${address.addressline2}, ${address.city}, ${address.state}, ${address.zipcode}`
-																	);
-																}}
-																my={1}
-															>
-																<Text ml="4">
-																	{`
+												{userData.addresses?.length >
+													0 && (
+													<AutoCompleteList>
+														{userData.addresses.map(
+															(address, oid) => (
+																<AutoCompleteItem
+																	key={
+																		address.addressId
+																	}
+																	value={
+																		address.addressName
+																	}
+																	textTransform="capitalize"
+																	align="center"
+																	onClick={() => {
+																		form.setFieldValue(
+																			"address",
+																			`${address.addressline1}, ${address.addressline2}, ${address.city}, ${address.state}, ${address.zipcode}`
+																		);
+																	}}
+																	my={1}
+																>
+																	<Text ml="4">
+																		{`
 																		${address.addressName} (${address.addressline1}, ${address.addressline2}, ${address.city}, ${address.state}, ${address.zipcode})
 																	`}
-																</Text>
-															</AutoCompleteItem>
-														)
-													)}
-													<AutoCompleteCreatable>
-														{({ value }) => (
-															<Text>
-																Deliver to{" "}
-																{value}
-															</Text>
+																	</Text>
+																</AutoCompleteItem>
+															)
 														)}
-													</AutoCompleteCreatable>
-												</AutoCompleteList>
+														<AutoCompleteCreatable>
+															{({ value }) => (
+																<Text>
+																	Deliver to{" "}
+																	{value}
+																</Text>
+															)}
+														</AutoCompleteCreatable>
+													</AutoCompleteList>
 												)}
 											</AutoComplete>
 										</FormControl>

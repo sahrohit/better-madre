@@ -18,7 +18,6 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 
 const ForgotPassword = () => {
-	
 	const toast = useToast();
 	const { resetPassword } = useAuth();
 	const ForgotPasswordSchema = Yup.object().shape({
@@ -92,6 +91,7 @@ const ForgotPassword = () => {
 										</Stack>
 										<Input
 											{...field}
+											autoComplete="email"
 											placeholder="youremail@email.com"
 										/>
 										{/* 
