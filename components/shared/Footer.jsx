@@ -8,13 +8,10 @@ import {
 	Text,
 	VisuallyHidden,
 	Input,
-	IconButton,
 	useColorModeValue,
 	Button,
 	FormControl,
-	HStack,
-	FormLabel,
-	FormErrorMessage,
+	useToast,
 } from "@chakra-ui/react";
 import { FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
 import { BiMailSend } from "react-icons/bi";
@@ -58,7 +55,10 @@ const ListHeader = ({ children }) => {
 	);
 };
 
+useToast;
+
 export default function Footer() {
+	const toast = useToast();
 	return (
 		<Box
 			bg={useColorModeValue("#edf2f7", "black")}
@@ -109,7 +109,47 @@ export default function Footer() {
 							validateOnChange={false}
 							validateOnBlur={false}
 							onSubmit={async (values, actions) => {
-								// Async Request to Store the Email (values.email)
+								const res = await fetch("/api/subscribe", {
+									body: JSON.stringify({
+										email: values.email,
+									}),
+									headers: {
+										"Content-Type": "application/json",
+									},
+									method: "POST",
+								});
+								const { error } = await res.json();
+								if (error) {
+									if (
+										error?.text?.includes("Member Exists")
+									) {
+										toast({
+											title: "Already Subscribed",
+											description:
+												"You are already subscribed",
+											status: "success",
+											duration: 3000,
+											isClosable: true,
+										});
+									} else {
+										toast({
+											title: "Error",
+											description: "An Error Occured",
+											status: "error",
+											duration: 3000,
+											isClosable: true,
+										});
+									}
+								} else {
+									toast({
+										title: "Subscribed !",
+										description:
+											"Good contents comming your way !",
+										status: "success",
+										duration: 3000,
+										isClosable: true,
+									});
+								}
 								actions.setSubmitting(false);
 							}}
 						>
