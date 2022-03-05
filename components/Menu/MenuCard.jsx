@@ -14,6 +14,8 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { useUser } from "@contexts/UserContext";
 import { useAuth } from "@contexts/AuthContext";
+import { motion } from "framer-motion";
+import { staggerChild } from "@config/animations";
 
 function Rating({ rating, numberOfReviews }) {
 	return (
@@ -61,6 +63,7 @@ const MenuCard = ({
 	rating,
 	numberOfReviews,
 }) => {
+	const MotionBox = motion(Box);
 	const router = useRouter();
 	const { currentUser } = useAuth();
 	const { addToCart } = useUser();
@@ -77,7 +80,13 @@ const MenuCard = ({
 	};
 
 	return (
-		<Box maxW="sm" borderWidth="1px" rounded="lg" shadow="lg">
+		<MotionBox
+			variants={staggerChild}
+			maxW="sm"
+			borderWidth="1px"
+			rounded="lg"
+			shadow="lg"
+		>
 			<Link href={`/menu/${menuId}`} passHref>
 				<Box
 					cursor={"pointer"}
@@ -184,7 +193,7 @@ const MenuCard = ({
 					</Button>
 				</HStack> */}
 			</Box>
-		</Box>
+		</MotionBox>
 	);
 };
 

@@ -13,8 +13,11 @@ import AdminMenuOption from "@components/AdminMenu/AdminMenuOption";
 import SearchBar from "@components/shared/SearchBar";
 import AdminMobileMenuOption from "@components/AdminMenu/AdminMobileMenuOption";
 import { useAdmin } from "@contexts/AdminContext";
+import { staggerParent } from "@config/animations";
+import { motion } from "framer-motion";
 
 const AdminPage = () => {
+	const MotionSimpleGrid = motion(SimpleGrid);
 	const { adminMenu } = useAdmin();
 
 	const [sliderValue, setSliderValue] = useState([0, 10000]);
@@ -113,7 +116,10 @@ const AdminPage = () => {
 					</Box>
 				)}
 
-				<SimpleGrid
+				<MotionSimpleGrid
+					variants={staggerParent}
+					initial="hidden"
+					animate="visible"
 					w={"full"}
 					mx={{ base: 0, md: 50 }}
 					my={50}
@@ -160,7 +166,7 @@ const AdminPage = () => {
 										</Box>
 									);
 								})}
-				</SimpleGrid>
+				</MotionSimpleGrid>
 			</Flex>
 		</>
 	);
