@@ -16,6 +16,7 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useViewportScroll, useMotionValue } from "framer-motion";
 
 import Logo from "@components/Logo";
 import LoginMenu from "./LoginMenu";
@@ -26,15 +27,37 @@ import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { MdOutlineRestaurantMenu, MdWorkOutline } from "react-icons/md";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { BiCalendarEvent, BiBuildings } from "react-icons/bi";
+import { useEffect, useState } from "react";
 
 export const Navbar = ({ position }) => {
+	const { scrollYProgress } = useViewportScroll();
 	const { currentUser } = useAuth();
 	const { isOpen, onToggle } = useDisclosure();
 	const { colorMode, toggleColorMode } = useColorMode();
 	const isMobile = useBreakpointValue({ base: true, md: false });
 
+	const [navbarShadow, setNavbarShadow] = useState(false);
+
+	useEffect(
+		() =>
+			scrollYProgress.onChange((latest) => {
+				if (latest > 0) {
+					setNavbarShadow(true);
+				} else {
+					setNavbarShadow(false);
+				}
+			}),
+		[scrollYProgress]
+	);
+
 	return (
-		<Box w={"full"} position={position} top="0" zIndex="1" boxShadow={"md"}>
+		<Box
+			w={"full"}
+			position={position}
+			top="0"
+			zIndex="1"
+			boxShadow={navbarShadow && "md"}
+		>
 			<Flex
 				mr={!isMobile && "10"}
 				ml={!isMobile && "10"}
