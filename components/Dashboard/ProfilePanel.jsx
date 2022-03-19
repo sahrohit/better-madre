@@ -58,8 +58,21 @@ const ProfilePanel = () => {
 	];
 
 	return (
-		<Flex w="full" alignItems="flex-start" justifyContent="center">
-			<Box w="sm" mx="auto" shadow="lg" rounded="lg">
+		<Flex
+			w="full"
+			alignItems="flex-start"
+			justifyContent="center"
+			display={{ base: "none", lg: "flex" }}
+		>
+			<Box
+				w="sm"
+				mx="auto"
+				shadow="lg"
+				rounded="lg"
+				alignSelf={"flex-start"}
+				position="sticky"
+				top={20}
+			>
 				<Image
 					roundedTop={"lg"}
 					w="full"

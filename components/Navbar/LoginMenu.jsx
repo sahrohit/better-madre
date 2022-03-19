@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const LoginMenu = () => {
 	return (
-		<HStack display={{ base: "none", md: "inline-flex" }}>
+		<HStack display={{ base: "none", lg: "inline-flex" }}>
 			<Button
 				display={{ base: "none", lg: "inline-flex" }}
 				variant="ghost"

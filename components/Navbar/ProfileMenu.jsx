@@ -22,7 +22,7 @@ const ProfileMenu = () => {
 	const router = useRouter();
 	const { currentUser, logOut } = useAuth();
 	const { colorMode, toggleColorMode } = useColorMode();
-	const isMobile = useBreakpointValue({ base: true, md: false });
+	// const isMobile = useBreakpointValue({ base: true, lg: false });
 
 	return (
 		<HStack>
@@ -51,31 +51,27 @@ const ProfileMenu = () => {
 						</MenuItem>
 					</MenuGroup>
 
-					{isMobile && (
-						<>
-							<MenuDivider />
-							<MenuGroup title="Theme">
-								<MenuItem closeOnSelect={false}>
-									<HStack
-										w={"full"}
-										justifyContent={"space-between"}
-										align={"center"}
-									>
-										<Text>Dark Mode</Text>
-										<Switch
-											pt={1}
-											isChecked={colorMode === "dark"}
-											onChange={() => {
-												toggleColorMode();
-											}}
-											size="lg"
-											colorScheme="grey"
-										/>
-									</HStack>
-								</MenuItem>
-							</MenuGroup>
-						</>
-					)}
+					<MenuDivider />
+					<MenuGroup title="Theme">
+						<MenuItem closeOnSelect={false}>
+							<HStack
+								w={"full"}
+								justifyContent={"space-between"}
+								align={"center"}
+							>
+								<Text>Dark Mode</Text>
+								<Switch
+									pt={1}
+									isChecked={colorMode === "dark"}
+									onChange={() => {
+										toggleColorMode();
+									}}
+									size="lg"
+									colorScheme="grey"
+								/>
+							</HStack>
+						</MenuItem>
+					</MenuGroup>
 					<MenuDivider />
 					<MenuGroup title="Management">
 						<MenuItem

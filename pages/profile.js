@@ -10,7 +10,7 @@ const ProfilePage = () => {
 	return (
 		<OnlyVerifiedEmail>
 			<OrderContextWrapper>
-				<Navbar position="static" />
+				<Navbar position="sticky" />
 				<SimpleGrid
 					w={"full"}
 					height={"100vh"}

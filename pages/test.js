@@ -75,6 +75,7 @@ import {
 	FiCheckCircle,
 } from "react-icons/fi";
 import { GiDeliveryDrone } from "react-icons/gi";
+import IconBadge from "@components/Navbar/CartIcon";
 
 const TestingPage = () => {
 	// const files = [];
@@ -173,11 +174,13 @@ const TestingPage = () => {
 	);
 
 	return (
-		<Box width="100%">
-			{orders?.map((order) => {
-				<Text>{JSON.stringify(order)}</Text>;
-			})}
-		</Box>
+		<>
+			<Box width="100%">
+				{orders?.map((order) => {
+					<Text>{JSON.stringify(order)}</Text>;
+				})}
+			</Box>
+		</>
 	);
 };
 

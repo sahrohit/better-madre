@@ -13,6 +13,26 @@ import {
 	useColorMode,
 	HStack,
 	VStack,
+	Drawer,
+	DrawerBody,
+	DrawerFooter,
+	DrawerHeader,
+	DrawerOverlay,
+	DrawerContent,
+	DrawerCloseButton,
+	Popover,
+	PopoverTrigger,
+	PopoverContent,
+	PopoverHeader,
+	PopoverBody,
+	PopoverFooter,
+	PopoverArrow,
+	PopoverCloseButton,
+	Avatar,
+	AvatarBadge,
+	Icon,
+	Tooltip,
+	ButtonGroup,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -28,13 +48,17 @@ import { MdOutlineRestaurantMenu, MdWorkOutline } from "react-icons/md";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { BiCalendarEvent, BiBuildings } from "react-icons/bi";
 import { useEffect, useState } from "react";
+import DrawerFooterContent from "./DrawerFooterContent";
+import DrawerBodyContent from "./DrawerBodyContent";
+import CartIcon from "./CartIcon";
 
 export const Navbar = ({ position }) => {
 	const { scrollYProgress } = useViewportScroll();
 	const { currentUser } = useAuth();
-	const { isOpen, onToggle } = useDisclosure();
+
+	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { colorMode, toggleColorMode } = useColorMode();
-	const isMobile = useBreakpointValue({ base: true, md: false });
+	const isMobile = useBreakpointValue({ base: true, lg: false });
 
 	const [navbarShadow, setNavbarShadow] = useState(false);
 
@@ -70,12 +94,12 @@ export const Navbar = ({ position }) => {
 				align={"center"}
 			>
 				<Flex
-					flex={{ base: 1, md: "auto" }}
+					flex={{ base: 1, lg: "auto" }}
 					ml={{ base: -2 }}
-					display={{ base: "flex", md: "none" }}
+					display={{ base: "flex", lg: "none" }}
 				>
 					<IconButton
-						onClick={onToggle}
+						onClick={onOpen}
 						icon={
 							isOpen ? (
 								<CloseIcon w={3} h={3} />
@@ -89,18 +113,18 @@ export const Navbar = ({ position }) => {
 				</Flex>
 				<Flex
 					flex={{ base: 1 }}
-					justifyContent={{ base: "center", md: "start" }}
+					justifyContent={{ base: "center", lg: "start" }}
 					alignItems="center"
 				>
 					<Logo />
 
-					<Flex display={{ base: "none", md: "flex" }} ml={10}>
+					<Flex display={{ base: "none", lg: "flex" }} ml={10}>
 						<DesktopNav />
 					</Flex>
 				</Flex>
 
 				<Stack
-					flex={{ base: 1, md: 0 }}
+					flex={{ base: 1, lg: 0 }}
 					justify={"flex-start"}
 					align={"center"}
 					direction={currentUser ? "row-reverse" : "row"}
@@ -108,31 +132,27 @@ export const Navbar = ({ position }) => {
 				>
 					{currentUser ? <ProfileMenu /> : <LoginMenu />}
 
-					{!isMobile && (
-						<IconButton
-							variant="nooutline"
-							colorScheme="teal"
-							aria-label="Toggle Light Mode"
-							icon={
-								colorMode == "light" ? (
-									<MoonIcon />
-								) : (
-									<SunIcon />
-								)
-							}
-							onClick={toggleColorMode}
-						/>
-					)}
+					{!isMobile && <CartIcon />}
 				</Stack>
 			</Flex>
 
-			<Collapse in={isOpen} animateOpacity>
-				<MobileNav
-					colorMode={colorMode}
-					toggleColorMode={toggleColorMode}
-					currentUser={currentUser}
-				/>
-			</Collapse>
+			<Drawer isOpen={isOpen} onClose={onClose} placement={"left"}>
+				<DrawerOverlay />
+				<DrawerContent>
+					<DrawerCloseButton />
+					<DrawerHeader>
+						<Logo />
+					</DrawerHeader>
+
+					<DrawerBody>
+						<DrawerBodyContent />
+					</DrawerBody>
+
+					<DrawerFooter>
+						<DrawerFooterContent />
+					</DrawerFooter>
+				</DrawerContent>
+			</Drawer>
 		</Box>
 	);
 };
@@ -163,85 +183,6 @@ const DesktopNav = () => {
 				</ChakraLink>
 			))}
 		</Stack>
-	);
-};
-
-const MobileNav = ({ colorMode, toggleColorMode, currentUser }) => {
-	const router = useRouter();
-
-	return (
-		<Flex direction="row" justify={"space-between"} align={"center"}>
-			<Stack p={4} display={{ md: "none" }}>
-				{NAV_ITEMS.map((navItem) => (
-					<MobileNavItem
-						key={navItem.label}
-						{...navItem}
-						colorMode={colorMode}
-						toggleColorMode={toggleColorMode}
-					/>
-				))}
-			</Stack>
-			{!currentUser && (
-				<VStack
-					px={4}
-					display={{ md: "none", base: "flex" }}
-					direction="column"
-					justify={"space-between"}
-					align={"center"}
-					spacing={5}
-				>
-					<Button
-						display={"inline-flex"}
-						w={"full"}
-						color={"white"}
-						bg="#25b09c"
-						_hover={{
-							bg: "#e34d4d",
-						}}
-						onClick={() => router.push("/auth/register")}
-					>
-						Sign Up
-					</Button>
-					<Button
-						display={"inline-flex"}
-						w={"full"}
-						color={"white"}
-						bg="#25b09c"
-						_hover={{
-							bg: "#e34d4d",
-						}}
-						onClick={() => router.push("/auth/login")}
-					>
-						Sign In
-					</Button>
-				</VStack>
-			)}
-		</Flex>
-	);
-};
-
-const MobileNavItem = ({ label, href, icon }) => {
-	const router = useRouter();
-
-	return (
-		<ChakraLink
-			key={label}
-			href={router.asPath === href ? "" : href}
-			as={Link}
-			passHref
-		>
-			<HStack
-				spacing={2}
-				cursor={"pointer"}
-				px={2}
-				py={1}
-				rounded="lg"
-				wrap={"nowrap"}
-			>
-				{icon}
-				<Text whiteSpace={"nowrap"}>{label}</Text>
-			</HStack>
-		</ChakraLink>
 	);
 };
 
