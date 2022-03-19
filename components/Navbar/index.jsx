@@ -132,7 +132,7 @@ export const Navbar = ({ position }) => {
 				>
 					{currentUser ? <ProfileMenu /> : <LoginMenu />}
 
-					{!isMobile && <CartIcon />}
+					{!isMobile && currentUser && <CartIcon />}
 				</Stack>
 			</Flex>
 
