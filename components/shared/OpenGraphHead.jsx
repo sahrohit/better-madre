@@ -1,7 +1,5 @@
-import Head from "next/head";
-
 const OpenGraphHead = () => (
-	<Head>
+	<>
 		<title>Madre | where something delicious is always cooking.</title>
 		<meta
 			name="title"
@@ -41,7 +39,7 @@ const OpenGraphHead = () => (
 			property="twitter:image"
 			content="https://madre.vercel.app/Madre_dark.png"
 		></meta>
-	</Head>
+	</>
 );
 
 export default OpenGraphHead;

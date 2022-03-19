@@ -1,9 +1,11 @@
+import OpenGraphHead from "@components/shared/OpenGraphHead";
 import { Html, Head, Main, NextScript } from "next/document";
 
 export default function Document() {
 	return (
 		<Html>
 			<Head>
+				<OpenGraphHead />
 				<link rel="manifest" href="/manifest.json" />
 				<link
 					rel="apple-touch-icon"
@@ -11,6 +13,16 @@ export default function Document() {
 					href="icons/apple-icon-180.png"
 				/>
 				<meta name="theme-color" content="#edf2f7" />
+				<link rel="preconnect" href="https://fonts.googleapis.com" />
+				<link
+					rel="preconnect"
+					href="https://fonts.gstatic.com"
+					crossOrigin
+				/>
+				<link
+					href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Inter&family=Parisienne&family=Poppins&display=swap"
+					rel="stylesheet"
+				/>
 			</Head>
 			<body>
 				<Main />

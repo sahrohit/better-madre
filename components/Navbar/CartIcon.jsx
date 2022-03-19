@@ -5,11 +5,10 @@ import { useRouter } from "next/router";
 import { useUser } from "@contexts/UserContext";
 
 const CartIcon = ({ items }) => {
-	const {
-		userData: { cartItems },
-	} = useUser();
+	const { userData } = useUser();
 	const router = useRouter();
-	const itemLength = cartItems.reduce((acc, obj) => acc + obj.quantity, 0);
+	const itemLength =
+		userData?.cartItems?.reduce((acc, obj) => acc + obj.quantity, 0) || 0;
 
 	return (
 		<chakra.span pos="relative" display="inline-block">
