@@ -1,9 +1,23 @@
-import React from "react";
-import { Alert, AlertIcon, Center, Icon, IconButton } from "@chakra-ui/react";
+import React, { useState } from "react";
+import {
+	Alert,
+	AlertIcon,
+	Center,
+	Icon,
+	IconButton,
+	Link as ChakraLink,
+} from "@chakra-ui/react";
 import { FaGithub } from "react-icons/fa";
 import Link from "next/link";
+import { getFromStorage, setToStorage } from "@components/helpers/localstorage";
 
 const TopAlert = () => {
+	const [ack, setAck] = useState(getFromStorage("ack"));
+
+	if (ack) {
+		return <></>;
+	}
+
 	return (
 		<Alert as={Center} status="info" py={0}>
 			<AlertIcon />
@@ -22,6 +36,14 @@ const TopAlert = () => {
 					icon={<Icon fontSize="20px" as={FaGithub} />}
 				/>
 			</Link>
+			<ChakraLink
+				onClick={() => {
+					setToStorage("ack", true);
+					setAck(true);
+				}}
+			>
+				I understand.
+			</ChakraLink>
 		</Alert>
 	);
 };

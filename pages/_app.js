@@ -4,10 +4,12 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { AuthProvider } from "@contexts/AuthContext";
 import { MenuProvider } from "@contexts/MenuContext";
 import { UserProvider } from "@contexts/UserContext";
+import Script from "next/script";
+import * as gtag from "../lib/gtag";
 
 import TopAlert from "@components/shared/TopAlert";
 
-import Router, { useRouter } from "next/router";
+import Router from "next/router";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 
@@ -21,7 +23,25 @@ function MyApp({ Component, pageProps }) {
 			<AuthProvider>
 				<MenuProvider>
 					<UserProvider>
-						{/* <TopAlert /> */}
+						<Script
+							strategy="afterInteractive"
+							src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
+						/>
+						<Script
+							id="gtag-init"
+							strategy="afterInteractive"
+							dangerouslySetInnerHTML={{
+								__html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${gtag.GA_TRACKING_ID}', {
+              page_path: window.location.pathname,
+            });
+          `,
+							}}
+						/>
+					 <TopAlert />
 						<Component {...pageProps} />
 					</UserProvider>
 				</MenuProvider>
