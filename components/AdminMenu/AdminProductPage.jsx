@@ -64,6 +64,7 @@ import {
 } from "firebase/storage";
 import { storage } from "../../firebase";
 import { nanoid } from "nanoid";
+import FullPageLoadingSpinner from "@components/shared/FullPageLoadingSpinner";
 
 const MenuSchema = Yup.object().shape({
 	menuname: Yup.string().required("Required"),
@@ -104,32 +105,21 @@ const AdminProductPage = ({ id }) => {
 	const [fileUploadProgress, setFileUploadProgress] = useState(0);
 	const [selectedFile, setSelectedFile] = useState();
 
-	// React.useEffect(() => {
-	// 	const confirmationMessage = "Changes you made may not be saved.";
-	// 	const beforeUnloadHandler = (e) => {
-	// 		(e || window.event).returnValue = confirmationMessage;
-	// 		return confirmationMessage; // Gecko + Webkit, Safari, Chrome etc.
-	// 	};
-	// 	const beforeRouteHandler = (url) => {
-	// 		if (Router.pathname !== url && !confirm(confirmationMessage)) {
-	// 			// to inform NProgress or something ...
-	// 			Router.events.emit("routeChangeError");
-	// 			// tslint:disable-next-line: no-string-throw
-	// 			throw `Route change to "${url}" was aborted (this error can be safely ignored).`;
-	// 		}
-	// 	};
-	// 	if (true) {
-	// 		window.addEventListener("beforeunload", beforeUnloadHandler);
-	// 		Router.events.on("routeChangeStart", beforeRouteHandler);
-	// 	} else {
-	// 		window.removeEventListener("beforeunload", beforeUnloadHandler);
-	// 		Router.events.off("routeChangeStart", beforeRouteHandler);
-	// 	}
-	// 	return () => {
-	// 		window.removeEventListener("beforeunload", beforeUnloadHandler);
-	// 		Router.events.off("routeChangeStart", beforeRouteHandler);
-	// 	};
-	// }, []);
+	if (!item) {
+		router.push("/admin/menu").then(() => {
+			if (!toast.isActive("admin-menu-not-found")) {
+				toast({
+					id: "admin-menu-not-found",
+					title: "Error",
+					description: "Menu not found",
+					status: "error",
+					duration: 3000,
+				});
+			}
+		});
+
+		return <FullPageLoadingSpinner />;
+	}
 
 	return (
 		<Formik
@@ -427,27 +417,7 @@ const AdminProductPage = ({ id }) => {
 																									storage,
 																									image.imageRef
 																								)
-																							)
-																								.then(
-																									() => {
-																										console.log(
-																											"File Deleted Successfully"
-																										);
-																									}
-																								)
-																								.catch(
-																									(
-																										error
-																									) => {
-																										console.log(
-																											"An Error OCcured"
-																										);
-																										console.log(
-																											"Error",
-																											error
-																										);
-																									}
-																								);
+																							);
 																						}
 																					}}
 																				/>

@@ -20,30 +20,16 @@ import {
 	DrawerOverlay,
 	DrawerContent,
 	DrawerCloseButton,
-	Popover,
-	PopoverTrigger,
-	PopoverContent,
-	PopoverHeader,
-	PopoverBody,
-	PopoverFooter,
-	PopoverArrow,
-	PopoverCloseButton,
-	Avatar,
-	AvatarBadge,
-	Icon,
-	Tooltip,
-	ButtonGroup,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useViewportScroll, useMotionValue } from "framer-motion";
+import { useViewportScroll } from "framer-motion";
 
 import Logo from "@components/Logo";
 import LoginMenu from "./LoginMenu";
 import { useAuth } from "@contexts/AuthContext";
 import ProfileMenu from "./ProfileMenu";
 
-import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { MdOutlineRestaurantMenu, MdWorkOutline } from "react-icons/md";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { BiCalendarEvent, BiBuildings } from "react-icons/bi";
@@ -57,7 +43,6 @@ export const Navbar = ({ position }) => {
 	const { currentUser } = useAuth();
 
 	const { isOpen, onOpen, onClose } = useDisclosure();
-	const { colorMode, toggleColorMode } = useColorMode();
 	const isMobile = useBreakpointValue({ base: true, lg: false });
 
 	const [navbarShadow, setNavbarShadow] = useState(false);

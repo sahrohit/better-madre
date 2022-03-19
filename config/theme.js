@@ -86,55 +86,6 @@ const theme = extendTheme({
 				outline: (props) => ({
 					borderColor: mode("white.400", "#30E3CA")(props),
 				}),
-				outlineAlternative: (props) => ({
-					borderWidth: "1px",
-					borderRadius: 0,
-					borderColor: mode("#595959", "whiteAlpha.500")(props),
-					_hover: {
-						backgroundColor: mode(
-							"rgba(49, 151, 149, 0.06)",
-							"rgba(157, 236, 249, 0.06)"
-						)(props),
-					},
-				}),
-			},
-		},
-		Icon: {
-			variants: {
-				accent: (props) => ({
-					borderColor: mode("gray.800", "gray.400")(props),
-				}),
-			},
-		},
-		Divider: {
-			variants: {
-				solid: (props) => ({
-					borderColor: mode("gray.800", "gray.400")(props),
-					marginLeft: "auto",
-					marginRight: "auto",
-				}),
-			},
-		},
-		Menu: {
-			variants: {
-				test: (props) => ({
-					backgroundColor: mode("#fc4553", "#fc4553")(props),
-					color: mode("#fc4553", "#fc4553")(props),
-					_hover: {
-						backgroundColor: mode("#fc4553", "#fc4553")(props),
-					},
-				}),
-			},
-		},
-		Drawer: {
-			variants: {
-				default: (props) => ({
-					color: mode("gray.800", "whiteAlpha.900")(props),
-					bg: mode("gray.100", "#121212")(props),
-					// _hover: {
-					// 	backgroundColor: mode("#fc4553", "#fc4553")(props),
-					// },
-				}),
 			},
 		},
 	},

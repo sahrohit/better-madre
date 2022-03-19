@@ -105,7 +105,7 @@ const Banner = (props) => {
 						Order Now
 					</Button>
 				</Link>
-				<Text
+				{/* <Text
 					fontSize="xs"
 					mt={2}
 					textAlign="center"
@@ -113,7 +113,7 @@ const Banner = (props) => {
 					opacity="0.6"
 				>
 					No credit card required.
-				</Text>
+				</Text> */}
 			</Stack>
 			<Box
 				w={{ base: "80%", sm: "60%", md: "50%" }}

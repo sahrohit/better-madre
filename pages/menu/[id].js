@@ -4,7 +4,7 @@ import { collection, getDocs } from "firebase/firestore";
 
 import { Navbar } from "@components/Navbar";
 import Footer from "@components/shared/Footer";
-
+import MenuContextWrapper from "@contexts/MenuContext";
 import ProductPage from "@components/Menu/ProductPage";
 
 export const getStaticProps = async ({ params }) => {
@@ -28,12 +28,10 @@ export const getStaticPaths = async () => {
 
 export default function Simple({ id }) {
 	return (
-		<>
+		<MenuContextWrapper>
 			<Navbar />
-
 			<ProductPage id={id} />
-
 			<Footer />
-		</>
+		</MenuContextWrapper>
 	);
 }

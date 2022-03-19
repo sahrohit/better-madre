@@ -54,7 +54,7 @@ const AdminMenuOption = ({
 			<InputGroup my={4}>
 				<Input
 					w={"full"}
-					type="text"
+					type="search"
 					placeholder="Search"
 					value={searchText}
 					onChange={(e) => setSearchText(e.target.value)}

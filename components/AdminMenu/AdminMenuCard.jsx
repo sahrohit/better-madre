@@ -1,10 +1,7 @@
-import React, { useRef } from "react";
+import React from "react";
 import {
 	Flex,
-	Circle,
 	Box,
-	Image,
-	Badge,
 	useColorModeValue,
 	chakra,
 	HStack,
@@ -17,8 +14,6 @@ import {
 import { useRouter } from "next/router";
 import { useAdmin } from "@contexts/AdminContext";
 import { DeleteIcon } from "@chakra-ui/icons";
-import { staggerChild } from "@config/animations";
-import { motion } from "framer-motion";
 
 const AdminMenuCard = ({
 	id,
@@ -31,18 +26,12 @@ const AdminMenuCard = ({
 	isPublished,
 	showDelete,
 }) => {
-	const MotionFlex = motion(Flex);
 	const toast = useToast();
 	const router = useRouter();
 	const { updateMenu, deleteMenuItem } = useAdmin();
 
 	return (
-		<MotionFlex
-			variants={staggerChild}
-			w="full"
-			alignItems="center"
-			justifyContent="center"
-		>
+		<Flex w="full" alignItems="center" justifyContent="center">
 			<Flex
 				direction="column"
 				justifyContent="center"
@@ -151,7 +140,7 @@ const AdminMenuCard = ({
 					</HStack>
 				</Box>
 			</Flex>
-		</MotionFlex>
+		</Flex>
 	);
 };
 

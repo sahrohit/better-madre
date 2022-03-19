@@ -13,6 +13,7 @@ const CartIcon = ({ items }) => {
 	return (
 		<chakra.span pos="relative" display="inline-block">
 			<IconButton
+				aria-label="Cart"
 				px={2}
 				fontSize={"2xl"}
 				icon={<BsCart3 />}

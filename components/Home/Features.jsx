@@ -55,7 +55,7 @@ export default function SimpleThreeColumns() {
 				>
 					Features
 				</chakra.h1>
-				<Text color={"gray.600"} fontSize={"xl"}>
+				<Text color={"gray.500"} fontSize={"xl"}>
 					The services we offer are just to satisfy your needs.
 				</Text>
 			</Stack>

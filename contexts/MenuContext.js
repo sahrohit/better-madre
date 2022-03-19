@@ -62,3 +62,9 @@ const MenuProvider = ({ children }) => {
 
 export { MenuProvider };
 export { useMenu };
+
+const MenuContextWrapper = ({ children }) => {
+	return <MenuProvider>{children}</MenuProvider>;
+};
+
+export default MenuContextWrapper;

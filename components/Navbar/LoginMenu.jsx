@@ -5,14 +5,14 @@ import Link from "next/link";
 const LoginMenu = () => {
 	return (
 		<HStack display={{ base: "none", lg: "inline-flex" }}>
-			<Button
-				display={{ base: "none", lg: "inline-flex" }}
-				variant="ghost"
-			>
-				<ChakraLink href={"/auth/login"} as={Link} passHref>
+			<ChakraLink href={"/auth/login"} as={Link} passHref>
+				<Button
+					display={{ base: "none", lg: "inline-flex" }}
+					variant="ghost"
+				>
 					<a>Sign in</a>
-				</ChakraLink>
-			</Button>
+				</Button>
+			</ChakraLink>
 			<Button
 				colorScheme="filled"
 				color={"white"}

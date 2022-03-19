@@ -2,7 +2,6 @@ import "../styles/globals.css";
 import theme from "../config/theme";
 import { ChakraProvider } from "@chakra-ui/react";
 import { AuthProvider } from "@contexts/AuthContext";
-import { MenuProvider } from "@contexts/MenuContext";
 import { UserProvider } from "@contexts/UserContext";
 import Script from "next/script";
 import * as gtag from "../lib/gtag";
@@ -21,17 +20,16 @@ function MyApp({ Component, pageProps }) {
 	return (
 		<ChakraProvider theme={theme}>
 			<AuthProvider>
-				<MenuProvider>
-					<UserProvider>
-						<Script
-							strategy="afterInteractive"
-							src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
-						/>
-						<Script
-							id="gtag-init"
-							strategy="afterInteractive"
-							dangerouslySetInnerHTML={{
-								__html: `
+				<UserProvider>
+					<Script
+						strategy="afterInteractive"
+						src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
+					/>
+					<Script
+						id="gtag-init"
+						strategy="afterInteractive"
+						dangerouslySetInnerHTML={{
+							__html: `
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
@@ -39,12 +37,11 @@ function MyApp({ Component, pageProps }) {
               page_path: window.location.pathname,
             });
           `,
-							}}
-						/>
-					 <TopAlert />
-						<Component {...pageProps} />
-					</UserProvider>
-				</MenuProvider>
+						}}
+					/>
+					<TopAlert />
+					<Component {...pageProps} />
+				</UserProvider>
 			</AuthProvider>
 		</ChakraProvider>
 	);

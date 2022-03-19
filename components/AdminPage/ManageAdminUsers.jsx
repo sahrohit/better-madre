@@ -18,43 +18,31 @@ import {
 	AlertDialogOverlay,
 	Tag,
 	FormErrorMessage,
+	useColorModeValue,
 } from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
 import { useAuth } from "contexts/AuthContext";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import { useState, useEffect, useRef } from "react";
-import {
-	collection,
-	doc,
-	setDoc,
-	onSnapshot,
-	deleteDoc,
-	getDoc,
-} from "firebase/firestore";
+import { doc, setDoc, deleteDoc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase";
-import FullPageLoadingSpinner from "@components/shared/FullPageLoadingSpinner";
 import {
 	AutoComplete,
 	AutoCompleteInput,
 	AutoCompleteItem,
 	AutoCompleteList,
-	AutoCompleteGroup,
-	AutoCompleteFixedItem,
 } from "@choc-ui/chakra-autocomplete";
 import { useAdmin } from "@contexts/AdminContext";
-import { GrUserAdmin } from "react-icons/gr";
+import { AiOutlineUserAdd } from "react-icons/ai";
 import { nanoid } from "nanoid";
 
 const ManageAdminUsers = () => {
 	const { users, uids, admins } = useAdmin();
-
 	const toast = useToast();
-
 	const [confirmInput, setConfirmInput] = useState("");
 	const cancelButtonRef = useRef();
 	const [newAdminUid, setNewAdminUid] = useState("");
-
 	const [isAddAdminDialogOpen, setIsAddAdminDialogOpen] = useState(false);
 
 	const AdminUsersSchema = Yup.object().shape({
@@ -72,9 +60,11 @@ const ManageAdminUsers = () => {
 			justify={"flex-start"}
 			alignItems={"center"}
 		>
-			<Heading variant={"emphasis"}>Manage Admins</Heading>
+			<Heading variant={"emphasis"} fontFamily={"Parisienne"}>
+				Manage Admins
+			</Heading>
 
-			<VStack>
+			<VStack w={"full"}>
 				{admins.map((uid) => (
 					<ProfileCard key={uid} uid={uid} />
 				))}
@@ -109,19 +99,19 @@ const ManageAdminUsers = () => {
 													placeholder="User Id or Search Name"
 													autoFocus
 													autoComplete="off"
-													variant="filled"
+													variant="outline"
 												/>
 												<IconButton
 													fontSize={"xl"}
 													colorScheme={"teal"}
 													type="submit"
-													icon={<GrUserAdmin />}
+													icon={<AiOutlineUserAdd />}
 												/>
 											</HStack>
 											<AutoCompleteList>
 												{users.map((user, oid) => (
 													<AutoCompleteItem
-														key={nanoid()}
+														key={user.uid}
 														value={user.displayName}
 														textTransform="capitalize"
 														align="center"
@@ -173,6 +163,7 @@ const ManageAdminUsers = () => {
 										Type <Tag>confirm</Tag> to confirm.
 										<FormControl>
 											<Input
+												autoComplete="off"
 												my={2}
 												placeholder="confirm"
 												onChange={(e) =>
@@ -240,7 +231,6 @@ export default ManageAdminUsers;
 
 const ProfileCard = ({ uid }) => {
 	const toast = useToast();
-	const { colorMode } = useColorMode();
 	const { currentUser } = useAuth();
 
 	const [isRevokeDialogOpen, setIsRevokeDialogOpen] = useState(false);
@@ -262,23 +252,25 @@ const ProfileCard = ({ uid }) => {
 
 	return (
 		<HStack
+			bg={useColorModeValue("white", "#1a1b1e")}
+			rounded={"lg"}
+			shadow={"lg"}
 			p={4}
-			width={"100%"}
+			width={"full"}
 			justify={"flex-start"}
 			alignItems={"center"}
 			direction={"column"}
-			border="1px"
-			borderRadius="12px"
-			borderColor={colorMode == "light" ? `gray.200` : `whiteAlpha.300`}
 		>
 			<Avatar name={user?.displayName} src={user?.photoURL} />
-			<VStack align={"left"}>
+			<VStack align={"left"} w={"full"}>
 				<HStack justifyContent={"space-between"}>
 					<VStack align={"left"}>
 						<Heading fontSize="xl" fontWeight={"normal"}>
 							{user?.displayName}
 						</Heading>
-						<Text fontSize="sm">{uid}</Text>
+						<Text color="gray.500" fontSize="sm">
+							{uid}
+						</Text>
 					</VStack>
 					<IconButton
 						color="red.500"
@@ -306,6 +298,7 @@ const ProfileCard = ({ uid }) => {
 									Type <Tag>revoke</Tag> to confirm.
 									<FormControl>
 										<Input
+											autoComplete="off"
 											my={2}
 											placeholder="revoke"
 											onChange={(e) =>
