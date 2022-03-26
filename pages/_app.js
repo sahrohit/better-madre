@@ -39,7 +39,7 @@ function MyApp({ Component, pageProps }) {
           `,
 						}}
 					/>
-					<TopAlert />
+					{/* <TopAlert /> */}
 					<Component {...pageProps} />
 				</UserProvider>
 			</AuthProvider>

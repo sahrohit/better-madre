@@ -31,12 +31,14 @@ const TopAlert = () => {
 				aria-label="View source code"
 			>
 				<IconButton
+					aria-label="View source code"
 					variant="ghost"
 					mx={2}
 					icon={<Icon fontSize="20px" as={FaGithub} />}
 				/>
 			</Link>
 			<ChakraLink
+				href="#"
 				onClick={() => {
 					setToStorage("ack", true);
 					setAck(true);
