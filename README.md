@@ -12,20 +12,20 @@
     <br />
     <a href="https://madre.vercel.app">https://madre.vercel.app</a>
 
-[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
+<!--[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/0-percent-optimized.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/built-with-grammas-recipe.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/powered-by-electricity.svg)](https://forthebadge.com)
-[![forthebadge](https://forthebadge.com/images/badges/made-with-javascript.svg)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/made-with-javascript.svg)](https://forthebadge.com) -->
 
 
 </div>
 
 ## About The Project
 
-[![Product Name Screen Shot](https://shot.screenshotapi.net/screenshot?token=SYFRG8T-XWFMK5V-PGRW10V-VTR9YYG&url=https%3A%2F%2Fmadre.vercel.app&width=1536&height=722&full_page=true&output=image&file_type=webp&lazy_load=true&dark_mode=true&wait_for_event=domcontentloaded&delay=5000&ttl=86400)](https://madre.vercel.app)
+<!--[![Product Name Screen Shot](https://shot.screenshotapi.net/screenshot?token=SYFRG8T-XWFMK5V-PGRW10V-VTR9YYG&url=https%3A%2F%2Fmadre.vercel.app&width=1536&height=722&full_page=true&output=image&file_type=webp&lazy_load=true&dark_mode=true&wait_for_event=domcontentloaded&delay=5000&ttl=86400)](https://madre.vercel.app)-->
 
-Madre was our very first project, and the initial iteration is available [`https://oldmadre.vercel.app`](https://oldmadre.vercel.app). Looking back over the years, we noticed a lot of issues and wanted to enhance our site, so we created this. As before said, we welcome any and all suggestions and help.
+Madre was our very first project, and the initial iteration is available [`https://oldmadre.vercel.app`](https://oldmadre.vercel.app). Looking back over the years, we noticed a lot of issues and wanted to enhance our site, so we created this. As before, we welcome any and all suggestions and help.
 
 ### Built With
 
